@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { useFrame, useThree, extend, Object3DNode } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
 import * as THREE from 'three'
@@ -102,7 +102,7 @@ interface PixelationRevealProps {
 }
 
 export function PixelationReveal({ progress }: PixelationRevealProps) {
-  const materialRef = useRef<InstanceType<typeof PixelationMaterial>>(null)
+  const materialRef = useRef<any>(null)
   const { viewport } = useThree()
 
   useEffect(() => {

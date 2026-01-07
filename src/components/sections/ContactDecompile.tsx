@@ -27,6 +27,8 @@ export function ContactDecompile() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        if (!entry) return
+
         // Check if heading is near center of viewport
         const rect = entry.boundingClientRect
         const viewportCenter = window.innerHeight / 2
