@@ -56,3 +56,137 @@ export const capabilities: Capability[] = [
     examples: ['ML Infrastructure', 'Real-Time Systems', 'Resource-Constrained Platforms'],
   },
 ]
+
+// Domain-Tech Matrix (Capabilities, not projects)
+export interface MatrixCell {
+  domain: string
+  techCategory: string
+  capability: string
+  stack: string[]
+  delivered: string
+}
+
+export const matrix: MatrixCell[] = [
+  // Healthcare x Type Systems
+  {
+    domain: 'Healthcare Compliance',
+    techCategory: 'Type-Safe Systems',
+    capability: 'WASM-powered medical data sanitizers with dual-pipeline PII scrubbing',
+    stack: ['Rust', 'WASM', 'BERT NER'],
+    delivered: '100% local processing, HIPAA-compliant by design',
+  },
+  {
+    domain: 'Healthcare Compliance',
+    techCategory: 'Frontend PWA',
+    capability: 'FDA-compliant non-device medication trackers with behavioral psychology',
+    stack: ['Go WASM', 'IndexedDB', 'PWA'],
+    delivered: 'ADHD-optimized, offline-first, zero server transmission',
+  },
+
+  // FinTech x Type Systems
+  {
+    domain: 'Financial Systems',
+    techCategory: 'Type-Safe Systems',
+    capability: 'Category theory for compliance — mortgages as typed constraint regions',
+    stack: ['Effect-TS', 'Schema', 'Morphisms'],
+    delivered: 'Compile-time validation of loan eligibility rules',
+  },
+
+  // AI/ML x Infrastructure
+  {
+    domain: 'AI/ML Infrastructure',
+    techCategory: 'Physics-Aware Systems',
+    capability: 'Memory-hierarchy-aware ML VMs with Horowitz energy modeling',
+    stack: ['Rust', 'OCaml', 'CUDA'],
+    delivered: 'Roofline analysis, attention routing, 6400x cost transparency',
+  },
+  {
+    domain: 'AI/ML Infrastructure',
+    techCategory: 'Hybrid Architectures',
+    capability: 'Tribrid language models with learned per-token pathway routing',
+    stack: ['PyTorch', 'Transformers', 'Mamba', 'LNN'],
+    delivered: 'O(n²) vs O(n) vs O(1) memory selected dynamically',
+  },
+
+  // Business OS x Event Sourcing
+  {
+    domain: 'Business Operating Systems',
+    techCategory: 'Event-Sourced Systems',
+    capability: 'Cognition-first CRMs with ECS architecture and circular entity evolution',
+    stack: ['React', 'TypeScript', 'Convex'],
+    delivered: 'Max 3 choices per screen, full event history, no cognitive overhead',
+  },
+  {
+    domain: 'Business Operating Systems',
+    techCategory: 'Multi-Agent AI',
+    capability: 'Lead generation engines with 7 behavioral paradigms and consensus mechanisms',
+    stack: ['Elixir', 'Phoenix', 'Ash', 'Broadway'],
+    delivered: 'Opportune moment detection, transparent scoring, radical honesty',
+  },
+  {
+    domain: 'Business Operating Systems',
+    techCategory: 'Workflow Automation',
+    capability: 'Document management with morphing modes — text to table to spreadsheet to canvas',
+    stack: ['React', 'TypeScript', 'Convex'],
+    delivered: 'Context-aware linkification, real-time collaboration, version history',
+  },
+  {
+    domain: 'Business Operating Systems',
+    techCategory: 'Invoice & Billing',
+    capability: 'Auto-generated invoicing from tasks/workflows with portal-based payment',
+    stack: ['React', 'TypeScript', 'Convex'],
+    delivered: 'Recurring invoices, tax calculation, aging reports, payment reminders',
+  },
+
+  // AI Agents x Business Math
+  {
+    domain: 'AI Agent Infrastructure',
+    techCategory: 'Council Systems',
+    capability: 'Multi-persona AI councils with visible deliberation and confidence scoring',
+    stack: ['TypeScript', 'Convex', 'CAG'],
+    delivered: 'Operator/Strategist/Signal personas, thinking modes, metacognition bootstrapping',
+  },
+  {
+    domain: 'AI Agent Infrastructure',
+    techCategory: 'Deterministic Math',
+    capability: 'Decimal-precision business math for AI agents with currency/recency/health scoring',
+    stack: ['Decimal.js', 'TypeScript'],
+    delivered: 'Linear/exponential/log decay, momentum scoring, confidence thresholds',
+  },
+
+  // Cross-Domain x Compilers
+  {
+    domain: 'Cross-Domain Integration',
+    techCategory: 'Business Logic Compilers',
+    capability: 'Spreadsheet-to-native-code compilers via intermediate representations',
+    stack: ['TypeScript', 'C codegen', 'WASM'],
+    delivered: 'YAML → WorkIR → optimized binaries, no coding required',
+  },
+  {
+    domain: 'Cross-Domain Integration',
+    techCategory: 'Self-Learning Systems',
+    capability: 'Real-time pattern detection with automatic automation suggestions',
+    stack: ['Convex', 'TypeScript', 'Event Sourcing'],
+    delivered: 'Observes user actions, detects patterns, suggests automations with one-tap approval',
+  },
+]
+
+// Domain categories
+export const domains = [
+  { id: 'healthcare', name: 'Healthcare Compliance', color: 'green' },
+  { id: 'fintech', name: 'Financial Systems', color: 'orange' },
+  { id: 'ai-ml', name: 'AI/ML Infrastructure', color: 'accent' },
+  { id: 'ai-agents', name: 'AI Agent Infrastructure', color: 'pink' },
+  { id: 'business-os', name: 'Business Operating Systems', color: 'warm' },
+  { id: 'cross-domain', name: 'Cross-Domain Integration', color: 'purple' },
+] as const
+
+// Tech categories
+export const techCategories = [
+  { id: 'type-systems', name: 'Type-Safe Systems', icon: '🔒' },
+  { id: 'ai-ml', name: 'AI / ML', icon: '🤖' },
+  { id: 'frontend', name: 'Frontend / PWA', icon: '🎨' },
+  { id: 'backend', name: 'Event-Sourced Backend', icon: '⚡' },
+  { id: 'compilers', name: 'Compilers / DSLs', icon: '🔧' },
+  { id: 'physics', name: 'Physics-Aware', icon: '⚡' },
+] as const

@@ -36,6 +36,12 @@ export const contactConfig: ContactConfig = {
       external: false,
     },
     {
+      key: 'calendar',
+      label: 'Book a Call',
+      href: 'https://cal.com/eassa-ayoub-hf9yfh',
+      external: true,
+    },
+    {
       key: 'linkedin',
       label: 'LinkedIn',
       href: 'https://linkedin.com/in/eassageorge',
@@ -64,6 +70,10 @@ export const contactConfig: ContactConfig = {
 export function getLinkDisplayValue(link: ContactLink): string {
   if (link.key === 'email') {
     return link.href.replace('mailto:', '')
+  }
+  if (link.key === 'calendar') {
+    // Display as cal.com/eassa-ayoub (without hash)
+    return 'cal.com/eassa-ayoub'
   }
   return link.href.replace('https://', '')
 }

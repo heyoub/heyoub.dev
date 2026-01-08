@@ -12,11 +12,25 @@ export function ContactDecompile() {
   const [isLocked, setIsLocked] = useState(false)
   const manualProgress = useMotionValue(0)
 
+  const handleConnect = () => {
+    if (containerRef.current) {
+      const containerBottom = containerRef.current.offsetTop + containerRef.current.offsetHeight
+      window.scrollTo({
+        top: containerBottom - window.innerHeight,
+        behavior: 'smooth'
+      })
+    }
+  }
+
   // Track scroll progress through this section
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start'],
   })
+
+  // Video roll up effect - starts below viewport and rolls up as user approaches
+  const videoRollY = useTransform(scrollYProgress, [0, 0.15], [200, 0])
+  const videoRollOpacity = useTransform(scrollYProgress, [0, 0.1, 0.15], [0, 0.5, 1])
 
   // Use manual progress after auto-play, otherwise use scroll progress
   const activeProgress = hasAutoPlayed ? scrollYProgress : manualProgress
@@ -74,43 +88,44 @@ export function ContactDecompile() {
   }, [hasAutoPlayed, isLocked, scrollYProgress, manualProgress])
 
   // EXPANDED SCROLL RANGES for smoother "slow-motion" transitions
-  // Container is now 450vh for more scroll room
+  // Container: 380vh mobile, 450vh desktop - gives enough scroll room
   //
-  // PHASE 1: Styled contact (0.08 - 0.74) - stays through video, dramatic blur into code
-  // PHASE 2: Video with effects (0.28 - 0.68) - slower fade out
-  // PHASE 3: Code view (0.52 - 0.82) - earlier start, overlaps with styled text fade
+  // PHASE 1: Styled contact (0.08 - 0.70) - EXTENDED: stays through video, dramatic blur into code
+  // PHASE 2: Video with effects (0.30 - 0.66) - SHORTER: text outlasts video
+  // PHASE 3: Code view (0.50 - 0.72 - 1.0) - earlier start, LOCKS IN at bottom for stability
 
-  // Styled view - EXTENDED: stays visible through video AND overlaps with code
+  // Styled view - EXTENDED: stays visible longer than video
+  // Fades out earlier for cleaner handoff to code view
   const styledOpacity = useTransform(
     activeProgress,
-    [0.08, 0.14, 0.58, 0.74],
+    [0.08, 0.14, 0.58, 0.70],
     [0, 1, 1, 0]
   )
-  
+
   // Styled view BLUR - starts subtle, becomes VERY dramatic making text illegible
   // Blur builds up as code footer starts appearing (focus handoff)
   const styledBlur = useTransform(
     activeProgress,
-    [0.50, 0.58, 0.66, 0.74],
+    [0.50, 0.58, 0.65, 0.70],
     [0, 10, 40, 70]
   )
 
   // Styled view BRIGHTNESS/SATURATION - enhanced through video phase
   const styledBrightness = useTransform(
     activeProgress,
-    [0.14, 0.36, 0.52, 0.64],
+    [0.14, 0.36, 0.56, 0.68],
     [1, 1.15, 1.25, 0.6]
   )
   const styledSaturation = useTransform(
     activeProgress,
-    [0.14, 0.36, 0.52, 0.64],
+    [0.14, 0.36, 0.56, 0.68],
     [1, 1.35, 1.5, 0.3]
   )
 
   // Styled view PIXELATION - subtle at first, dramatic with blur
   const styledPixelation = useTransform(
     activeProgress,
-    [0.54, 0.62, 0.72],
+    [0.58, 0.66, 0.76],
     [0, 4, 15]
   )
 
@@ -127,53 +142,55 @@ export function ContactDecompile() {
   )
 
   // BACKGROUND LAYER - covers orbs from video phase through code phase
-  // Fades in as video starts, stays solid until code is fully visible
+  // Fades in as video starts, stays solid through end of scroll
   const bgCoverOpacity = useTransform(
     activeProgress,
-    [0.26, 0.32, 0.86],
+    [0.28, 0.34, 1.0],
     [0, 1, 1]
   )
 
-  // Video content opacity - STRETCHED: overlaps with styled text and code
+  // Video content opacity - SHORTER: text stays visible longer
   const videoContentOpacity = useTransform(
     activeProgress,
-    [0.28, 0.38, 0.48, 0.62, 0.72],
+    [0.30, 0.38, 0.48, 0.58, 0.66],
     [0, 0.7, 1, 0.85, 0]
   )
 
-  // Pixelation: granular steps for that "25fps scroll" feel - extended
+  // Pixelation: granular steps for that "25fps scroll" feel - adjusted for shorter video
   const videoPixelation = useTransform(
     activeProgress,
-    [0.28, 0.38, 0.48, 0.58, 0.66, 0.74],
+    [0.30, 0.38, 0.48, 0.56, 0.62, 0.66],
     [60, 22, 6, 2, 6, 35]
   )
 
-  // Saturation: gradual reveal - extended
+  // Saturation: gradual reveal - adjusted for shorter video
   const videoSaturation = useTransform(
     activeProgress,
-    [0.28, 0.42, 0.54, 0.64, 0.72],
+    [0.30, 0.42, 0.52, 0.60, 0.66],
     [0, 0.8, 1.4, 1.0, 0.1]
   )
 
-  // Glitch effect - pulses during transitions
+  // Glitch effect - pulses during transitions (adjusted for shorter video)
   const glitchIntensity = useTransform(
     activeProgress,
-    [0.28, 0.36, 0.44, 0.48, 0.64, 0.70, 0.76],
+    [0.30, 0.36, 0.42, 0.48, 0.60, 0.64, 0.70],
     [0, 0.8, 1, 0, 0, 1, 0]
   )
 
   // Code view - starts earlier to OVERLAP with styled text fade, dramatic handoff
+  // Tightened ranges for mobile stability - reaches full opacity earlier and holds
   const codeOpacity = useTransform(
     activeProgress,
-    [0.52, 0.64, 0.78],
-    [0, 0.5, 1]
+    [0.50, 0.60, 0.70, 1.0],
+    [0, 0.5, 1, 1]
   )
 
   // Code BLUR - MORE dramatic blur at start, comes into focus as styled text becomes illegible
+  // Fully sharp by 0.72 and holds through end of scroll
   const codeBlur = useTransform(
     activeProgress,
-    [0.52, 0.62, 0.72, 0.82],
-    [50, 25, 8, 0]
+    [0.50, 0.58, 0.68, 0.72, 1.0],
+    [50, 25, 8, 0, 0]
   )
 
   const lineCount = 14 + links.length * 2
@@ -186,14 +203,17 @@ export function ContactDecompile() {
   }, [])
 
   return (
-    <div ref={containerRef} className="relative min-h-[450vh]">
+    <div ref={containerRef} className="relative min-h-[380vh] md:min-h-[450vh]">
       {/* Sticky container for the transition */}
-      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+      <motion.div
+        className="sticky top-0 h-screen flex items-center justify-center overflow-hidden"
+        style={{ y: videoRollY, opacity: videoRollOpacity }}
+      >
         
         {/* PHASE 1: Styled View (Contact Section) - with blur/saturation handoff */}
         <motion.section
           id="contact"
-          className="absolute inset-0 flex flex-col justify-center items-center gap-8 py-24 px-[8vw] z-[25]"
+          className="absolute inset-0 flex flex-col justify-center items-center gap-8 py-24 px-[8vw] z-[25] pointer-events-none"
           style={{
             opacity: styledOpacity,
             filter: useTransform(
@@ -227,25 +247,21 @@ export function ContactDecompile() {
             }}
           />
           <div className="text-center max-w-2xl">
-            <h3 ref={headingRef} className="font-serif text-5xl md:text-6xl mb-6">
-              {heading}
+            <h3 ref={headingRef} className="font-serif text-[clamp(2rem,8vw,4rem)] mb-4 md:mb-6">
+              Let's Build
             </h3>
-            <p className="text-text-secondary font-light text-lg">{description}</p>
+            <p className="text-text-secondary font-light text-[clamp(1rem,2.5vw,1.25rem)]">
+              Type systems that compile constraints. Event architectures that never forget.
+              Interfaces where thought becomes action.
+            </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-            {links.map((link) => (
-              <a
-                key={link.key}
-                href={link.href}
-                target={link.external ? '_blank' : undefined}
-                rel={link.external ? 'noopener noreferrer' : undefined}
-                className="font-mono text-xs tracking-[0.15em] uppercase text-text-secondary px-6 py-3 border border-white/10 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
+          <button
+            onClick={handleConnect}
+            className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-[0.15em] uppercase text-text-secondary px-6 md:px-8 py-3 md:py-4 border border-white/10 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300 cursor-pointer pointer-events-auto touch-target"
+          >
+            Connect
+          </button>
           
           {/* Decompile teaser - subtle hint at bottom */}
           <motion.div
@@ -254,24 +270,29 @@ export function ContactDecompile() {
           >
             {/* Glitchy scanline */}
             <motion.div
-              className="w-48 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"
+              className="w-48 h-px bg-gradient-to-r from-transparent via-accent to-transparent"
               style={{
                 scaleX: teaserGlitch,
                 opacity: teaserGlitch,
+                boxShadow: '0 0 8px rgba(34, 211, 238, 0.6)',
               }}
             />
             <motion.span
-              className="font-mono text-[10px] tracking-[0.3em] uppercase text-accent/40"
-              style={{ opacity: teaserGlitch }}
+              className="font-mono text-[10px] tracking-[0.3em] uppercase text-accent"
+              style={{
+                opacity: teaserGlitch,
+                textShadow: '0 0 12px rgba(34, 211, 238, 0.8), 0 0 24px rgba(34, 211, 238, 0.4)',
+              }}
             >
               // decompiling
             </motion.span>
             {/* Subtle down arrow */}
             <motion.div
-              className="text-accent/30 text-lg"
+              className="text-accent text-lg"
               style={{
                 opacity: teaserGlitch,
-                y: useTransform(activeProgress, [0.20, 0.24], [0, 4])
+                y: useTransform(activeProgress, [0.20, 0.24], [0, 4]),
+                filter: 'drop-shadow(0 0 6px rgba(34, 211, 238, 0.6))',
               }}
             >
               ↓
@@ -393,7 +414,7 @@ export function ContactDecompile() {
             </div>
 
             {/* Semantic content styled as code */}
-            <div className="code-block py-6 px-8 md:pl-20 font-mono text-sm leading-relaxed">
+            <div className="code-block py-4 md:py-6 px-4 md:px-8 md:pl-20 font-mono text-[clamp(0.7rem,1.5vw,0.875rem)] leading-relaxed">
               {/* File comment header */}
               <p className="code-line">
                 <span className="code-comment code-comment--with-slashes">{code.filename}</span>
@@ -517,7 +538,7 @@ export function ContactDecompile() {
             </small>
           </div>
         </motion.footer>
-      </div>
+      </motion.div>
     </div>
   )
 }

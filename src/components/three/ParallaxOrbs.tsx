@@ -1,27 +1,70 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 
 interface OrbConfig {
   position: [number, number, number]
+  mobilePosition: [number, number, number] // Vertical stack for mobile
   color: string
   size: number
+  mobileSize: number // Smaller on mobile
   speed: number
   distort: number
 }
 
+// Desktop: scattered horizontal/diagonal layout
+// Mobile: vertical stack (same X, varied Y and Z depth)
 const orbs: OrbConfig[] = [
-  { position: [3, 2, -2], color: '#06b6d4', size: 2.5, speed: 0.5, distort: 0.3 },
-  { position: [-3, -1.5, -3], color: '#8b5cf6', size: 2, speed: 0.7, distort: 0.4 },
-  { position: [0, 0, -4], color: '#fbbf24', size: 1.5, speed: 0.3, distort: 0.2 },
+  {
+    position: [3, 2, -2],              // Desktop: top right
+    mobilePosition: [0, 3, -5],        // Mobile: top center
+    color: '#06b6d4',
+    size: 2.5,
+    mobileSize: 1.8,
+    speed: 0.5,
+    distort: 0.3
+  },
+  {
+    position: [-3, -1.5, -3],          // Desktop: bottom left
+    mobilePosition: [0, 0, -7],        // Mobile: middle center
+    color: '#8b5cf6',
+    size: 2,
+    mobileSize: 1.5,
+    speed: 0.7,
+    distort: 0.4
+  },
+  {
+    position: [0, 0, -4],              // Desktop: center
+    mobilePosition: [0, -3, -9],       // Mobile: bottom center
+    color: '#fbbf24',
+    size: 1.5,
+    mobileSize: 1.2,
+    speed: 0.3,
+    distort: 0.2
+  },
 ]
 
-function Orb({ position, color, size, speed, distort }: OrbConfig) {
+function Orb({ position, mobilePosition, color, size, mobileSize, speed, distort }: OrbConfig) {
   const meshRef = useRef<THREE.Mesh>(null)
   const { mouse, viewport } = useThree()
-  
-  const initialPosition = useMemo(() => new THREE.Vector3(...position), [position])
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768) // md breakpoint
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Use mobile or desktop position/size
+  const activePosition = isMobile ? mobilePosition : position
+  const activeSize = isMobile ? mobileSize : size
+  const initialPosition = useMemo(() => new THREE.Vector3(...activePosition), [activePosition])
 
   useFrame((state) => {
     if (!meshRef.current) return
@@ -32,12 +75,13 @@ function Orb({ position, color, size, speed, distort }: OrbConfig) {
     meshRef.current.position.x = initialPosition.x + Math.sin(time * speed) * 0.3
     meshRef.current.position.y = initialPosition.y + Math.cos(time * speed * 0.8) * 0.2
 
-    // Mouse parallax effect
+    // Mouse parallax effect (reduced on mobile)
+    const parallaxStrength = isMobile ? 0.02 : 0.05
     const mouseX = (mouse.x * viewport.width) / 2
     const mouseY = (mouse.y * viewport.height) / 2
-    
-    meshRef.current.position.x += mouseX * 0.05
-    meshRef.current.position.y += mouseY * 0.05
+
+    meshRef.current.position.x += mouseX * parallaxStrength
+    meshRef.current.position.y += mouseY * parallaxStrength
 
     // Gentle rotation
     meshRef.current.rotation.x = time * 0.1
@@ -45,11 +89,11 @@ function Orb({ position, color, size, speed, distort }: OrbConfig) {
   })
 
   return (
-    <Sphere ref={meshRef} args={[size, 64, 64]} position={position}>
+    <Sphere ref={meshRef} args={[activeSize, 64, 64]} position={activePosition}>
       <MeshDistortMaterial
         color={color}
         transparent
-        opacity={0.4}
+        opacity={0.25}
         distort={distort}
         speed={2}
         roughness={0.2}

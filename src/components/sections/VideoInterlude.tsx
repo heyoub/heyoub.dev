@@ -22,8 +22,17 @@ export function VideoInterlude({
     offset: ['start end', 'end start'],
   })
 
-  // Parallax effect
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+  // Roll up from below effect - inverse to hero tuck down
+  const containerY = useTransform(scrollYProgress, [0, 0.3, 0.5], [200, 50, 0])
+  const containerOpacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [0, 0.6, 1])
+  const containerScale = useTransform(scrollYProgress, [0, 0.3], [0.95, 1])
+
+  // Core Thesis glassmorphic text - persistent, no fade
+  const glassTextOpacity = useTransform(scrollYProgress, [0.2, 0.35], [0, 1])
+  const glassTextScale = useTransform(scrollYProgress, [0.2, 0.35], [0.95, 1])
+
+  // Internal video parallax (subtle)
+  const y = useTransform(scrollYProgress, [0.3, 1], ['0%', '20%'])
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
 
   useEffect(() => {
@@ -39,7 +48,12 @@ export function VideoInterlude({
     <motion.div
       ref={containerRef}
       className={`relative overflow-hidden ${className}`}
-      style={{ height }}
+      style={{
+        height,
+        y: containerY,
+        opacity: containerOpacity,
+        scale: containerScale
+      }}
     >
       {/* Video */}
       <motion.div 
@@ -65,8 +79,32 @@ export function VideoInterlude({
         <div className="absolute inset-0 bg-bg-primary/60" />
       )}
 
+      {/* Glassmorphic "Core Thesis" text - video shows through letters */}
+      <motion.div
+        className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none"
+        style={{
+          opacity: glassTextOpacity,
+          scale: glassTextScale,
+        }}
+      >
+        <h2
+          className="font-serif text-[clamp(3.5rem,14vw,9rem)] font-bold tracking-tight text-center px-8"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+            WebkitTextFillColor: 'transparent',
+            WebkitTextStroke: '0.1px rgba(255,255,255,0.3)',
+            filter: 'drop-shadow(0 0 30px rgba(255,255,255,0.3)) drop-shadow(0 0 60px rgba(255,255,255,0.2))',
+          }}
+        >
+          Core Thesis
+        </h2>
+      </motion.div>
+
       {/* Fade edges */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ opacity }}
       >

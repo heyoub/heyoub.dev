@@ -66,6 +66,32 @@ export default {
         '300': '300ms',
         '400': '400ms',
       },
+      spacing: {
+        // Fluid spacing tokens
+        'fluid-xs': 'clamp(0.375rem, 1.5vw, 0.75rem)',
+        'fluid-sm': 'clamp(0.5rem, 2vw, 1rem)',
+        'fluid-md': 'clamp(1rem, 3vw, 2rem)',
+        'fluid-lg': 'clamp(2rem, 5vw, 4rem)',
+        'fluid-xl': 'clamp(3rem, 8vw, 6rem)',
+      },
+      fontSize: {
+        // Fluid typography tokens
+        'fluid-xs': 'clamp(0.75rem, 1.5vw, 0.875rem)',
+        'fluid-sm': 'clamp(0.85rem, 1.75vw, 1rem)',
+        'fluid-base': 'clamp(0.95rem, 2vw, 1.125rem)',
+        'fluid-lg': 'clamp(1rem, 2.5vw, 1.25rem)',
+        'fluid-h4': 'clamp(1.125rem, 2.5vw, 1.5rem)',
+        'fluid-h3': 'clamp(1.25rem, 3vw, 2rem)',
+        'fluid-h2': 'clamp(1.5rem, 4vw, 2.5rem)',
+        'fluid-h1': 'clamp(2rem, 5vw, 3.5rem)',
+        'fluid-display': 'clamp(2.5rem, 8vw, 7rem)',
+      },
+      minHeight: {
+        'touch': '3rem', // 48px minimum touch target
+      },
+      minWidth: {
+        'touch': '3rem', // 48px minimum touch target
+      },
     },
   },
   plugins: [],
