@@ -64,8 +64,11 @@ export function Hero() {
         >
           {/* Quote-style text block */}
           <div className="flex items-center gap-4 border-l-2 border-accent/30 pl-4">
-            <p className="text-[clamp(0.95rem,2vw,1.125rem)] font-light text-text-secondary italic">
-              Ready to build systems where constraints compile and thinking becomes structure?
+            <p className="text-[clamp(0.95rem,2vw,1.125rem)] font-light text-text-secondary">
+              You're not just building apps.{' '}
+              <span className="text-text-primary italic">
+                You're shaping how people experience reality.
+              </span>
             </p>
           </div>
 

@@ -39,6 +39,7 @@ export default {
       fontFamily: {
         serif: ['Instrument Serif', 'serif'],
         mono: ['Space Mono', 'monospace'],
+        code: ['Fira Code', 'monospace'], // Technical detail text
         sans: ['DM Sans', 'sans-serif'],
       },
       animation: {

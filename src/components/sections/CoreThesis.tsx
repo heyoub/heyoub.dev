@@ -21,22 +21,37 @@ const pillars = [
   {
     label: 'Systems Thinking',
     title: 'Prevention over patches',
-    description:
-      "It's the difference between fixing a leaky pipe and redesigning the plumbing so leaks don't happen. I build systems that prevent fires—not put them out.",
+    summary:
+      "If a business is a machine, software is its operating system. Most software isn't built like a system—it's a tangled mess of patches, quick fixes, and bolted-on features.",
+    details: [
+      'Instead of fluid data movement → fragmented workflows',
+      'Instead of smart automation → explosion of manual tasks',
+      'Instead of reducing effort → cognitive burden compounds',
+    ],
     accent: 'accent',
   },
   {
     label: 'Cognitive-First',
     title: 'Designed for how brains work',
-    description:
-      "Users take 40% longer to complete tasks when software fights their cognition. Error rates double with poor information structure. I understand these challenges intimately—and I build for them.",
+    summary:
+      "Cognitive load—the mental effort to use a system—is why software fails. Not users being 'bad at tech.' Tech being bad at understanding users.",
+    details: [
+      '40% longer task completion in high-load interfaces',
+      'Error rates 2x when information is poorly structured',
+      'Mental fatigue 2.5x faster for ADHD & dyslexic users',
+    ],
     accent: 'purple',
   },
   {
     label: 'Type Guarantees',
     title: 'Constraints become compile-time',
-    description:
-      "Your mental model becomes the structure. HIPAA rules, energy costs, cognitive load—they become architectural guarantees. Illegal states become unrepresentable.",
+    summary:
+      "The compiler enforces your domain logic—crash hard, burn loud, start fast. Your mental model becomes the structure. No runtime surprises.",
+    details: [
+      'HIPAA rules compile, energy budgets enforce',
+      'Business logic becomes architectural guarantee',
+      'Illegal states become unrepresentable',
+    ],
     accent: 'green',
   },
 ]
@@ -99,9 +114,24 @@ export function CoreThesis() {
               <h3 className="font-serif text-[clamp(1.1rem,2vw,1.35rem)] text-text-primary mb-3 group-hover:text-accent transition-colors">
                 {pillar.title}
               </h3>
-              <p className="text-text-secondary font-light text-[clamp(0.9rem,1.5vw,1rem)] leading-relaxed">
-                {pillar.description}
+              <p className="text-text-secondary font-light text-[clamp(0.85rem,1.4vw,0.95rem)] leading-relaxed mb-4">
+                {pillar.summary}
               </p>
+              {/* Detail bullets in Fira Code */}
+              <ul className="space-y-2 border-t border-white/5 pt-4">
+                {pillar.details.map((detail, idx) => (
+                  <li
+                    key={idx}
+                    className="font-code text-[clamp(0.65rem,1.1vw,0.75rem)] text-text-muted leading-relaxed flex items-start gap-2"
+                  >
+                    <span
+                      className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: `var(--${pillar.accent})` }}
+                    />
+                    {detail}
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           ))}
         </motion.div>
