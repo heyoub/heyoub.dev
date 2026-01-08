@@ -2,12 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "ai-profile",
   "version": "1.0.0",
-  "generated": "2026-01-08",
+  "generated": "__BUILD_DATE__",
   "person": {
     "name": "Eassa Ayoub",
     "title": "Technical Architect",
     "tagline": "AI Systems & Cross-Domain Synthesis",
-    "location": "Drexel Hill, PA",
+    "location": "Philadelphia, PA",
     "timezone": "America/New_York",
     "availability": "open-to-opportunities",
     "contact": {
@@ -137,7 +137,7 @@
     "preferred_contact": "email or calendar booking"
   },
   "metadata": {
-    "last_updated": "2026-01-08",
+    "last_updated": "__BUILD_DATE__",
     "schema_version": "1.0.0",
     "discoverable": true,
     "indexable": true,

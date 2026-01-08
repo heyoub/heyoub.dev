@@ -1,11 +1,51 @@
-import { defineConfig } from 'vite'
+import { defineConfig, Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import glsl from 'vite-plugin-glsl'
 import { VitePWA } from 'vite-plugin-pwa'
 
+import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs'
+import { join } from 'path'
+
+// Auto-update build date plugin - replaces __BUILD_DATE__ with current date
+function buildDatePlugin(): Plugin {
+  const buildDate = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+
+  // Recursively process files in a directory
+  function processDirectory(dir: string) {
+    const files = readdirSync(dir)
+    for (const file of files) {
+      const filePath = join(dir, file)
+      const stat = statSync(filePath)
+      if (stat.isDirectory()) {
+        processDirectory(filePath)
+      } else if (file.match(/\.(json|txt|xml|html)$/)) {
+        const content = readFileSync(filePath, 'utf-8')
+        if (content.includes('__BUILD_DATE__')) {
+          writeFileSync(filePath, content.replace(/__BUILD_DATE__/g, buildDate))
+        }
+      }
+    }
+  }
+
+  return {
+    name: 'build-date',
+    // Transform HTML files during build
+    transformIndexHtml(html) {
+      return html.replace(/__BUILD_DATE__/g, buildDate)
+    },
+    // Process public folder files after bundle is written
+    closeBundle() {
+      const distDir = join(process.cwd(), 'dist')
+      processDirectory(distDir)
+      console.log(`\n✓ Build date updated to ${buildDate}`)
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    buildDatePlugin(),
     react(),
     glsl({
       include: [

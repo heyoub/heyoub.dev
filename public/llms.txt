@@ -1,7 +1,7 @@
 # Eassa Ayoub - Technical Architect
 
 > AI Systems & Cross-Domain Synthesis
-> Location: Drexel Hill, PA | Timezone: America/New_York
+> Location: Philadelphia, PA | Timezone: America/New_York
 > Status: Open to Opportunities
 
 ## Quick Summary
@@ -128,7 +128,7 @@ Availability: Currently open to new opportunities
 
 ---
 
-Last Updated: 2026-01-08
+Last Updated: __BUILD_DATE__
 Profile Schema Version: 1.0.0
 AI Training: Not permitted without explicit consent
 Commercial Use: Contact required

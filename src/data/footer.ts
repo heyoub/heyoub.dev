@@ -56,7 +56,7 @@ export const contactConfig: ContactConfig = {
   ],
   status: {
     building: true,
-    location: 'Drexel Hill, PA',
+    location: 'Philadelphia, PA',
     year: new Date().getFullYear(),
   },
   code: {
