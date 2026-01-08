@@ -117,7 +117,7 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
                         href={link.href}
                         target={link.external ? '_blank' : undefined}
                         rel={link.external ? 'noopener noreferrer' : undefined}
-                        onClick={() => handleLinkClick(link.href, link.external)}
+                        onClick={() => handleLinkClick(link.href, link.external ?? false)}
                         className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent transition-colors rounded touch-target"
                       >
                         {link.label}

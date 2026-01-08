@@ -6,7 +6,7 @@ export function ContactDecompile() {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const { heading, description, links, status, code } = contactConfig
+  const { links, status, code } = contactConfig
 
   const [hasAutoPlayed, setHasAutoPlayed] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
