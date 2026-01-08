@@ -1,5 +1,5 @@
+import { lazy, Suspense } from 'react'
 import { SmoothScroll } from '@/components/effects/SmoothScroll'
-import { Scene } from '@/components/three/Scene'
 import { Nav } from '@/components/layout/Nav'
 import { Hero } from '@/components/sections/Hero'
 import { VideoInterlude } from '@/components/sections/VideoInterlude'
@@ -7,13 +7,18 @@ import { CoreThesis } from '@/components/sections/CoreThesis'
 import { Portfolio } from '@/components/sections/Portfolio'
 import { Path } from '@/components/sections/Path'
 import { OpenTo } from '@/components/sections/OpenTo'
-import { ContactDecompile } from '@/components/sections/ContactDecompile'
+
+// Lazy load heavy components
+const Scene = lazy(() => import('@/components/three/Scene').then(m => ({ default: m.Scene })))
+const ContactDecompile = lazy(() => import('@/components/sections/ContactDecompile').then(m => ({ default: m.ContactDecompile })))
 
 function App() {
   return (
     <SmoothScroll>
-      {/* WebGL Background */}
-      <Scene />
+      {/* WebGL Background - lazy loaded */}
+      <Suspense fallback={<div className="fixed inset-0 bg-bg-primary" />}>
+        <Scene />
+      </Suspense>
 
       {/* Noise overlay */}
       <div className="noise-overlay" />
@@ -34,8 +39,10 @@ function App() {
         <Portfolio />
         <Path />
         <OpenTo />
-        {/* Contact + Footer with scroll-driven decompile transition */}
-        <ContactDecompile />
+        {/* Contact + Footer with scroll-driven decompile transition - lazy loaded */}
+        <Suspense fallback={<div className="min-h-screen bg-bg-primary" />}>
+          <ContactDecompile />
+        </Suspense>
       </main>
     </SmoothScroll>
   )

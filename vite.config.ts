@@ -26,4 +26,20 @@ export default defineConfig({
       '@data': '/src/data',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split Three.js into its own chunk
+          'three': ['three', '@react-three/fiber', '@react-three/drei'],
+          // Split Framer Motion into its own chunk
+          'framer': ['framer-motion'],
+          // Split React vendor into its own chunk
+          'react-vendor': ['react', 'react-dom'],
+        },
+      },
+    },
+    // Increase chunk size warning limit since we're intentionally splitting
+    chunkSizeWarningLimit: 1000,
+  },
 })
