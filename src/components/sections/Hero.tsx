@@ -95,12 +95,16 @@ export function Hero() {
         <div className="w-full max-w-[380px] aspect-[380/480] bg-gradient-to-br from-bg-tertiary to-bg-secondary border border-white/[0.08] relative overflow-hidden">
           {/* Gradient accent line */}
           <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-500 to-purple-500" />
-          
-          {/* Headshot */}
+
+          {/* Headshot - Hero image is critical, use fetchpriority high */}
           <img
             src="/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png"
-            alt="Eassa Ayoub"
+            alt="Eassa Ayoub - Technical Architect specializing in AI Systems"
             className="w-full h-full object-cover object-top"
+            fetchPriority="high"
+            decoding="async"
+            width={380}
+            height={480}
           />
         </div>
       </motion.div>

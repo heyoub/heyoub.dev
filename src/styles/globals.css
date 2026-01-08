@@ -403,4 +403,104 @@
     pointer-events: none;
     z-index: -1;
   }
+
+  /* ========================================
+     PERFORMANCE OPTIMIZATIONS
+     ======================================== */
+
+  /* Content-visibility for off-screen sections - MASSIVE PAINT SAVINGS */
+  .content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
+
+  /* Sections with known heights for better CLS */
+  .section-hero {
+    content-visibility: visible; /* Always render hero */
+    contain: layout style;
+  }
+
+  .section-below-fold {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 800px;
+    contain: layout style paint;
+  }
+
+  .section-contact {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+    contain: layout style paint;
+  }
+
+  /* GPU-accelerated transforms */
+  .gpu-accelerate {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  /* Optimize paint for fixed elements */
+  .paint-optimize {
+    contain: strict;
+    content-visibility: auto;
+  }
+
+  /* Lazy image container - prevents layout shift */
+  .img-container {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-tertiary);
+  }
+
+  .img-container::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%; /* 16:9 aspect ratio default */
+  }
+
+  .img-container img,
+  .img-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Aspect ratio utilities for CLS prevention */
+  .aspect-16-9::before { padding-top: 56.25%; }
+  .aspect-4-3::before { padding-top: 75%; }
+  .aspect-1-1::before { padding-top: 100%; }
+  .aspect-3-2::before { padding-top: 66.67%; }
+
+  /* Smooth scroll anchor offset for sticky nav */
+  [id] {
+    scroll-margin-top: 80px;
+  }
+
+  /* Print optimization */
+  @media print {
+    .noise-overlay,
+    .grid-bg,
+    canvas {
+      display: none !important;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .tech-tag,
+    .pattern-card,
+    .project-card {
+      border-width: 2px;
+    }
+  }
+
+  /* Forced colors mode (Windows High Contrast) */
+  @media (forced-colors: active) {
+    .section-label::after {
+      background: CanvasText;
+    }
+  }
 }

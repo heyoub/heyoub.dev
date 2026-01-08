@@ -55,8 +55,8 @@ export function VideoInterlude({
         scale: containerScale
       }}
     >
-      {/* Video */}
-      <motion.div 
+      {/* Video - Optimized loading */}
+      <motion.div
         className="absolute inset-0 w-full h-[130%] -top-[15%]"
         style={{ y }}
       >
@@ -68,6 +68,10 @@ export function VideoInterlude({
           loop
           playsInline
           autoPlay
+          preload="metadata"
+          poster="/assets/Hero_3.jpg"
+          disablePictureInPicture
+          disableRemotePlayback
         />
       </motion.div>
 
