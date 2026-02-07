@@ -7,7 +7,7 @@ export interface ProjectLink {
 export const projectManifest: ProjectLink[] = [
   {
     name: 'Scrubah.PII',
-    gitUrl: 'https://github.com/Heyoub/scrubah.pii',
+    gitUrl: 'https://github.com/heyoub/scrubah.pii',
     siteUrl: 'https://scrub.heyoub.dev/',
   },
   // Add more projects here as they become public
