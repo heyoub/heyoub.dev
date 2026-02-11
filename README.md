@@ -167,9 +167,3 @@ vercel --prod
 - **Display:** Instrument Serif (variable)
 - **Mono:** Space Mono
 - **Body:** DM Sans
-
-## Credits
-
-Built by Eassa Heyoub
-Architecture: Semantic Computing Stack
-Philosophy: "The receipts prove legitimacy"
