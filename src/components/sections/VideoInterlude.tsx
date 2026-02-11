@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { fluidType } from '@/lib/responsive'
 
 interface VideoInterludeProps {
   src: string
@@ -8,11 +9,11 @@ interface VideoInterludeProps {
   className?: string
 }
 
-export function VideoInterlude({ 
-  src, 
-  height = '60vh', 
+export function VideoInterlude({
+  src,
+  height = '60vh',
   overlay = 'gradient',
-  className = ''
+  className = '',
 }: VideoInterludeProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -22,26 +23,34 @@ export function VideoInterlude({
     offset: ['start end', 'end start'],
   })
 
-  // Roll up from below effect - inverse to hero tuck down
   const containerY = useTransform(scrollYProgress, [0, 0.3, 0.5], [200, 50, 0])
   const containerOpacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [0, 0.6, 1])
   const containerScale = useTransform(scrollYProgress, [0, 0.3], [0.95, 1])
 
-  // Core Thesis glassmorphic text - persistent, no fade
   const glassTextOpacity = useTransform(scrollYProgress, [0.2, 0.35], [0, 1])
   const glassTextScale = useTransform(scrollYProgress, [0.2, 0.35], [0.95, 1])
 
-  // Internal video parallax (subtle)
   const y = useTransform(scrollYProgress, [0.3, 1], ['0%', '20%'])
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
 
+  // Efficient: play only when visible, pause when off-screen (saves GPU/battery)
   useEffect(() => {
     const video = videoRef.current
-    if (video) {
-      video.play().catch(() => {
-        // Autoplay may be blocked, that's okay
-      })
-    }
+    if (!video) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    observer.observe(video)
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -92,8 +101,9 @@ export function VideoInterlude({
         }}
       >
         <h2
-          className="font-serif text-[clamp(3.5rem,14vw,9rem)] font-bold tracking-tight text-center px-8"
+          className="font-serif font-bold tracking-tight text-center px-8"
           style={{
+            fontSize: fluidType.glassmorphic,
             background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',

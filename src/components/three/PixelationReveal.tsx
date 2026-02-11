@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, type MutableRefObject } from 'react'
 import { useFrame, useThree, extend } from '@react-three/fiber'
 import type { Object3DNode } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
@@ -99,7 +99,7 @@ declare module '@react-three/fiber' {
 }
 
 interface PixelationRevealProps {
-  progress: number // 0 to 1
+  progressRef: MutableRefObject<number> // 0 to 1, read per-frame without React re-renders
 }
 
 // Type for the custom shader material uniforms
@@ -110,7 +110,7 @@ interface PixelationMaterialUniforms {
   uDiagonalAngle: number
 }
 
-export function PixelationReveal({ progress }: PixelationRevealProps) {
+export function PixelationReveal({ progressRef }: PixelationRevealProps) {
   const materialRef = useRef<ShaderMaterial & PixelationMaterialUniforms>(null)
   const { viewport } = useThree()
 
@@ -123,12 +123,15 @@ export function PixelationReveal({ progress }: PixelationRevealProps) {
   useFrame((state) => {
     if (materialRef.current) {
       materialRef.current.uTime = state.clock.elapsedTime
-      materialRef.current.uProgress = progress
+      materialRef.current.uProgress = progressRef.current
     }
   })
 
+  // Hide when no pixelation active (progress near zero)
+  const visible = progressRef.current > 0.01
+
   return (
-    <mesh position={[0, 0, 1]}>
+    <mesh position={[0, 0, 1]} visible={visible}>
       <planeGeometry args={[viewport.width, viewport.height]} />
       <pixelationMaterial ref={materialRef} transparent />
     </mesh>

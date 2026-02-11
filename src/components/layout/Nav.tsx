@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { zIndex } from '@/lib/responsive'
 
 // Simple scroll utility that works with Lenis (initialized in Astro)
 function useScrollTo() {
@@ -8,7 +9,7 @@ function useScrollTo() {
     if (element) {
       const offset = options?.offset ?? 0
       const top = element.getBoundingClientRect().top + window.scrollY + offset
-      window.scrollTo({ top, behavior: 'smooth' })
+      window.scrollTo({ top, behavior: 'auto' })
     }
   }, [])
 }
@@ -114,8 +115,9 @@ export function Nav() {
   return (
     <>
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 px-6 md:px-8 py-4 md:py-6 flex justify-between items-center"
+        className="fixed top-0 left-0 right-0 px-6 md:px-8 py-4 md:py-6 flex justify-between items-center"
         style={{
+          zIndex: zIndex.nav,
           background: 'linear-gradient(to bottom, var(--bg-primary) 0%, transparent 100%)',
         }}
         initial={{ opacity: 0, y: -20 }}

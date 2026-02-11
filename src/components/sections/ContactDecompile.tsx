@@ -251,11 +251,24 @@ export function ContactDecompile() {
 
   const lineCount = 14 + links.length * 2
 
+  // Efficient: play only when visible, pause when off-screen
   useEffect(() => {
     const video = videoRef.current
-    if (video) {
-      video.play().catch(() => {})
-    }
+    if (!video) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { threshold: 0.05 }
+    )
+
+    observer.observe(video)
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -385,12 +398,11 @@ export function ContactDecompile() {
             <video
               ref={videoRef}
               className="absolute inset-0 w-full h-full object-cover"
-              src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4"
+              src="/assets/fs/3141208-hd_720p.mp4"
               muted
               loop
               playsInline
-              autoPlay
-              preload="auto"
+              preload="metadata"
             />
           </motion.div>
           

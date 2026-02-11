@@ -40,7 +40,8 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* scroll-behavior handled by Lenis - do NOT set smooth here (double-interpolation) */
+    scroll-behavior: auto;
   }
 
   body {
@@ -59,16 +60,28 @@
     color: var(--text-primary);
   }
 
-  /* Hide default scrollbar - using custom progress indicator */
+  /* Thin styled scrollbar - accessible but minimal */
   ::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    display: none;
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
   }
 
   html {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: thin; /* Firefox: thin but visible */
+    scrollbar-color: var(--text-muted) var(--bg-primary);
   }
 }
 

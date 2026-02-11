@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0b"/>
+      <stop offset="50%" style="stop-color:#0d0d10"/>
+      <stop offset="100%" style="stop-color:#0a0a0b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22d3ee"/>
+      <stop offset="60%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#f472b6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Grid pattern -->
+  <g opacity="0.04" stroke="#22d3ee" stroke-width="0.5" fill="none">
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(60,0)" />
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(120,0)" />
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(180,0)" />
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(240,0)" />
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(960,0)" />
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(1020,0)" />
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(1080,0)" />
+    <line x1="0" y1="0" x2="0" y2="630" transform="translate(1140,0)" />
+  </g>
+
+  <!-- Accent line top -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#accent)"/>
+
+  <!-- Corner accents -->
+  <line x1="60" y1="60" x2="140" y2="60" stroke="#22d3ee" stroke-width="1" opacity="0.5"/>
+  <line x1="60" y1="60" x2="60" y2="140" stroke="#22d3ee" stroke-width="1" opacity="0.5"/>
+  <line x1="1140" y1="570" x2="1060" y2="570" stroke="#a78bfa" stroke-width="1" opacity="0.5"/>
+  <line x1="1140" y1="570" x2="1140" y2="490" stroke="#a78bfa" stroke-width="1" opacity="0.5"/>
+
+  <!-- Name -->
+  <text x="100" y="250" font-family="Georgia, serif" font-size="72" fill="#ededed" font-weight="400">
+    Eassa <tspan font-style="italic" fill="#a0a0a8">Ayoub</tspan>
+  </text>
+
+  <!-- Title -->
+  <text x="100" y="320" font-family="monospace" font-size="16" fill="#22d3ee" letter-spacing="8">
+    COGNITIVE-FIRST SYSTEMS ARCHITECT
+  </text>
+
+  <!-- Description -->
+  <text x="100" y="380" font-family="sans-serif" font-size="22" fill="#8b8b96" font-weight="300">
+    Building software that matches how humans actually think.
+  </text>
+
+  <!-- Tech tags -->
+  <g font-family="monospace" font-size="13" fill="#22d3ee" opacity="0.6">
+    <text x="100" y="450">RUST</text>
+    <text x="170" y="450">OCAML</text>
+    <text x="260" y="450">TYPESCRIPT</text>
+    <text x="390" y="450">EFFECT-TS</text>
+    <text x="510" y="450">REACT</text>
+    <text x="590" y="450">ELIXIR</text>
+  </g>
+
+  <!-- URL -->
+  <text x="100" y="540" font-family="monospace" font-size="15" fill="#4a4a55" letter-spacing="2">
+    heyoub.dev
+  </text>
+
+  <!-- Accent line bottom -->
+  <rect x="0" y="627" width="1200" height="3" fill="url(#accent)"/>
+</svg>
