@@ -1,6 +1,6 @@
 # heyoub.dev — Personal Brand Site
 
-> Research Engineer & Systems Architect | Semantic Computing Stack
+> Research Engineer & Systems Architect
 
 ## Stack
 
@@ -68,7 +68,7 @@ src/
 │   ├── projects.ts                  # Portfolio data
 │   ├── patterns.ts                  # 6 architectural patterns
 │   ├── timeline.ts                  # Career path
-│   └── stack.ts                     # Semantic computing stack layers
+│   └── stack.ts                     # Stack layers
 ├── styles/
 │   └── globals.css                  # CSS variables, base styles
 ├── App.tsx
