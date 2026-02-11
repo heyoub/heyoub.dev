@@ -49,23 +49,29 @@ import { Scene } from '@components/three/Scene'
   </main>
 </Layout>
 
-<!-- Lenis smooth scroll - initialized globally -->
+<!-- Lenis smooth scroll - uses a single shared RAF loop -->
 <script>
   import Lenis from 'lenis'
 
   const lenis = new Lenis({
     duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 2,
     infinite: false,
+    autoRaf: false, // Don't create a separate RAF loop — we drive it ourselves
   })
 
+  let lastTime = 0
   function raf(time: number) {
-    lenis.raf(time)
+    // Throttle to ~60fps max to avoid unnecessary work on high-refresh displays
+    if (time - lastTime >= 16) {
+      lenis.raf(time)
+      lastTime = time
+    }
     requestAnimationFrame(raf)
   }
 

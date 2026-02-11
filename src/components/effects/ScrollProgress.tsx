@@ -1,4 +1,5 @@
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { useRef, useEffect } from 'react'
+import { motion, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion'
 import { zIndex } from '@/lib/responsive'
 
 const MARKER_COUNT = 16
@@ -61,12 +62,8 @@ export function ScrollProgress() {
         />
       </motion.div>
 
-      {/* Terminal-style section bars */}
-      <div className="absolute top-0 left-0 right-0 h-[3px]">
-        {sections.map((section, idx) => (
-          <TerminalBar key={section.id} section={section} progress={smoothProgress} index={idx} />
-        ))}
-      </div>
+      {/* Terminal-style section bars — driven by a single ref write, not 240 useTransform callbacks */}
+      <TerminalBars progress={smoothProgress} />
 
       {/* Terminal status readout */}
       <motion.div
@@ -85,73 +82,93 @@ export function ScrollProgress() {
   )
 }
 
-interface TerminalBarProps {
-  section: { id: string; position: number; label: string }
-  progress: ReturnType<typeof useSpring>
-  index: number
-}
+/**
+ * Renders all 16 terminal bars using a single useMotionValueEvent
+ * that writes to a ref, then updates DOM via one RAF — instead of
+ * 240 individual useTransform callbacks per frame.
+ */
+function TerminalBars({ progress }: { progress: ReturnType<typeof useSpring> }) {
+  const containerRef = useRef<HTMLDivElement>(null)
 
-function TerminalBar({ section, progress, index }: TerminalBarProps) {
-  const proximity = useTransform(progress, (v) => {
-    const distance = Math.abs(v - section.position)
-    return Math.max(0, 1 - distance * 8)
+  useMotionValueEvent(progress, 'change', (v) => {
+    const container = containerRef.current
+    if (!container) return
+
+    const bars = container.children
+    for (let idx = 0; idx < bars.length; idx++) {
+      const bar = bars[idx] as HTMLElement
+      const position = idx / (MARKER_COUNT - 1)
+      const distance = Math.abs(v - position)
+      const prox = Math.max(0, 1 - distance * 8)
+      const passed = v >= position
+      const active = v >= position - 0.05 && v <= position + 0.05
+
+      // Update width
+      const width = 120 + prox * 40
+      bar.style.width = `${width}px`
+
+      // Update segments
+      const segContainer = bar.firstElementChild as HTMLElement | null
+      if (segContainer) {
+        const segs = segContainer.children
+        for (let seg = 0; seg < segs.length; seg++) {
+          const segEl = segs[seg] as HTMLElement
+          const glitchVal = hash(seg + idx * 8, Math.floor(v * 50))
+          let color: string
+          if (active && glitchVal > 0.7) {
+            color = 'rgba(244, 114, 182, 0.8)'
+          } else if (passed) {
+            color = seg <= 5 ? 'rgba(34, 211, 238, 0.8)' : 'rgba(167, 139, 250, 0.8)'
+          } else if (prox > 0.3) {
+            color = `rgba(34, 211, 238, ${(0.3 + prox * 0.5) * 0.8})`
+          } else {
+            color = 'transparent'
+          }
+          segEl.style.backgroundColor = color
+        }
+      }
+
+      // Update label
+      const label = bar.lastElementChild as HTMLElement | null
+      if (label) {
+        const labelOpacity = prox < 0.5 ? prox * 0.8 : 0.4 + (prox - 0.5) * 1.0
+        label.style.opacity = String(Math.min(0.9, labelOpacity))
+        label.style.color = passed ? 'var(--accent)' : 'var(--text-muted)'
+
+        // Cursor blink
+        const cursor = label.lastElementChild as HTMLElement | null
+        if (cursor) {
+          cursor.style.opacity = active ? '1' : '0'
+        }
+      }
+    }
   })
 
-  const isPassed = useTransform(progress, (v) => v >= section.position)
-  const isActive = useTransform(progress, (v) =>
-    v >= section.position - 0.05 && v <= section.position + 0.05
-  )
-
   return (
-    <motion.div
-      className="absolute top-0 h-full flex items-center"
-      style={{ left: `${section.position * 100}%`, transform: 'translateX(-50%)' }}
-    >
-      <motion.div
-        className="relative h-full flex flex-col justify-center"
-        style={{ width: useTransform(proximity, [0, 1], [120, 160]) }}
-      >
-        {/* Bar segments - deterministic color based on progress, no Math.random */}
-        <div className="flex gap-px h-[3px]">
-          {[0, 1, 2, 3, 4, 5, 6, 7].map((seg) => (
-            <motion.div
-              key={seg}
-              className="flex-1 h-full"
-              style={{
-                backgroundColor: useTransform(progress, (v) => {
-                  const passed = v >= section.position
-                  const active = v >= section.position - 0.05 && v <= section.position + 0.05
-                  const distance = Math.abs(v - section.position)
-                  const prox = Math.max(0, 1 - distance * 8)
-                  // Deterministic glitch: based on segment index + section position, not random
-                  const glitchVal = hash(seg + index * 8, Math.floor(v * 50))
-                  if (active && glitchVal > 0.7) return 'rgba(244, 114, 182, 0.8)'
-                  if (passed) return seg <= 5 ? 'rgba(34, 211, 238, 0.8)' : 'rgba(167, 139, 250, 0.8)'
-                  if (prox > 0.3) return `rgba(34, 211, 238, ${(0.3 + prox * 0.5) * 0.8})`
-                  return 'transparent'
-                }),
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Label - shows when near */}
-        <motion.div
-          className="absolute top-full mt-1 left-1/2 -translate-x-1/2 font-mono text-[7px] tracking-[0.15em] whitespace-nowrap"
-          style={{
-            opacity: useTransform(proximity, [0, 0.5, 1], [0, 0.4, 0.9]),
-            color: useTransform(isPassed, (p) => (p ? 'var(--accent)' : 'var(--text-muted)')),
-          }}
+    <div ref={containerRef} className="absolute top-0 left-0 right-0 h-[3px]">
+      {sections.map((section, idx) => (
+        <div
+          key={section.id}
+          className="absolute top-0 h-full flex items-center"
+          style={{ left: `${section.position * 100}%`, transform: 'translateX(-50%)', width: 120 }}
         >
-          {section.label}
-          <motion.span
-            className="ml-0.5"
-            style={{ opacity: useTransform(isActive, (a) => (a ? 1 : 0)) }}
+          {/* Bar segments */}
+          <div className="flex gap-px h-[3px] w-full">
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((seg) => (
+              <div key={seg} className="flex-1 h-full" style={{ backgroundColor: 'transparent' }} />
+            ))}
+          </div>
+
+          {/* Label */}
+          <div
+            className="absolute top-full mt-1 left-1/2 -translate-x-1/2 font-mono text-[7px] tracking-[0.15em] whitespace-nowrap"
+            style={{ opacity: 0, color: 'var(--text-muted)' }}
           >
-            _
-          </motion.span>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+            {section.label}
+            <span className="ml-0.5" style={{ opacity: 0 }}>_</span>
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
