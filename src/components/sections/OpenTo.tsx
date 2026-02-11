@@ -1,10 +1,19 @@
 import { motion } from 'framer-motion'
 import { scrollReveal, staggerContainer, staggerItem, viewportConfig } from '@/lib/animations'
 import { openToContent } from '@/data/content'
+import { fluidType, fluidLayout } from '@/lib/responsive'
 
 export function OpenTo() {
   return (
-    <section className="py-[clamp(1.5rem,6vw,6rem)] px-[8vw] bg-gradient-to-br from-accent/[0.03] to-purple/[0.03] border-y border-white/5">
+    <section
+      className="bg-gradient-to-br from-accent/[0.03] to-purple/[0.03] border-y border-white/5"
+      style={{
+        paddingTop: fluidLayout.sectionPySmall,
+        paddingBottom: fluidLayout.sectionPySmall,
+        paddingLeft: fluidLayout.containerPx,
+        paddingRight: fluidLayout.containerPx,
+      }}
+    >
       <motion.div
         className="flex flex-col lg:flex-row justify-between items-center gap-8 md:gap-12"
         variants={scrollReveal}
@@ -13,8 +22,16 @@ export function OpenTo() {
         viewport={viewportConfig}
       >
         <div className="text-center lg:text-left">
-          <h3 className="font-serif text-[clamp(1.5rem,4vw,2rem)] mb-4">{openToContent.heading}</h3>
-          <p className="text-text-secondary font-light text-[clamp(0.95rem,2vw,1.125rem)] max-w-lg">
+          <h3
+            className="font-serif mb-4"
+            style={{ fontSize: fluidType.h2 }}
+          >
+            {openToContent.heading}
+          </h3>
+          <p
+            className="text-text-secondary font-light max-w-lg"
+            style={{ fontSize: fluidType.base }}
+          >
             {openToContent.description}
           </p>
         </div>
@@ -27,17 +44,18 @@ export function OpenTo() {
           viewport={viewportConfig}
         >
           {openToContent.roles.map((role, index) => (
-            <motion.button
+            <motion.span
               key={role}
-              className={`font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider px-4 md:px-5 py-2.5 md:py-3 border transition-colors touch-target focus-ring press-effect tap-highlight ${
+              className={`font-mono tracking-wider px-4 md:px-5 py-2.5 md:py-3 border transition-colors ${
                 index === openToContent.roles.length - 1
-                  ? 'border-accent/10 text-accent/40 hover:bg-accent/5 active:bg-accent/5'
-                  : 'border-accent/30 text-accent hover:bg-accent/10 active:bg-accent/10'
+                  ? 'border-accent/10 text-accent/40'
+                  : 'border-accent/30 text-accent hover:bg-accent/10'
               }`}
+              style={{ fontSize: fluidType.heroLabel }}
               variants={staggerItem}
             >
               {role}
-            </motion.button>
+            </motion.span>
           ))}
         </motion.div>
       </motion.div>

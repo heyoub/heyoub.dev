@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, useMotionValue, animate } from 'framer-motion'
 import { contactConfig, getLinkDisplayValue } from '@/data/footer'
+import { fluidType, zIndex } from '@/lib/responsive'
 
 export function ContactDecompile() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -251,11 +252,24 @@ export function ContactDecompile() {
 
   const lineCount = 14 + links.length * 2
 
+  // Efficient: play only when visible, pause when off-screen
   useEffect(() => {
     const video = videoRef.current
-    if (video) {
-      video.play().catch(() => {})
-    }
+    if (!video) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { threshold: 0.05 }
+    )
+
+    observer.observe(video)
+    return () => observer.disconnect()
   }, [])
 
   return (
