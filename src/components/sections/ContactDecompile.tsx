@@ -519,7 +519,7 @@ export function ContactDecompile() {
               </div>
             </div>
 
-            {/* Semantic content styled as code */}
+            {/* Content styled as code */}
             <div className="code-block py-4 md:py-6 px-4 md:px-8 md:pl-20 font-mono text-[clamp(0.7rem,1.5vw,0.875rem)] leading-relaxed">
               {/* File comment header */}
               <p className="code-line">
