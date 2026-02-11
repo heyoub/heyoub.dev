@@ -406,13 +406,13 @@ export function ContactDecompile() {
             />
           </motion.div>
           
-          {/* Pixelation overlay effect using CSS */}
+          {/* Pixelation overlay — uses opacity + fixed blur instead of per-frame backdropFilter */}
           <motion.div
             className="absolute inset-0 pointer-events-none"
             style={{
-              backdropFilter: useTransform(videoPixelation, (px) =>
-                px > 2 ? `blur(${px * 0.4}px)` : 'none'
-              ),
+              opacity: useTransform(videoPixelation, [0, 2, 60], [0, 0, 0.85]),
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
             }}
           />
           

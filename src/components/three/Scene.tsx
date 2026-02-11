@@ -1,4 +1,4 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, invalidate } from '@react-three/fiber'
 import { Suspense, useRef } from 'react'
 import { useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 import { ParallaxOrbs } from './ParallaxOrbs'
@@ -26,9 +26,9 @@ export function Scene() {
           position: [0, 0, 5],
           fov: isMobile ? 85 : 75,
         }}
-        dpr={[1, 2]}
+        dpr={isMobile ? 1 : [1, 1.5]}
         gl={{
-          antialias: true,
+          antialias: !isMobile,
           alpha: true,
           powerPreference: 'high-performance',
         }}

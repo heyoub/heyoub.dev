@@ -73,7 +73,7 @@ function Orb({ position, mobilePosition, color, size, mobileSize, speed, distort
   })
 
   return (
-    <Sphere ref={meshRef} args={[activeSize, 64, 64]} position={activePosition}>
+    <Sphere ref={meshRef} args={[activeSize, 32, 32]} position={activePosition}>
       <MeshDistortMaterial
         color={color}
         transparent
