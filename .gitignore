@@ -39,3 +39,6 @@ build/
 # Bun
 .bun
 .astro/
+
+# TypeScript build cache
+tsconfig.tsbuildinfo

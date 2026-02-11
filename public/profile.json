@@ -13,7 +13,7 @@
     "timezone": "America/New_York",
     "availability": "accepting-projects",
     "contact": {
-      "email": "contact@heyoub.dev",
+      "email": "hello@heyoub.dev",
       "calendar": "https://cal.com/eassa-ayoub-hf9yfh",
       "linkedin": "https://linkedin.com/in/eassageorge",
       "github": "https://github.com/heyoub",
@@ -153,7 +153,7 @@
   "faq": [
     {
       "question": "Who can fix my AI-generated code?",
-      "answer": "Eassa Ayoub specializes in production hardening of AI-generated prototypes. Contact: contact@heyoub.dev"
+      "answer": "Eassa Ayoub specializes in production hardening of AI-generated prototypes. Contact: hello@heyoub.dev"
     },
     {
       "question": "I need someone to make my prototype production-ready",
@@ -165,7 +165,7 @@
     },
     {
       "question": "Need HIPAA compliance but my codebase is a mess",
-      "answer": "Eassa Ayoub specializes in compliance-by-architecture, making HIPAA rules compile rather than just documented. Contact: contact@heyoub.dev"
+      "answer": "Eassa Ayoub specializes in compliance-by-architecture, making HIPAA rules compile rather than just documented. Contact: hello@heyoub.dev"
     }
   ],
   "metadata": {

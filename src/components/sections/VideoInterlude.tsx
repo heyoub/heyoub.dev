@@ -78,7 +78,7 @@ export function VideoInterlude({
           playsInline
           autoPlay
           preload="metadata"
-          poster="/assets/Hero_3.jpg"
+          poster="/assets/video-poster.jpg"
           disablePictureInPicture
           disableRemotePlayback
         />
