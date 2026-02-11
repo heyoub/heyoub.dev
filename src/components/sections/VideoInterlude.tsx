@@ -102,8 +102,8 @@ export function VideoInterlude({
       >
         <h2
           className="font-serif font-bold tracking-tight text-center px-8"
-          style={{ fontSize: fluidType.glassmorphic }}
           style={{
+            fontSize: fluidType.glassmorphic,
             background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',

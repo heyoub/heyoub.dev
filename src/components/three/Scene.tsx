@@ -1,7 +1,6 @@
 import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Suspense, useRef } from 'react'
 import { useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
-import { useState } from 'react'
 import { ParallaxOrbs } from './ParallaxOrbs'
 import { GridPlane } from './GridPlane'
 import { PixelationReveal } from './PixelationReveal'
@@ -10,13 +9,14 @@ import { useIsMobile, zIndex } from '@/lib/responsive'
 export function Scene() {
   const isMobile = useIsMobile()
   const { scrollYProgress } = useScroll()
-  const [pixelProgress, setPixelProgress] = useState(0)
+  const pixelProgressRef = useRef(0)
 
   // Map the last 15% of scroll to pixelation (approaching footer)
   const pixelMotion = useTransform(scrollYProgress, [0.85, 1], [0, 1])
 
+  // Write to ref — no React re-render, PixelationReveal reads it in useFrame
   useMotionValueEvent(pixelMotion, 'change', (v) => {
-    setPixelProgress(v)
+    pixelProgressRef.current = v
   })
 
   return (
@@ -39,7 +39,7 @@ export function Scene() {
           <directionalLight position={[-5, -5, -5]} intensity={0.3} />
           <ParallaxOrbs />
           <GridPlane />
-          {pixelProgress > 0.01 && <PixelationReveal progress={pixelProgress} />}
+          <PixelationReveal progressRef={pixelProgressRef} />
         </Suspense>
       </Canvas>
     </div>

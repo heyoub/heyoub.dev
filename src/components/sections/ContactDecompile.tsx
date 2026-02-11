@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, useMotionValue, animate } from 'framer-motion'
 import { contactConfig, getLinkDisplayValue } from '@/data/footer'
-import { fluidType, zIndex } from '@/lib/responsive'
 
 export function ContactDecompile() {
   const containerRef = useRef<HTMLDivElement>(null)
