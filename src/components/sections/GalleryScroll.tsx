@@ -159,19 +159,29 @@ function ParallaxImage() {
   })
 
   const textOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.7], [0, 1, 0])
+  // Scroll-driven parallax: image moves slower than scroll (works on iOS unlike background-attachment: fixed)
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
 
   return (
     <div
       ref={ref}
-      className="relative h-[60vh] lg:h-[80vh] my-16 lg:my-24"
-      style={{
-        backgroundImage: 'url(/assets/fs/pexels-kevin-ku-glasses.jpg)',
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }}
+      className="relative h-[60vh] lg:h-[80vh] my-16 lg:my-24 overflow-hidden"
     >
+      {/* Parallax image layer - scroll-driven transform instead of background-attachment: fixed */}
+      <motion.div
+        className="absolute inset-0 will-change-transform"
+        style={{
+          y: imageY,
+          backgroundImage: 'url(/assets/fs/pexels-kevin-ku-glasses.jpg)',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          // Extend image below container so parallax doesn't reveal gaps
+          top: '-15%',
+          bottom: '-15%',
+        }}
+      />
+
       <div className="absolute inset-0 bg-bg-primary/60" />
       <div className="absolute inset-0 bg-gradient-to-b from-bg-primary via-transparent to-bg-primary pointer-events-none" />
 

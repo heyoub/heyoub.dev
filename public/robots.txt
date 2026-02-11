@@ -1,48 +1,35 @@
 # robots.txt for heyoub.dev
+# All crawlers (including AI) are welcome
 
 User-agent: *
 Allow: /
-Allow: /profile.json
-Allow: /llms.txt
 
-# AI Agents & LLMs
+# AI crawlers explicitly welcomed
 User-agent: GPTBot
 Allow: /
-Allow: /profile.json
-Allow: /llms.txt
 
 User-agent: ChatGPT-User
 Allow: /
-Allow: /profile.json
-Allow: /llms.txt
 
-User-agent: Claude-Web
+User-agent: ClaudeBot
 Allow: /
-Allow: /profile.json
-Allow: /llms.txt
 
 User-agent: anthropic-ai
 Allow: /
-Allow: /profile.json
-Allow: /llms.txt
-
-User-agent: Google-Extended
-Allow: /
-Allow: /profile.json
-Allow: /llms.txt
-
-User-agent: CCBot
-Allow: /
-Allow: /profile.json
-Allow: /llms.txt
 
 User-agent: PerplexityBot
 Allow: /
-Allow: /profile.json
-Allow: /llms.txt
 
-# Sitemap
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
 Sitemap: https://heyoub.dev/sitemap.xml
-
-# Crawl-delay for politeness
-Crawl-delay: 1

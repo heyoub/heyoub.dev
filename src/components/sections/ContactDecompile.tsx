@@ -399,12 +399,11 @@ export function ContactDecompile() {
             <video
               ref={videoRef}
               className="absolute inset-0 w-full h-full object-cover"
-              src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4"
+              src="/assets/fs/3141208-hd_720p.mp4"
               muted
               loop
               playsInline
-              autoPlay
-              preload="auto"
+              preload="metadata"
             />
           </motion.div>
           
