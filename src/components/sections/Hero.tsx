@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { heroLabel, heroName, heroTagline, heroStats, heroPhoto, fadeUp } from '@/lib/animations'
+import { heroContent } from '@/data/content'
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -18,7 +19,7 @@ export function Hero() {
   const contentScale = useTransform(scrollYProgress, [0, 1], [1, 0.95])
 
   return (
-    <section ref={sectionRef} className="min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center px-[8vw] gap-8 md:gap-16 py-24 md:py-0 relative overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center px-[8vw] gap-8 md:gap-16 py-24 md:py-0 overflow-hidden">
       {/* Content */}
       <motion.div
         className="max-w-xl lg:max-w-none"
@@ -30,7 +31,7 @@ export function Hero() {
           initial="hidden"
           animate="visible"
         >
-          Eassa <span className="italic text-text-secondary">Ayoub</span>
+          {heroContent.name.first} <span className="italic text-text-secondary">{heroContent.name.last}</span>
         </motion.h1>
 
         <motion.div
@@ -39,7 +40,7 @@ export function Hero() {
           initial="hidden"
           animate="visible"
         >
-          Technical Architect · AI Systems & Cross-Domain Synthesis
+          {heroContent.label}
         </motion.div>
 
         <motion.p
@@ -48,12 +49,11 @@ export function Hero() {
           initial="hidden"
           animate="visible"
         >
-          I build{' '}
+          {heroContent.tagline.before}{' '}
           <strong className="text-text-primary font-medium">
-            software that feels like thinking
+            {heroContent.tagline.emphasis}
           </strong>
-          . Systems where your mental model becomes structure, behavior becomes enforced, and
-          complexity dissolves into clarity — without forcing you into abstraction hell.
+          {heroContent.tagline.after}
         </motion.p>
 
         <motion.div
@@ -65,9 +65,9 @@ export function Hero() {
           {/* Quote-style text block */}
           <div className="flex items-center gap-4 border-l-2 border-accent/30 pl-4">
             <p className="text-[clamp(0.95rem,2vw,1.125rem)] font-light text-text-secondary">
-              You're not just building apps.{' '}
+              {heroContent.quote.regular}{' '}
               <span className="text-text-primary italic">
-                You're shaping how people experience reality.
+                {heroContent.quote.emphasis}
               </span>
             </p>
           </div>
@@ -75,13 +75,13 @@ export function Hero() {
           {/* Square CTA button with padding */}
           <div className="flex items-center justify-center p-2">
             <a
-              href="https://cal.com/eassa-ayoub-hf9yfh"
+              href={heroContent.cta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300 flex flex-col items-center justify-center gap-2 group touch-target"
+              className="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300 flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight"
             >
-              <span className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">Book a</span>
-              <span className="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">Call</span>
+              <span className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">{heroContent.cta.label}</span>
+              <span className="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">{heroContent.cta.action}</span>
             </a>
           </div>
         </motion.div>
@@ -101,10 +101,10 @@ export function Hero() {
 
           {/* Headshot - Hero image is critical, use fetchpriority high */}
           <img
-            src="/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png"
-            alt="Eassa Ayoub - Technical Architect specializing in AI Systems"
+            src={heroContent.photo.src}
+            alt={heroContent.photo.alt}
             className="w-full h-full object-cover object-top"
-            fetchPriority="high"
+            loading="eager"
             decoding="async"
             width={380}
             height={480}
@@ -121,7 +121,7 @@ export function Hero() {
         transition={{ delay: 1 }}
       >
         <span className="w-12 md:w-16 h-px bg-gradient-to-r from-text-muted to-transparent" />
-        <span>Scroll to explore</span>
+        <span>{heroContent.scrollHint}</span>
       </motion.div>
     </section>
   )

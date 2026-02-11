@@ -10,5 +10,9 @@ export const projectManifest: ProjectLink[] = [
     gitUrl: 'https://github.com/Heyoub/scrubah.pii',
     siteUrl: 'https://scrub.heyoub.dev/',
   },
-  // Add more projects here as they become public
+  {
+    name: 'SunSetter AQM',
+    gitUrl: 'https://github.com/Heyoub/SunSetter_AQM',
+    siteUrl: 'https://sunsetter-aqm.heyoub.dev',
+  },
 ]

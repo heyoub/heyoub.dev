@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { scrollReveal, staggerContainer, staggerItem, viewportConfig } from '@/lib/animations'
 import { matrix, domains } from '@/data/projects'
+import { portfolioContent } from '@/data/content'
 
 export function Portfolio() {
   return (
@@ -12,7 +13,7 @@ export function Portfolio() {
         whileInView="visible"
         viewport={viewportConfig}
       >
-        What I Build
+        {portfolioContent.sectionLabel}
       </motion.div>
 
       <motion.div
@@ -22,10 +23,9 @@ export function Portfolio() {
         whileInView="visible"
         viewport={viewportConfig}
       >
-        <h2 className="font-serif text-[clamp(1.5rem,4vw,2.5rem)] mb-4">Capabilities</h2>
+        <h2 className="font-serif text-[clamp(1.5rem,4vw,2.5rem)] mb-4">{portfolioContent.heading}</h2>
         <p className="text-text-secondary font-light text-[clamp(1rem,2.5vw,1.25rem)]">
-          I don't just write code — I architect systems where constraints become guarantees,
-          complexity becomes clarity, and your mental model becomes structure.
+          {portfolioContent.description}
         </p>
       </motion.div>
 

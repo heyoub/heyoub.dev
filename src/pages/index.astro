@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro'
+
+// React components as islands
+import { Nav } from '@components/layout/Nav'
+import { Hero } from '@components/sections/Hero'
+import { VideoInterlude } from '@components/sections/VideoInterlude'
+import { CoreThesis } from '@components/sections/CoreThesis'
+import { Portfolio } from '@components/sections/Portfolio'
+import { Path } from '@components/sections/Path'
+import { OpenTo } from '@components/sections/OpenTo'
+import { ContactDecompile } from '@components/sections/ContactDecompile'
+import { Scene } from '@components/three/Scene'
+---
+
+<Layout>
+  <!-- WebGL Background - only on client, no SSR for Three.js -->
+  <Scene client:only="react" />
+
+  <!-- Noise overlay - pure CSS, no JS needed -->
+  <div class="noise-overlay"></div>
+
+  <!-- Navigation - needs immediate interactivity -->
+  <Nav client:load />
+
+  <!-- Main Content -->
+  <main class="relative">
+    <!-- Hero - load immediately for LCP -->
+    <Hero client:load />
+
+    <!-- Video interlude - hydrate when visible -->
+    <VideoInterlude
+      client:visible
+      src="/assets/fs/3130182-hd_1280_720_30fps.mp4"
+      height="50vh"
+      overlay="gradient"
+    />
+
+    <!-- Below-fold sections - hydrate when visible -->
+    <CoreThesis client:visible />
+    <Portfolio client:visible />
+    <Path client:visible />
+    <OpenTo client:visible />
+
+    <!-- Contact + Footer - hydrate when visible -->
+    <ContactDecompile client:visible />
+  </main>
+</Layout>
+
+<!-- Lenis smooth scroll - initialized globally -->
+<script>
+  import Lenis from 'lenis'
+
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 2,
+    infinite: false,
+  })
+
+  function raf(time: number) {
+    lenis.raf(time)
+    requestAnimationFrame(raf)
+  }
+
+  requestAnimationFrame(raf)
+</script>

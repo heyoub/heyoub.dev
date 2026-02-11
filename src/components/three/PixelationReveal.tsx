@@ -1,14 +1,15 @@
 import { useRef, useEffect } from 'react'
-import { useFrame, useThree, extend, Object3DNode } from '@react-three/fiber'
+import { useFrame, useThree, extend } from '@react-three/fiber'
+import type { Object3DNode } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
-import * as THREE from 'three'
+import { Vector2, ShaderMaterial } from 'three'
 
 // Custom shader material for pixelation effect
 const PixelationMaterial = shaderMaterial(
   {
     uTime: 0,
     uProgress: 0,
-    uResolution: new THREE.Vector2(1, 1),
+    uResolution: new Vector2(1, 1),
     uDiagonalAngle: Math.PI / 6, // 30 degrees
   },
   // Vertex shader
@@ -101,8 +102,16 @@ interface PixelationRevealProps {
   progress: number // 0 to 1
 }
 
+// Type for the custom shader material uniforms
+interface PixelationMaterialUniforms {
+  uTime: number
+  uProgress: number
+  uResolution: Vector2
+  uDiagonalAngle: number
+}
+
 export function PixelationReveal({ progress }: PixelationRevealProps) {
-  const materialRef = useRef<any>(null)
+  const materialRef = useRef<ShaderMaterial & PixelationMaterialUniforms>(null)
   const { viewport } = useThree()
 
   useEffect(() => {

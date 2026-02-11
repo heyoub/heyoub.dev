@@ -46,7 +46,7 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
               <span className="font-mono text-sm tracking-widest text-accent">MENU</span>
               <button
                 onClick={onClose}
-                className="w-12 h-12 flex items-center justify-center text-text-secondary hover:text-accent transition-colors touch-target"
+                className="w-12 h-12 flex items-center justify-center text-text-secondary hover:text-accent transition-colors touch-target focus-ring press-effect tap-highlight"
                 aria-label="Close menu"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -71,7 +71,7 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => handleLinkClick(project.gitUrl!, true)}
-                          className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent transition-colors rounded touch-target"
+                          className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent active:bg-accent/20 transition-colors rounded touch-target focus-ring tap-highlight"
                         >
                           {project.name}
                         </a>
@@ -95,7 +95,7 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => handleLinkClick(project.siteUrl!, true)}
-                          className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent transition-colors rounded touch-target"
+                          className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent active:bg-accent/20 transition-colors rounded touch-target focus-ring tap-highlight"
                         >
                           {project.name}
                         </a>
@@ -118,7 +118,7 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
                         target={link.external ? '_blank' : undefined}
                         rel={link.external ? 'noopener noreferrer' : undefined}
                         onClick={() => handleLinkClick(link.href, link.external ?? false)}
-                        className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent transition-colors rounded touch-target"
+                        className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent active:bg-accent/20 transition-colors rounded touch-target focus-ring tap-highlight"
                       >
                         {link.label}
                       </a>

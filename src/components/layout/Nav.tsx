@@ -1,7 +1,18 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useScrollTo } from '@/components/effects/SmoothScroll'
 import { fadeIn } from '@/lib/animations'
+
+// Simple scroll utility that works with Lenis (initialized in Astro)
+function useScrollTo() {
+  return useCallback((target: string, options?: { offset?: number }) => {
+    const element = target === '#' ? document.body : document.querySelector(target)
+    if (element) {
+      const offset = options?.offset ?? 0
+      const top = element.getBoundingClientRect().top + window.scrollY + offset
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+  }, [])
+}
 import { projectManifest } from '@/data/manifest'
 import { contactConfig } from '@/data/footer'
 import { MobileMenu } from './MobileMenu'
@@ -126,7 +137,7 @@ export function Nav() {
         {/* Mobile Hamburger Button */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="md:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 text-text-secondary hover:text-accent transition-colors touch-target"
+          className="md:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 text-text-secondary hover:text-accent transition-colors touch-target focus-ring press-effect tap-highlight"
           aria-label="Open menu"
         >
           <span className="w-6 h-0.5 bg-current transition-all" />

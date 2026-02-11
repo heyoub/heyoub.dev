@@ -1,13 +1,6 @@
 import { motion } from 'framer-motion'
 import { scrollReveal, staggerContainer, staggerItem, viewportConfig } from '@/lib/animations'
-
-const roles = [
-  'Full-Stack Architecture',
-  'Cross-Domain Integration',
-  'AI Systems Engineering',
-  'Technical Architecture Consulting',
-  'Technical Co-Founder',
-]
+import { openToContent } from '@/data/content'
 
 export function OpenTo() {
   return (
@@ -20,11 +13,9 @@ export function OpenTo() {
         viewport={viewportConfig}
       >
         <div className="text-center lg:text-left">
-          <h3 className="font-serif text-[clamp(1.5rem,4vw,2rem)] mb-4">Open to Opportunities</h3>
+          <h3 className="font-serif text-[clamp(1.5rem,4vw,2rem)] mb-4">{openToContent.heading}</h3>
           <p className="text-text-secondary font-light text-[clamp(0.95rem,2vw,1.125rem)] max-w-lg">
-            Looking for roles where I can preserve mental models, extend them with architectural
-            depth, and build systems where thinking becomes structure. Let's create software that
-            feels inevitable.
+            {openToContent.description}
           </p>
         </div>
 
@@ -35,11 +26,11 @@ export function OpenTo() {
           whileInView="visible"
           viewport={viewportConfig}
         >
-          {roles.map((role, index) => (
+          {openToContent.roles.map((role, index) => (
             <motion.button
               key={role}
-              className={`font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider px-4 md:px-5 py-2.5 md:py-3 border transition-colors touch-target ${
-                index === roles.length - 1
+              className={`font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider px-4 md:px-5 py-2.5 md:py-3 border transition-colors touch-target focus-ring press-effect tap-highlight ${
+                index === openToContent.roles.length - 1
                   ? 'border-accent/10 text-accent/40 hover:bg-accent/5 active:bg-accent/5'
                   : 'border-accent/30 text-accent hover:bg-accent/10 active:bg-accent/10'
               }`}

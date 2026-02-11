@@ -1,14 +1,14 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import { Color, type Mesh } from 'three'
 
 export function GridPlane() {
-  const meshRef = useRef<THREE.Mesh>(null)
+  const meshRef = useRef<Mesh>(null)
 
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
-      uColor: { value: new THREE.Color('#22d3ee') },
+      uColor: { value: new Color('#22d3ee') },
       uOpacity: { value: 0.03 },
     }),
     []

@@ -12,14 +12,35 @@ export function ContactDecompile() {
   const [isLocked, setIsLocked] = useState(false)
   const manualProgress = useMotionValue(0)
 
-  const handleConnect = () => {
-    if (containerRef.current) {
-      const containerBottom = containerRef.current.offsetTop + containerRef.current.offsetHeight
-      window.scrollTo({
-        top: containerBottom - window.innerHeight,
-        behavior: 'smooth'
-      })
-    }
+  // False trap door - triggers decompile animation instead of actual navigation
+  const [trapDoorTriggered, setTrapDoorTriggered] = useState(false)
+
+  const handleTrapDoor = () => {
+    if (isLocked || hasAutoPlayed || trapDoorTriggered) return
+
+    setTrapDoorTriggered(true) // Hide button immediately
+    setIsLocked(true)
+    document.body.style.overflow = 'hidden'
+
+    // Animate from current progress to reveal code footer
+    animate(manualProgress, 1, {
+      duration: 3, // Full 3 second animation
+      ease: [0.4, 0, 0.2, 1], // Slower ease-out for dramatic effect
+      onComplete: () => {
+        setHasAutoPlayed(true)
+        setIsLocked(false)
+        document.body.style.overflow = ''
+
+        // Scroll to bottom of container so code footer is visible
+        if (containerRef.current) {
+          const containerBottom = containerRef.current.offsetTop + containerRef.current.offsetHeight
+          window.scrollTo({
+            top: containerBottom - window.innerHeight,
+            behavior: 'instant'
+          })
+        }
+      },
+    })
   }
 
   // Track scroll progress through this section
@@ -256,12 +277,15 @@ export function ContactDecompile() {
             </p>
           </div>
 
-          <button
-            onClick={handleConnect}
-            className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-[0.15em] uppercase text-text-secondary px-6 md:px-8 py-3 md:py-4 border border-white/10 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300 cursor-pointer pointer-events-auto touch-target"
-          >
-            Connect
-          </button>
+          {!trapDoorTriggered && (
+            <button
+              onClick={handleTrapDoor}
+              className="relative z-[100] font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-[0.15em] uppercase text-text-secondary px-6 md:px-8 py-3 md:py-4 border border-white/10 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300 cursor-pointer pointer-events-auto touch-target group"
+              aria-label="Connect - triggers decompile animation"
+            >
+              <span className="group-hover:animate-pulse">Connect</span>
+            </button>
+          )}
           
           {/* Decompile teaser - subtle hint at bottom */}
           <motion.div
@@ -302,13 +326,13 @@ export function ContactDecompile() {
 
         {/* BACKGROUND COVER - hides orbs from video phase through code phase */}
         <motion.div
-          className="absolute inset-0 z-[15] bg-bg-primary"
+          className="absolute inset-0 z-[15] bg-bg-primary pointer-events-none"
           style={{ opacity: bgCoverOpacity }}
         />
 
         {/* PHASE 2: Video with depixelation effect */}
         <motion.div
-          className="absolute inset-0 z-20"
+          className="absolute inset-0 z-20 pointer-events-none"
           style={{ opacity: videoContentOpacity }}
         >
           {/* Video with fallback gradient */}
@@ -377,6 +401,7 @@ export function ContactDecompile() {
           style={{
             opacity: codeOpacity,
             filter: useTransform(codeBlur, (blur) => `blur(${blur}px)`),
+            pointerEvents: (hasAutoPlayed || trapDoorTriggered) ? 'auto' : 'none',
           }}
         >
           {/* Editor header - decorative */}

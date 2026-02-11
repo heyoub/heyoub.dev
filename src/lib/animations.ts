@@ -1,4 +1,4 @@
-import { Variants, Transition } from 'framer-motion'
+import type { Variants, Transition } from 'framer-motion'
 
 // Easing curves
 export const easeOutExpo = [0.16, 1, 0.3, 1]

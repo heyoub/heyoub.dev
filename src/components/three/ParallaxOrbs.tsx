@@ -1,7 +1,7 @@
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
-import * as THREE from 'three'
+import { Vector3, type Mesh } from 'three'
 
 interface OrbConfig {
   position: [number, number, number]
@@ -46,8 +46,8 @@ const orbs: OrbConfig[] = [
 ]
 
 function Orb({ position, mobilePosition, color, size, mobileSize, speed, distort }: OrbConfig) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const { mouse, viewport } = useThree()
+  const meshRef = useRef<Mesh>(null)
+  const { pointer, viewport } = useThree()
   const [isMobile, setIsMobile] = useState(false)
 
   // Detect mobile viewport
@@ -64,7 +64,7 @@ function Orb({ position, mobilePosition, color, size, mobileSize, speed, distort
   // Use mobile or desktop position/size
   const activePosition = isMobile ? mobilePosition : position
   const activeSize = isMobile ? mobileSize : size
-  const initialPosition = useMemo(() => new THREE.Vector3(...activePosition), [activePosition])
+  const initialPosition = useMemo(() => new Vector3(...activePosition), [activePosition])
 
   useFrame((state) => {
     if (!meshRef.current) return
@@ -75,13 +75,13 @@ function Orb({ position, mobilePosition, color, size, mobileSize, speed, distort
     meshRef.current.position.x = initialPosition.x + Math.sin(time * speed) * 0.3
     meshRef.current.position.y = initialPosition.y + Math.cos(time * speed * 0.8) * 0.2
 
-    // Mouse parallax effect (reduced on mobile)
+    // Pointer parallax effect (reduced on mobile)
     const parallaxStrength = isMobile ? 0.02 : 0.05
-    const mouseX = (mouse.x * viewport.width) / 2
-    const mouseY = (mouse.y * viewport.height) / 2
+    const pointerX = (pointer.x * viewport.width) / 2
+    const pointerY = (pointer.y * viewport.height) / 2
 
-    meshRef.current.position.x += mouseX * parallaxStrength
-    meshRef.current.position.y += mouseY * parallaxStrength
+    meshRef.current.position.x += pointerX * parallaxStrength
+    meshRef.current.position.y += pointerY * parallaxStrength
 
     // Gentle rotation
     meshRef.current.rotation.x = time * 0.1
