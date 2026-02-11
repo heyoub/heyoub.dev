@@ -1,11 +1,11 @@
 # heyoub.dev — Personal Brand Site
 
-> Research Engineer & Systems Architect
+> Software Engineer & Systems Architect
 
 ## Stack
 
 ```
-React 18 + Vite + TypeScript
+Astro + React 18 + TypeScript
 ├── Three.js + @react-three/fiber    → WebGL effects (pixelation reveal, orbs)
 ├── @react-three/drei                → Three.js helpers
 ├── Framer Motion                    → Declarative animations
@@ -18,61 +18,41 @@ React 18 + Vite + TypeScript
 
 ```
 src/
+├── pages/
+│   └── index.astro                  # Entry page
+├── layouts/
+│   └── Layout.astro                 # Base layout
 ├── components/
 │   ├── sections/                    # Page sections
 │   │   ├── Hero.tsx
 │   │   ├── CoreThesis.tsx
-│   │   ├── Patterns.tsx
-│   │   ├── SemanticStack.tsx
-│   │   ├── Portfolio.tsx
-│   │   ├── Philosophy.tsx
-│   │   ├── CrossDomain.tsx
+│   │   ├── GalleryScroll.tsx
 │   │   ├── Path.tsx
-│   │   ├── Signal.tsx
+│   │   ├── VideoInterlude.tsx
 │   │   ├── OpenTo.tsx
-│   │   └── Contact.tsx
-│   ├── ui/                          # Reusable components
-│   │   ├── SectionLabel.tsx
-│   │   ├── TechTag.tsx
-│   │   ├── PatternCard.tsx
-│   │   ├── ProjectCard.tsx
-│   │   ├── TimelineItem.tsx
-│   │   └── CodeFooter.tsx
+│   │   └── ContactDecompile.tsx
 │   ├── three/                       # WebGL components
 │   │   ├── Scene.tsx                # Main R3F canvas
 │   │   ├── ParallaxOrbs.tsx         # Floating gradient orbs
 │   │   ├── GridPlane.tsx            # Animated grid background
-│   │   ├── PixelationReveal.tsx     # The diagonal dissolve shader
-│   │   └── NoiseTexture.tsx         # Film grain overlay
-│   ├── effects/                     # Animation wrappers
-│   │   ├── SmoothScroll.tsx         # Lenis provider
-│   │   ├── ScrollReveal.tsx         # Scroll-triggered animations
-│   │   ├── StaggerChildren.tsx      # Staggered reveals
-│   │   └── ParallaxLayer.tsx        # Scroll-linked transforms
+│   │   └── PixelationReveal.tsx     # Diagonal dissolve shader
+│   ├── effects/
+│   │   └── ScrollProgress.tsx       # Scroll progress indicator
 │   └── layout/
 │       ├── Nav.tsx
-│       └── Footer.tsx               # Code-as-footer
-├── hooks/
-│   ├── useScrollProgress.ts         # Scroll position 0-1
-│   ├── useSectionInView.ts          # Active section detection
-│   ├── useMousePosition.ts          # For orb parallax
-│   └── useLenis.ts                  # Lenis instance access
+│       └── MobileMenu.tsx
 ├── lib/
 │   ├── animations.ts                # Shared Framer variants
-│   ├── shaders/                     # GLSL shaders
-│   │   ├── pixelation.vert
-│   │   ├── pixelation.frag
-│   │   └── noise.frag
-│   └── constants.ts                 # Colors, breakpoints, etc.
+│   └── responsive.ts                # Responsive utilities
 ├── data/
-│   ├── projects.ts                  # Portfolio data
-│   ├── patterns.ts                  # 6 architectural patterns
-│   ├── timeline.ts                  # Career path
-│   └── stack.ts                     # Stack layers
+│   ├── content.ts                   # Site copy
+│   ├── footer.ts                    # Contact config
+│   ├── patterns.ts                  # Design principles
+│   ├── projects.ts                  # Proof points
+│   └── manifest.ts                  # Project links
 ├── styles/
 │   └── globals.css                  # CSS variables, base styles
-├── App.tsx
-└── main.tsx
+└── vite-env.d.ts
 ```
 
 ## Key Effects
@@ -101,7 +81,6 @@ Floating gradient spheres that respond to:
 - Custom spring physics
 
 ### 5. Gallery Parallax Section
-Adapted from ForgeStack:
 - Sticky sidebar (patterns/stack)
 - Content scrolls with depth layers
 - Different scroll speeds per layer
@@ -137,12 +116,12 @@ vercel --prod
   --bg-primary: #0a0a0b;
   --bg-secondary: #111113;
   --bg-tertiary: #18181b;
-  
+
   /* Text */
   --text-primary: #fafafa;
   --text-secondary: #a1a1aa;
   --text-muted: #52525b;
-  
+
   /* Accents */
   --accent: #22d3ee;
   --purple: #a78bfa;
@@ -150,11 +129,11 @@ vercel --prod
   --orange: #fb923c;
   --warm: #fbbf24;
   --pink: #f472b6;
-  
+
   /* Gradients */
   --gradient-start: #06b6d4;
   --gradient-end: #8b5cf6;
-  
+
   /* Editor theme (GitHub Dark) */
   --editor-bg: #0d1117;
   --editor-chrome: #161b22;

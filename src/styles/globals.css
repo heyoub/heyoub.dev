@@ -146,7 +146,7 @@
     @apply col-span-2 bg-gradient-to-br from-accent/5 to-accent/5 border-accent/20;
   }
 
-  /* Code Footer - Semantic Syntax Styling */
+  /* Code Footer - Syntax Styling */
   
   /* Base code colors */
   .code-keyword { color: #ff7b72; }
