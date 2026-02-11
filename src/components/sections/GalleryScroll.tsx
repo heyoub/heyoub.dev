@@ -174,7 +174,7 @@ function ParallaxImage() {
           y: imageY,
           backgroundImage: 'url(/assets/fs/pexels-kevin-ku-glasses.jpg)',
           backgroundPosition: 'center',
-          backgroundSize: 'cover',
+          backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat',
           // Extend image below container so parallax doesn't reveal gaps
           top: '-15%',
