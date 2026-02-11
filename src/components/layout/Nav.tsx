@@ -1,6 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { fadeIn } from '@/lib/animations'
 
 // Simple scroll utility that works with Lenis (initialized in Astro)
 function useScrollTo() {
@@ -12,6 +11,50 @@ function useScrollTo() {
       window.scrollTo({ top, behavior: 'smooth' })
     }
   }, [])
+}
+
+// Hide on scroll down, show on scroll up
+function useScrollDirection() {
+  const [isVisible, setIsVisible] = useState(true)
+  const lastScrollY = useRef(0)
+  const ticking = useRef(false)
+
+  useEffect(() => {
+    const threshold = 10 // Min scroll amount before toggling
+
+    const updateScrollDirection = () => {
+      const scrollY = window.scrollY
+
+      // Always show at top of page
+      if (scrollY < 50) {
+        setIsVisible(true)
+        lastScrollY.current = scrollY
+        ticking.current = false
+        return
+      }
+
+      const diff = scrollY - lastScrollY.current
+
+      if (Math.abs(diff) > threshold) {
+        setIsVisible(diff < 0) // Show if scrolling up
+        lastScrollY.current = scrollY
+      }
+
+      ticking.current = false
+    }
+
+    const onScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(updateScrollDirection)
+        ticking.current = true
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return isVisible
 }
 import { projectManifest } from '@/data/manifest'
 import { contactConfig } from '@/data/footer'
@@ -53,6 +96,7 @@ function Dropdown({ label, children }: DropdownProps) {
 
 export function Nav() {
   const scrollTo = useScrollTo()
+  const isNavVisible = useScrollDirection()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -71,13 +115,16 @@ export function Nav() {
     <>
       <motion.nav
         className="fixed top-0 left-0 right-0 z-50 px-6 md:px-8 py-4 md:py-6 flex justify-between items-center"
-      style={{
-        background: 'linear-gradient(to bottom, var(--bg-primary) 0%, transparent 100%)',
-      }}
-      initial="hidden"
-      animate="visible"
-      variants={fadeIn}
-    >
+        style={{
+          background: 'linear-gradient(to bottom, var(--bg-primary) 0%, transparent 100%)',
+        }}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{
+          opacity: isNavVisible ? 1 : 0,
+          y: isNavVisible ? 0 : -20,
+        }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
         <a
           href="#"
           onClick={(e) => handleClick(e, '#')}

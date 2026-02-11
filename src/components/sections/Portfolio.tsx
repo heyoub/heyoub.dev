@@ -1,11 +1,17 @@
 import { motion } from 'framer-motion'
 import { scrollReveal, staggerContainer, staggerItem, viewportConfig } from '@/lib/animations'
-import { matrix, domains } from '@/data/projects'
+import { portfolioItems } from '@/data/projects'
 import { portfolioContent } from '@/data/content'
+
+const angleLabels = {
+  rescue: 'Rescue',
+  'ground-up': 'Built',
+  infrastructure: 'Infrastructure',
+} as const
 
 export function Portfolio() {
   return (
-    <section id="capabilities" className="py-[clamp(2.5rem,10vw,10rem)] px-[8vw]">
+    <section id="work" className="py-[clamp(2.5rem,10vw,10rem)] px-[8vw]">
       <motion.div
         className="section-label"
         variants={scrollReveal}
@@ -29,62 +35,60 @@ export function Portfolio() {
         </p>
       </motion.div>
 
-      {/* Domain Matrix */}
       <motion.div
-        className="space-y-8 md:space-y-12"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
         viewport={viewportConfig}
       >
-        {domains.map((domain) => {
-          const domainCells = matrix.filter((cell) => cell.domain === domain.name)
+        {portfolioItems.map((item) => (
+          <motion.div
+            key={item.id}
+            className="p-5 md:p-6 bg-bg-tertiary border border-white/5 hover:border-white/10 transition-all duration-300 group"
+            variants={staggerItem}
+          >
+            {/* Header: Label + Angle */}
+            <div className="flex items-center justify-between mb-4">
+              <span className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase text-accent">
+                {item.label}
+              </span>
+              {item.angle && (
+                <span className={`font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-wider uppercase px-2 py-1 ${
+                  item.angle === 'rescue'
+                    ? 'text-orange bg-orange/10 border border-orange/20'
+                    : item.angle === 'ground-up'
+                    ? 'text-green bg-green/10 border border-green/20'
+                    : 'text-purple bg-purple/10 border border-purple/20'
+                }`}>
+                  {angleLabels[item.angle]}
+                </span>
+              )}
+            </div>
 
-          return (
-            <motion.div key={domain.id} variants={staggerItem}>
-              <h3 className="font-serif text-[clamp(1.25rem,3vw,2rem)] mb-4 md:mb-6 flex items-center gap-3">
+            {/* Problem */}
+            <p className="text-text-secondary font-light text-[clamp(0.9rem,1.75vw,1rem)] leading-relaxed mb-4">
+              {item.problem}
+            </p>
+
+            {/* Outcome */}
+            <p className="text-text-primary font-medium text-[clamp(0.95rem,2vw,1.1rem)] leading-relaxed mb-4">
+              → {item.outcome}
+            </p>
+
+            {/* Stack */}
+            <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+              {item.stack.map((tech) => (
                 <span
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: `var(--${domain.color})` }}
-                />
-                {domain.name}
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                {domainCells.map((cell, idx) => (
-                  <motion.div
-                    key={idx}
-                    className="p-4 md:p-6 bg-bg-tertiary border border-white/5 hover:border-white/10 transition-all duration-300"
-                    variants={staggerItem}
-                  >
-                    <div className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase text-text-muted mb-3">
-                      {cell.techCategory}
-                    </div>
-
-                    <p className="text-text-primary font-light text-[clamp(0.95rem,2vw,1.125rem)] leading-relaxed mb-4">
-                      {cell.capability}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {cell.stack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] px-2.5 md:px-3 py-1.5 bg-white/5 text-accent border border-accent/20"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    <p className="text-green font-medium text-[clamp(0.85rem,1.75vw,1rem)] border-t border-white/5 pt-4">
-                      → {cell.delivered}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )
-        })}
+                  key={tech}
+                  className="font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] px-2 py-1 bg-white/5 text-text-muted"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        ))}
       </motion.div>
     </section>
   )

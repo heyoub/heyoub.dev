@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { heroLabel, heroName, heroTagline, heroStats, heroPhoto, fadeUp } from '@/lib/animations'
+import { heroLabel, heroName, heroTagline, heroStats, heroPhoto } from '@/lib/animations'
 import { heroContent } from '@/data/content'
 
 export function Hero() {
@@ -112,16 +112,42 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator - fades dramatically on scroll */}
       <motion.div
-        className="absolute bottom-8 md:bottom-12 left-[8vw] flex items-center gap-3 md:gap-4 font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-widest text-text-muted"
-        variants={fadeUp}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 1 }}
+        className="absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 md:left-[8vw] md:translate-x-0 flex flex-col md:flex-row items-center gap-2 md:gap-4 font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-widest text-text-muted"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        style={{
+          opacity: contentOpacity,
+          pointerEvents: 'none'
+        }}
       >
-        <span className="w-12 md:w-16 h-px bg-gradient-to-r from-text-muted to-transparent" />
-        <span>{heroContent.scrollHint}</span>
+        {/* Animated scroll line */}
+        <motion.div
+          className="w-px md:w-12 h-8 md:h-px bg-gradient-to-b md:bg-gradient-to-r from-accent/50 via-accent to-transparent"
+          animate={{
+            scaleY: [1, 1.2, 1],
+            scaleX: [1, 1, 1],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <span className="hidden md:inline">{heroContent.scrollHint}</span>
+        {/* Mobile: just show animated chevron */}
+        <motion.svg
+          className="md:hidden w-4 h-4 text-accent/70"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          animate={{ y: [0, 4, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </motion.svg>
       </motion.div>
     </section>
   )

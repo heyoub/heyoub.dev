@@ -3,11 +3,11 @@ import Layout from '../layouts/Layout.astro'
 
 // React components as islands
 import { Nav } from '@components/layout/Nav'
+import { ScrollProgress } from '@components/effects/ScrollProgress'
 import { Hero } from '@components/sections/Hero'
 import { VideoInterlude } from '@components/sections/VideoInterlude'
 import { CoreThesis } from '@components/sections/CoreThesis'
-import { Portfolio } from '@components/sections/Portfolio'
-import { Path } from '@components/sections/Path'
+import { GalleryScroll } from '@components/sections/GalleryScroll'
 import { OpenTo } from '@components/sections/OpenTo'
 import { ContactDecompile } from '@components/sections/ContactDecompile'
 import { Scene } from '@components/three/Scene'
@@ -19,6 +19,9 @@ import { Scene } from '@components/three/Scene'
 
   <!-- Noise overlay - pure CSS, no JS needed -->
   <div class="noise-overlay"></div>
+
+  <!-- Scroll progress bar - magical gradient with section nodes -->
+  <ScrollProgress client:load />
 
   <!-- Navigation - needs immediate interactivity -->
   <Nav client:load />
@@ -38,8 +41,7 @@ import { Scene } from '@components/three/Scene'
 
     <!-- Below-fold sections - hydrate when visible -->
     <CoreThesis client:visible />
-    <Portfolio client:visible />
-    <Path client:visible />
+    <GalleryScroll client:visible />
     <OpenTo client:visible />
 
     <!-- Contact + Footer - hydrate when visible -->

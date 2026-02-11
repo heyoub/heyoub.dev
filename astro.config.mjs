@@ -1,13 +1,20 @@
 import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import tailwind from '@astrojs/tailwind'
+import sitemap from '@astrojs/sitemap'
 import AstroPWA from '@vite-pwa/astro'
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://heyoub.dev',
   integrations: [
     react(),
     tailwind(),
+    sitemap({
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date(),
+    }),
     AstroPWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt', 'sitemap.xml', 'profile.json', 'llms.txt'],

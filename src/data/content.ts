@@ -150,6 +150,7 @@ export interface TechTag {
   color: 'orange' | 'warm' | 'purple' | 'green' | 'accent' | 'pink'
 }
 
+// Flat list for backward compat
 export const techStack: TechTag[] = [
   { name: 'Rust', color: 'orange' },
   { name: 'OCaml', color: 'warm' },
@@ -163,6 +164,53 @@ export const techStack: TechTag[] = [
   { name: 'Phoenix', color: 'purple' },
   { name: 'PyTorch', color: 'orange' },
   { name: 'WASM', color: 'purple' },
+]
+
+// Inverted pyramid - widest at top, narrows to point
+// Story: from bare metal to intelligence, complexity gets abstracted
+export interface StackLayer {
+  label: string
+  hint: string
+  techs: TechTag[]
+}
+
+export const stackPyramid: StackLayer[] = [
+  {
+    label: 'METAL',
+    hint: 'where cycles matter',
+    techs: [
+      { name: 'Rust', color: 'orange' },
+      { name: 'OCaml', color: 'warm' },
+      { name: 'Go', color: 'accent' },
+      { name: 'WASM', color: 'purple' },
+      { name: 'Python', color: 'green' },
+    ],
+  },
+  {
+    label: 'RUNTIME',
+    hint: 'where state lives',
+    techs: [
+      { name: 'TypeScript', color: 'accent' },
+      { name: 'Elixir', color: 'purple' },
+      { name: 'Phoenix', color: 'purple' },
+      { name: 'Effect-TS', color: 'accent' },
+    ],
+  },
+  {
+    label: 'PRODUCT',
+    hint: 'where users live',
+    techs: [
+      { name: 'React', color: 'accent' },
+      { name: 'Convex', color: 'accent' },
+    ],
+  },
+  {
+    label: 'INTELLIGENCE',
+    hint: 'where patterns emerge',
+    techs: [
+      { name: 'PyTorch', color: 'orange' },
+    ],
+  },
 ]
 
 // ============================================================================
