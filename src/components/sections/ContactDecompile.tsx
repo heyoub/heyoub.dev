@@ -170,6 +170,41 @@ export function ContactDecompile() {
     [0, 1, 1]
   )
 
+  // Aurora glow - flows behind video for ethereal effect
+  const auroraOpacity = useTransform(
+    activeProgress,
+    [0.28, 0.38, 0.56, 0.66],
+    [0, 0.8, 1, 0]
+  )
+
+  // Film grain - intensifies during video phase
+  const grainOpacity = useTransform(
+    activeProgress,
+    [0.30, 0.40, 0.58, 0.66],
+    [0, 0.5, 0.7, 0]
+  )
+
+  // Screen tear - pulses during phase transitions
+  const tearOpacity = useTransform(
+    activeProgress,
+    [0.32, 0.36, 0.40, 0.60, 0.64, 0.68],
+    [0, 1, 0, 0, 1, 0]
+  )
+
+  // Chromatic aberration - RGB split during glitch moments
+  const chromaticOffset = useTransform(
+    activeProgress,
+    [0.30, 0.36, 0.42, 0.60, 0.66, 0.72],
+    [0, 6, 0, 0, 8, 0]
+  )
+
+  // Color temperature shift - warm to cool to terminal green
+  const hueRotate = useTransform(
+    activeProgress,
+    [0.08, 0.36, 0.56, 0.72],
+    [-5, 0, 15, 60]
+  )
+
   // Video content opacity - SHORTER: text stays visible longer
   const videoContentOpacity = useTransform(
     activeProgress,
@@ -339,7 +374,10 @@ export function ContactDecompile() {
           <motion.div
             className="absolute inset-0 overflow-hidden"
             style={{
-              filter: useTransform(videoSaturation, (sat) => `saturate(${sat})`),
+              filter: useTransform(
+                [videoSaturation, hueRotate],
+                ([sat, hue]: number[]) => `saturate(${sat}) hue-rotate(${hue}deg)`
+              ),
             }}
           >
             {/* Fallback animated gradient in case video doesn't load */}
@@ -381,6 +419,37 @@ export function ContactDecompile() {
                 )
               `,
             }}
+          />
+
+          {/* Aurora glow - ethereal flowing colors */}
+          <motion.div
+            className="aurora-glow"
+            style={{ opacity: auroraOpacity }}
+          />
+
+          {/* Film grain - adds texture and grit */}
+          <motion.div
+            className="film-grain"
+            style={{ opacity: grainOpacity }}
+          />
+
+          {/* Chromatic aberration - RGB split for glitch feel */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none mix-blend-screen"
+            style={{
+              opacity: useTransform(chromaticOffset, [0, 4, 8], [0, 0.5, 0.8]),
+              boxShadow: useTransform(
+                chromaticOffset,
+                (offset) =>
+                  `inset ${offset}px 0 0 rgba(255,0,0,0.3), inset ${-offset}px 0 0 rgba(0,255,255,0.3)`
+              ),
+            }}
+          />
+
+          {/* Screen tear - scanning line effect */}
+          <motion.div
+            className="screen-tear"
+            style={{ opacity: tearOpacity }}
           />
           
           {/* Vignette */}

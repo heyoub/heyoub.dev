@@ -1,53 +1,31 @@
-// Simplified portfolio - problem-focused, rescue-angled
+// Principle-first proof points
+// One strong example per principle - shows the pattern, not the industry
 
-export interface PortfolioItem {
+export interface ProofPoint {
   id: string
-  label: string
-  problem: string
-  outcome: string
-  stack: string[]
-  angle?: 'rescue' | 'ground-up' | 'infrastructure'
+  principle: 'attention' | 'rent' | 'constraints'
+  proof: string
+  link?: {
+    label: string
+    url: string
+    type: 'repo' | 'demo' | 'writeup' | 'live'
+  }
 }
 
-export const portfolioItems: PortfolioItem[] = [
+export const proofPoints: ProofPoint[] = [
   {
-    id: 'medical-pii',
-    label: 'Healthcare',
-    problem: 'AI-generated medical tools that leaked PII and failed compliance review',
-    outcome: 'Rebuilt with local-only processing. Now HIPAA-compliant by architecture, not policy.',
-    stack: ['Rust', 'WASM'],
-    angle: 'rescue',
+    id: 'attention-crm',
+    principle: 'attention',
+    proof: 'CRM rebuild. Max three choices per screen. Decision fatigue gone.',
   },
   {
-    id: 'agent-memory',
-    label: 'AI Infrastructure',
-    problem: 'AI agents with no persistent memory — every conversation started from zero',
-    outcome: 'Production memory framework with retrieval, decay scoring, and context reconstruction.',
-    stack: ['TypeScript', 'Convex'],
-    angle: 'ground-up',
+    id: 'rent-memory',
+    principle: 'rent',
+    proof: 'Agent memory with real retrieval and decay. No wrapper theater.',
   },
   {
-    id: 'crm-chaos',
-    label: 'Business Systems',
-    problem: 'Vibe-coded CRM that worked in demos but broke under real usage',
-    outcome: 'Event-sourced rebuild. Full audit trail, max 3 choices per screen, zero data loss.',
-    stack: ['React', 'TypeScript', 'Convex'],
-    angle: 'rescue',
-  },
-  {
-    id: 'mortgage-compliance',
-    label: 'Financial Systems',
-    problem: 'Loan eligibility rules scattered across spreadsheets and tribal knowledge',
-    outcome: 'Type system that encodes regulations. Illegal loan states become compile errors.',
-    stack: ['Effect-TS'],
-    angle: 'ground-up',
-  },
-  {
-    id: 'ml-costs',
-    label: 'ML Infrastructure',
-    problem: 'ML pipeline burning money with no visibility into where compute actually went',
-    outcome: 'Memory-hierarchy-aware routing. 6400x cost transparency, predictable scaling.',
-    stack: ['Rust', 'OCaml'],
-    angle: 'infrastructure',
+    id: 'constraints-compliance',
+    principle: 'constraints',
+    proof: 'Regulatory rules that compile. Illegal states are type errors.',
   },
 ]

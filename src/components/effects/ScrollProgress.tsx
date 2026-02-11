@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 
-// Section markers with glitchy terminal bars
-const sections = [
-  { id: 'hero', position: 0, label: 'INIT' },
-  { id: 'thesis', position: 0.15, label: 'LOAD' },
-  { id: 'work', position: 0.4, label: 'EXEC' },
-  { id: 'path', position: 0.6, label: 'PROC' },
-  { id: 'connect', position: 0.85, label: 'SYNC' },
-]
+// Generate evenly spaced markers across full width
+const MARKER_COUNT = 16
+const labels = ['INIT', 'BOOT', 'LOAD', 'PARSE', 'EXEC', 'COMP', 'LINK', 'PROC', 'SYNC', 'HASH', 'PACK', 'SEND', 'RECV', 'DONE', 'EXIT', 'END'] as const
+const sections = Array.from({ length: MARKER_COUNT }, (_, i) => ({
+  id: `section-${i}`,
+  position: i / (MARKER_COUNT - 1), // 0 to 1 evenly spread
+  label: labels[i] ?? 'NODE',
+}))
 
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll()
@@ -159,12 +159,12 @@ function TerminalBar({ section, progress, glitchFrame, index }: TerminalBarProps
       <motion.div
         className="relative h-full flex flex-col justify-center"
         style={{
-          width: useTransform(proximity, [0, 1], [12, 24]),
+          width: useTransform(proximity, [0, 1], [120, 160]),
         }}
       >
         {/* Bar segments - terminal loading style */}
         <div className="flex gap-px h-[3px]">
-          {[0, 1, 2, 3].map((seg) => (
+          {[0, 1, 2, 3, 4, 5, 6, 7].map((seg) => (
             <motion.div
               key={seg}
               className="flex-1 h-full"
@@ -177,9 +177,9 @@ function TerminalBar({ section, progress, glitchFrame, index }: TerminalBarProps
                     const distance = Math.abs(v - section.position)
                     const prox = Math.max(0, 1 - distance * 8)
                     const shouldGlitch = active && Math.random() > 0.7
-                    if (shouldGlitch) return 'var(--pink)'
-                    if (passed) return seg <= 2 ? 'var(--accent)' : 'var(--purple)'
-                    if (prox > 0.3) return `rgba(34, 211, 238, ${0.3 + prox * 0.5})`
+                    if (shouldGlitch) return 'rgba(244, 114, 182, 0.8)'
+                    if (passed) return seg <= 5 ? 'rgba(34, 211, 238, 0.8)' : 'rgba(167, 139, 250, 0.8)'
+                    if (prox > 0.3) return `rgba(34, 211, 238, ${(0.3 + prox * 0.5) * 0.8})`
                     return 'transparent'
                   }
                 ),
