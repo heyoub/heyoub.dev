@@ -1,13 +1,13 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { proofPoints } from '@/data/projects'
-import { pathContent, coreThesisContent } from '@/data/content'
+import { pathContent, pillars } from '@/data/content'
 
 // Map principles to their pillar data
 const principleMap = {
-  attention: coreThesisContent.pillars[0]!,
-  rent: coreThesisContent.pillars[1]!,
-  constraints: coreThesisContent.pillars[2]!,
+  attention: pillars[0]!,
+  rent: pillars[1]!,
+  constraints: pillars[2]!,
 } as const
 
 export function GalleryScroll() {
@@ -126,15 +126,14 @@ export function GalleryScroll() {
         </div>
       </motion.div>
 
-      {/* Parallax section */}
-      <ParallaxImage />
     </section>
   )
 }
 
-// CSS fixed parallax section (webflow-style)
-function ParallaxImage() {
+// Video parallax section (webflow-style fixed background effect)
+export function ParallaxVideo() {
   const ref = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
@@ -145,20 +144,28 @@ function ParallaxImage() {
   return (
     <div
       ref={ref}
-      className="relative h-[60vh] lg:h-[80vh] my-16 lg:my-24"
-      style={{
-        backgroundImage: 'url(/assets/fs/pexels-kevin-ku-glasses.jpg)',
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }}
+      className="relative h-[60vh] lg:h-[80vh] -mx-[8vw]"
+      style={{ clipPath: 'inset(0)' }}
     >
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-bg-primary/60" />
+      {/* Fixed video background - clipped to this container for parallax effect */}
+      <video
+        ref={videoRef}
+        className="fixed inset-0 w-full h-full object-cover pointer-events-none"
+        src="/assets/fs/numbers-ticker.mp4"
+        muted
+        loop
+        playsInline
+        autoPlay
+        preload="metadata"
+      />
 
-      {/* Gradient fade edges */}
-      <div className="absolute inset-0 bg-gradient-to-b from-bg-primary via-transparent to-bg-primary pointer-events-none" />
+      {/* Vignette - soft fade at edges to blend into page */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          boxShadow: 'inset 0 0 150px 60px var(--bg-primary)',
+        }}
+      />
 
       {/* Floating text */}
       <motion.div

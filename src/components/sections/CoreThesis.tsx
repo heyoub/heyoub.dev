@@ -28,58 +28,67 @@ export function CoreThesis() {
             {coreThesisContent.headline.regular}{' '}
             <em className="text-accent">{coreThesisContent.headline.emphasis}</em>
           </h2>
-          <p className="text-text-secondary font-light text-[clamp(1rem,2vw,1.15rem)] leading-relaxed max-w-3xl mx-auto">
-            {coreThesisContent.description.before}{' '}
-            <span className="text-text-primary">
-              {coreThesisContent.description.emphasis}
-            </span>
-          </p>
-        </div>
+          {/* Problem hook */}
+          <h3 className="font-serif text-[clamp(1.2rem,2.5vw,1.6rem)] font-normal leading-snug mb-6 max-w-3xl mx-auto">
+            {coreThesisContent.problem.hook}
+          </h3>
 
-        {/* Three Pillars - Tight justified grid */}
-        <motion.div
-          className="grid md:grid-cols-3 gap-3 md:gap-4 mb-12 md:mb-16"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-        >
-          {coreThesisContent.pillars.map((pillar) => (
-            <motion.div
-              key={pillar.label}
-              className="p-4 md:p-5 bg-bg-tertiary/50 border border-white/5 hover:border-white/10 transition-all duration-300 group"
-              variants={staggerItem}
-            >
-              <div
-                className="font-mono text-[clamp(0.55rem,1.1vw,0.65rem)] tracking-[0.2em] uppercase mb-2"
-                style={{ color: `var(--${pillar.accent})` }}
+          {/* Narrative lines */}
+          <motion.div
+            className="space-y-3 max-w-3xl mx-auto mb-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportConfig}
+          >
+            {coreThesisContent.problem.narrative.map((line, i) => (
+              <motion.p
+                key={i}
+                className="text-text-secondary font-light text-[clamp(1rem,2vw,1.15rem)] leading-relaxed"
+                variants={staggerItem}
               >
-                {pillar.label}
-              </div>
-              <h3 className="font-serif text-[clamp(1rem,1.8vw,1.25rem)] text-text-primary mb-2 group-hover:text-accent transition-colors leading-tight">
-                {pillar.title}
-              </h3>
-              <p className="text-text-secondary font-light text-[clamp(0.8rem,1.3vw,0.9rem)] leading-snug mb-3">
-                {pillar.summary}
-              </p>
-              {/* Detail bullets in Fira Code */}
-              <ul className="space-y-1.5 border-t border-white/5 pt-3">
-                {pillar.details.map((detail, idx) => (
-                  <li
-                    key={idx}
-                    className="font-code text-[clamp(0.6rem,1vw,0.7rem)] text-text-muted leading-snug flex items-start gap-1.5"
-                  >
-                    <span
-                      className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: `var(--${pillar.accent})` }}
-                    />
-                    {detail}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </motion.div>
+                {line}
+              </motion.p>
+            ))}
+          </motion.div>
+
+          {/* Definition block */}
+          <div className="border-l-2 border-accent/30 pl-6 py-4 text-left max-w-3xl mx-auto mb-10">
+            <p className="font-mono text-[clamp(0.7rem,1.5vw,0.85rem)] tracking-[0.2em] uppercase text-accent mb-2">
+              {coreThesisContent.problem.definition.term}
+            </p>
+            <p className="text-text-secondary font-light text-[clamp(1rem,2vw,1.15rem)] leading-relaxed italic">
+              {coreThesisContent.problem.definition.meaning}
+            </p>
+          </div>
+
+          {/* Stats grid */}
+          <motion.div
+            className="grid md:grid-cols-3 gap-3 md:gap-4 max-w-3xl mx-auto"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportConfig}
+          >
+            {coreThesisContent.problem.stats.map((stat) => (
+              <motion.div
+                key={stat.value}
+                className="p-4 md:p-5 bg-bg-tertiary/50 border border-white/5 hover:border-white/10 transition-all duration-300"
+                variants={staggerItem}
+              >
+                <div
+                  className="font-serif text-[clamp(1.5rem,3vw,2rem)] font-normal mb-2"
+                  style={{ color: `var(--${stat.accent})` }}
+                >
+                  {stat.value}
+                </div>
+                <p className="text-text-secondary font-light text-[clamp(0.85rem,1.5vw,0.95rem)] leading-snug">
+                  {stat.description}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
 
         {/* The Universal Truth - Markdown quote style */}
         <motion.blockquote

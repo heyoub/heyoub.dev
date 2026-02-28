@@ -7,7 +7,7 @@ import { ScrollProgress } from '@components/effects/ScrollProgress'
 import { Hero } from '@components/sections/Hero'
 import { VideoInterlude } from '@components/sections/VideoInterlude'
 import { CoreThesis } from '@components/sections/CoreThesis'
-import { GalleryScroll } from '@components/sections/GalleryScroll'
+import { GalleryScroll, ParallaxVideo } from '@components/sections/GalleryScroll'
 import { OpenTo } from '@components/sections/OpenTo'
 import { ContactDecompile } from '@components/sections/ContactDecompile'
 import { Scene } from '@components/three/Scene'
@@ -34,7 +34,7 @@ import { Scene } from '@components/three/Scene'
     <!-- Video interlude - hydrate when visible -->
     <VideoInterlude
       client:visible
-      src="/assets/fs/3130182-hd_1280_720_30fps.mp4"
+      src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4"
       height="50vh"
       overlay="gradient"
     />
@@ -43,8 +43,9 @@ import { Scene } from '@components/three/Scene'
     <CoreThesis client:visible />
     <GalleryScroll client:visible />
     <OpenTo client:visible />
+    <ParallaxVideo client:visible />
 
-    <!-- Contact + Footer - hydrate when visible -->
+    <!-- Footer -->
     <ContactDecompile client:visible />
   </main>
 </Layout>

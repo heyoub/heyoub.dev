@@ -109,7 +109,10 @@ export function Nav() {
   }
 
   const gitProjects = projectManifest.filter((p) => p.gitUrl)
-  const liveProjects = projectManifest.filter((p) => p.siteUrl)
+
+  const dispatchTab = (tab: string) => {
+    window.dispatchEvent(new CustomEvent('editor-tab', { detail: { tab } }))
+  }
 
   return (
     <>
@@ -152,21 +155,32 @@ export function Nav() {
 
         {/* Projects Dropdown */}
         <Dropdown label="Projects">
-          {liveProjects.map((project) => (
-            <a
-              key={project.siteUrl}
-              href={project.siteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors"
+          {projectManifest.map((project) => (
+            <button
+              key={project.pitch.filename}
+              onClick={() => {
+                dispatchTab(project.pitch.filename)
+                scrollTo('#footer', { offset: -20 })
+              }}
+              className="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors"
             >
               {project.name}
-            </a>
+            </button>
           ))}
         </Dropdown>
 
         {/* Contact Dropdown */}
         <Dropdown label="Contact">
+          <button
+            onClick={() => {
+              dispatchTab('contact')
+              scrollTo('#footer', { offset: -20 })
+            }}
+            className="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors"
+          >
+            View Contact Info
+          </button>
+          <div className="border-t border-white/5 mt-1 pt-1" />
           {contactConfig.links.map((link) => (
             <a
               key={link.key}

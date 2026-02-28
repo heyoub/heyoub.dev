@@ -32,7 +32,7 @@ export const contactConfig: ContactConfig = {
     {
       key: 'email',
       label: 'Email',
-      href: 'mailto:contact@heyoub.dev',
+      href: 'mailto:hello@heyoub.dev',
       external: false,
     },
     {

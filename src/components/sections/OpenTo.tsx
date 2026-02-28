@@ -4,21 +4,54 @@ import { openToContent } from '@/data/content'
 
 export function OpenTo() {
   return (
-    <section className="py-[clamp(1.5rem,6vw,6rem)] px-[8vw] bg-gradient-to-br from-accent/[0.03] to-purple/[0.03] border-y border-white/5">
+    <section
+      id="services"
+      className="py-[clamp(1.5rem,6vw,6rem)] px-[8vw] bg-gradient-to-br from-accent/[0.03] to-purple/[0.03] border-y border-white/5"
+    >
       <motion.div
-        className="flex flex-col lg:flex-row justify-between items-center gap-8 md:gap-12"
+        className="flex flex-col items-center gap-8 md:gap-12"
         variants={scrollReveal}
         initial="hidden"
         whileInView="visible"
         viewport={viewportConfig}
       >
-        <div className="text-center lg:text-left">
+        {/* Heading + Description */}
+        <div className="text-center">
           <h3 className="font-serif text-[clamp(1.5rem,4vw,2rem)] mb-4">{openToContent.heading}</h3>
-          <p className="text-text-secondary font-light text-[clamp(0.95rem,2vw,1.125rem)] max-w-lg">
+          <p className="text-text-secondary font-light text-[clamp(0.95rem,2vw,1.125rem)] max-w-lg mx-auto">
             {openToContent.description}
           </p>
         </div>
 
+        {/* Services grid */}
+        <motion.div
+          className="grid md:grid-cols-3 gap-3 md:gap-4 w-full max-w-5xl"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+        >
+          {openToContent.services.map((service) => (
+            <motion.div
+              key={service.title}
+              className="p-4 md:p-5 bg-bg-tertiary/50 border border-white/5 hover:border-white/10 transition-all duration-300 border-t-2"
+              style={{ borderTopColor: `var(--${service.accent})` }}
+              variants={staggerItem}
+            >
+              <h4
+                className="font-serif text-[clamp(1rem,1.8vw,1.15rem)] mb-2"
+                style={{ color: `var(--${service.accent})` }}
+              >
+                {service.title}
+              </h4>
+              <p className="text-text-secondary font-light text-[clamp(0.85rem,1.5vw,0.95rem)] leading-snug">
+                {service.description}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Role buttons */}
         <motion.div
           className="flex flex-wrap justify-center gap-2 md:gap-3"
           variants={staggerContainer}

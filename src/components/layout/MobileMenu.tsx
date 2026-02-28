@@ -10,12 +10,17 @@ interface MobileMenuProps {
 
 export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
   const gitProjects = projectManifest.filter((p) => p.gitUrl)
-  const liveProjects = projectManifest.filter((p) => p.siteUrl)
 
   const handleLinkClick = (href: string, external: boolean) => {
     if (!external) {
       onNavigate(href)
     }
+    onClose()
+  }
+
+  const dispatchTabAndScroll = (tab: string) => {
+    window.dispatchEvent(new CustomEvent('editor-tab', { detail: { tab } }))
+    onNavigate('#footer')
     onClose()
   }
 
@@ -82,28 +87,23 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
               )}
 
               {/* Projects Section */}
-              {liveProjects.length > 0 && (
-                <section>
-                  <h3 className="font-mono text-xs tracking-[0.15em] uppercase text-text-muted mb-4">
-                    Live Projects
-                  </h3>
-                  <ul className="space-y-2">
-                    {liveProjects.map((project) => (
-                      <li key={project.siteUrl}>
-                        <a
-                          href={project.siteUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => handleLinkClick(project.siteUrl!, true)}
-                          className="block py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent active:bg-accent/20 transition-colors rounded touch-target focus-ring tap-highlight"
-                        >
-                          {project.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
+              <section>
+                <h3 className="font-mono text-xs tracking-[0.15em] uppercase text-text-muted mb-4">
+                  Projects
+                </h3>
+                <ul className="space-y-2">
+                  {projectManifest.map((project) => (
+                    <li key={project.pitch.filename}>
+                      <button
+                        onClick={() => dispatchTabAndScroll(project.pitch.filename)}
+                        className="block w-full text-left py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent active:bg-accent/20 transition-colors rounded touch-target focus-ring tap-highlight"
+                      >
+                        {project.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
 
               {/* Contact Section */}
               <section>
@@ -111,6 +111,17 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
                   Contact
                 </h3>
                 <ul className="space-y-2">
+                  <li>
+                    <button
+                      onClick={() => dispatchTabAndScroll('contact')}
+                      className="block w-full text-left py-3 px-4 text-text-primary hover:bg-accent/10 hover:text-accent active:bg-accent/20 transition-colors rounded touch-target focus-ring tap-highlight"
+                    >
+                      View Contact Info
+                    </button>
+                  </li>
+                  <li>
+                    <div className="border-t border-white/5 mx-4 my-1" />
+                  </li>
                   {contactConfig.links.map((link) => (
                     <li key={link.key}>
                       <a
