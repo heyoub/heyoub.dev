@@ -224,15 +224,7 @@ function FbfTabContent() {
         <span className="code-punctuation">[</span>
       </p>
       <p className="code-line" style={{ paddingLeft: '1.5rem' }}>
-        <span className="code-string">"agents/BP"</span>
-        <span className="code-punctuation">,</span>
-      </p>
-      <p className="code-line" style={{ paddingLeft: '1.5rem' }}>
-        <span className="code-string">"canvas/BP"</span>
-        <span className="code-punctuation">,</span>
-      </p>
-      <p className="code-line" style={{ paddingLeft: '1.5rem' }}>
-        <span className="code-string">"artifacts/BP"</span>
+        <span className="code-string">"the/agents.BP"</span>
       </p>
       <p className="code-line">
         <span className="code-punctuation">{'];'}</span>
@@ -296,7 +288,7 @@ function getLineCount(activeTab: string): number {
     return 14 + contactConfig.links.length * 2
   }
   if (activeTab === 'fbf') {
-    return 16
+    return 12
   }
   const project = projectManifest.find((p) => p.pitch.filename === activeTab)
   if (!project) return 10
