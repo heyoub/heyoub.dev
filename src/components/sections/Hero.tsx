@@ -57,7 +57,7 @@ export function Hero() {
         </motion.p>
 
         <motion.div
-          className="grid grid-cols-[1fr_auto] gap-6 max-w-2xl"
+          className="grid grid-cols-[1fr_auto_auto] gap-6 max-w-2xl"
           variants={heroStats}
           initial="hidden"
           animate="visible"
@@ -82,6 +82,19 @@ export function Hero() {
             >
               <span className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">{heroContent.cta.label}</span>
               <span className="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">{heroContent.cta.action}</span>
+            </a>
+          </div>
+
+          {/* FBF CTA button */}
+          <div className="flex items-center justify-center p-2">
+            <a
+              href="https://freebatteryfactory.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="aspect-square w-[clamp(7rem,15vw,9rem)] bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary transition-all duration-300 flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight"
+            >
+              <span className="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">the</span>
+              <span className="font-serif text-[clamp(1.5rem,3vw,2rem)] text-purple group-hover:text-bg-primary transition-colors">FBF</span>
             </a>
           </div>
         </motion.div>

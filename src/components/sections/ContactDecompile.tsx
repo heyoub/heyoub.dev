@@ -198,13 +198,108 @@ function ContactTabContent() {
   )
 }
 
+function FbfTabContent() {
+  return (
+    <>
+      <p className="code-line">
+        <span className="code-comment code-comment--with-slashes">the/FBF</span>
+      </p>
+      <p className="code-line">
+        <span className="code-comment code-comment--with-slashes">the line never stops.</span>
+      </p>
+      <p className="code-line">&nbsp;</p>
+
+      <p className="code-line">
+        <span className="code-comment code-comment--with-slashes">Modular power for autonomous systems. We make the batteries</span>
+      </p>
+      <p className="code-line">
+        <span className="code-comment code-comment--with-slashes">everyone forgets to include. Then we write about why they work.</span>
+      </p>
+      <p className="code-line">&nbsp;</p>
+
+      <p className="code-line">
+        <span className="code-keyword">const</span>{' '}
+        <span className="code-variable">packs</span>{' '}
+        <span className="code-punctuation">=</span>{' '}
+        <span className="code-punctuation">[</span>
+      </p>
+      <p className="code-line" style={{ paddingLeft: '1.5rem' }}>
+        <span className="code-string">"agents/BP"</span>
+        <span className="code-punctuation">,</span>
+      </p>
+      <p className="code-line" style={{ paddingLeft: '1.5rem' }}>
+        <span className="code-string">"canvas/BP"</span>
+        <span className="code-punctuation">,</span>
+      </p>
+      <p className="code-line" style={{ paddingLeft: '1.5rem' }}>
+        <span className="code-string">"artifacts/BP"</span>
+      </p>
+      <p className="code-line">
+        <span className="code-punctuation">{'];'}</span>
+      </p>
+      <p className="code-line">&nbsp;</p>
+
+      <section aria-labelledby="fbf-links-heading">
+        <h2 id="fbf-links-heading" className="sr-only">
+          Free Battery Factory Links
+        </h2>
+
+        <p className="code-line">
+          <span className="code-keyword">const</span>{' '}
+          <span className="code-variable">links</span>{' '}
+          <span className="code-punctuation">=</span>{' '}
+          <span className="code-punctuation">{'{'}</span>
+        </p>
+
+        <nav aria-label="Free Battery Factory links">
+          <dl className="code-object-body">
+            <div className="code-line code-property">
+              <dt className="code-key">factory</dt>
+              <dd>
+                <a
+                  href="https://freebatteryfactory.com"
+                  className="code-string code-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  freebatteryfactory.com
+                </a>
+                <span className="code-punctuation" aria-hidden="true">,</span>
+              </dd>
+            </div>
+            <div className="code-line code-property">
+              <dt className="code-key">devPacks</dt>
+              <dd>
+                <a
+                  href="https://batterypack.dev"
+                  className="code-string code-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  batterypack.dev
+                </a>
+              </dd>
+            </div>
+          </dl>
+        </nav>
+
+        <p className="code-line">
+          <span className="code-punctuation">{'};'}</span>
+        </p>
+      </section>
+    </>
+  )
+}
+
 function getLineCount(activeTab: string): number {
   if (activeTab === 'contact') {
     return 14 + contactConfig.links.length * 2
   }
+  if (activeTab === 'fbf') {
+    return 16
+  }
   const project = projectManifest.find((p) => p.pitch.filename === activeTab)
   if (!project) return 10
-  // filename + tagline + blank + blurb + blank + const stack = [ + stack items + ]; + blank + const links = { + link items + };
   return 5 + project.pitch.stack.length + 4 + project.pitch.links.length * 2
 }
 
@@ -239,6 +334,34 @@ export function ContactDecompile() {
         className="flex justify-between items-center px-4 py-3 bg-editor-chrome border-b border-editor-border"
       >
         <div className="flex gap-0 overflow-x-auto scrollbar-hide">
+          {/* Contact tab — first */}
+          <button
+            className={`font-mono text-xs px-4 py-2 flex items-center gap-2 whitespace-nowrap transition-colors ${
+              activeTab === 'contact'
+                ? 'text-text-primary bg-editor-bg border-b-2 border-accent'
+                : 'text-text-muted bg-editor-chrome hover:text-text-secondary hover:bg-editor-bg/50'
+            }`}
+            onClick={() => setActiveTab('contact')}
+          >
+            <span className="text-[0.65rem] opacity-60" aria-hidden="true">
+              ⟨/⟩
+            </span>
+            {code.filename}
+          </button>
+          {/* the/FBF tab */}
+          <button
+            className={`font-mono text-xs px-4 py-2 flex items-center gap-2 whitespace-nowrap transition-colors ${
+              activeTab === 'fbf'
+                ? 'text-text-primary bg-editor-bg border-b-2 border-accent'
+                : 'text-text-muted bg-editor-chrome hover:text-text-secondary hover:bg-editor-bg/50'
+            }`}
+            onClick={() => setActiveTab('fbf')}
+          >
+            <span className="text-[0.65rem] opacity-60" aria-hidden="true">
+              ⟨/⟩
+            </span>
+            the/FBF
+          </button>
           {/* Project tabs */}
           {projectManifest.map((project) => (
             <button
@@ -256,20 +379,6 @@ export function ContactDecompile() {
               {project.pitch.filename}
             </button>
           ))}
-          {/* Contact tab */}
-          <button
-            className={`font-mono text-xs px-4 py-2 flex items-center gap-2 whitespace-nowrap transition-colors ${
-              activeTab === 'contact'
-                ? 'text-text-primary bg-editor-bg border-b-2 border-accent'
-                : 'text-text-muted bg-editor-chrome hover:text-text-secondary hover:bg-editor-bg/50'
-            }`}
-            onClick={() => setActiveTab('contact')}
-          >
-            <span className="text-[0.65rem] opacity-60" aria-hidden="true">
-              ⟨/⟩
-            </span>
-            {code.filename}
-          </button>
         </div>
         <div className="flex gap-2 shrink-0 ml-4" aria-hidden="true">
           <span className="w-3 h-3 rounded-full bg-[#ff5f56]" />
@@ -304,6 +413,8 @@ export function ContactDecompile() {
           >
             {activeTab === 'contact' ? (
               <ContactTabContent />
+            ) : activeTab === 'fbf' ? (
+              <FbfTabContent />
             ) : activeProject ? (
               <ProjectTabContent project={activeProject} />
             ) : null}
