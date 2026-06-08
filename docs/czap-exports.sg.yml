@@ -1,0 +1,12 @@
+# ast-grep rule: enumerate every public re-export (value + type) of the @czap packages.
+# Usage (run from the LiteShip repo root):
+#   ast-grep scan -r path/to/czap-exports.sg.yml packages/*/src/index.ts
+# Re-run before each rebuild phase to catch new exports as LiteShip moves pre-1.0.
+# See LITESHIP-REBUILD.md §9 for the straggler-audit dispositions this produced.
+id: czap-exports
+language: typescript
+rule:
+  kind: export_statement
+  has:
+    field: source
+    kind: string

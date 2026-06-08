@@ -1,0 +1,22 @@
+# build output
+dist/
+.output/
+# astro
+.astro/
+# deps
+node_modules/
+# env
+.env
+.env.production
+.env.*.local
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+# os / editor
+.DS_Store
+*.local
+.vscode/*
+!.vscode/extensions.json
+# wrangler (later, for cloudflare)
+.wrangler/

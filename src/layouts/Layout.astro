@@ -1,0 +1,48 @@
+---
+interface Props {
+  title?: string
+  description?: string
+}
+const {
+  title = 'Eassa Ayoub — Cognitive-First Systems',
+  description = 'Most software makes users carry its complexity. I build software that feels like thinking.',
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en" data-czap-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/assets/logo/AXLG.png" />
+    <title>{title}</title>
+    <style is:global>
+      :root {
+        --bg: #0a0a0b;
+        --surface: #111113;
+        --text: #fafafa;
+        --muted: #a1a1aa;
+        --accent: #22d3ee;
+        --purple: #a78bfa;
+        --grad-start: #06b6d4;
+        --grad-end: #8b5cf6;
+        --font-serif: ui-serif, Georgia, 'Times New Roman', serif;
+        --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { background: var(--bg); color: var(--text); }
+      body {
+        min-height: 100dvh;
+        font-family: var(--font-serif);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.5;
+        overflow-x: hidden;
+      }
+      .mono { font-family: var(--font-mono); }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

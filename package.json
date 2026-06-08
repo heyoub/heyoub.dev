@@ -1,0 +1,43 @@
+{
+  "name": "heyoub-dev",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "heyoub.dev — Eassa Ayoub. Cognitive-first systems, built on LiteShip (the CZAP engine). A dogfood and showcase.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^6.4.4",
+    "@astrojs/node": "^10.1.3",
+    "effect": "4.0.0-beta.32",
+    "@czap/core": "0.1.4",
+    "@czap/quantizer": "0.1.4",
+    "@czap/compiler": "0.1.4",
+    "@czap/astro": "0.1.4",
+    "@czap/vite": "0.1.4",
+    "@czap/edge": "0.1.4",
+    "@czap/detect": "0.1.4",
+    "@czap/web": "0.1.4",
+    "@czap/scene": "0.1.4",
+    "@czap/assets": "0.1.4",
+    "@czap/worker": "0.1.4",
+    "@czap/cloudflare": "0.1.4"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0",
+    "typescript": "^5.9.3",
+    "@astrojs/check": "^0.9.4"
+  },
+  "packageManager": "pnpm@10.32.1",
+  "pnpm": {
+    "overrides": {
+      "@czap/_spine": "0.1.4"
+    },
+    "onlyBuiltDependencies": ["esbuild", "sharp", "msgpackr-extract"]
+  }
+}

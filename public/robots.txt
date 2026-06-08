@@ -1,0 +1,48 @@
+# robots.txt for heyoub.dev
+
+User-agent: *
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+# AI Agents & LLMs
+User-agent: GPTBot
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+User-agent: Claude-Web
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+User-agent: Google-Extended
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+User-agent: CCBot
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /profile.json
+Allow: /llms.txt
+
+# Sitemap
+Sitemap: https://heyoub.dev/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
