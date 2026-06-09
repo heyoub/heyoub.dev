@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import GpuField from '@/components/GpuField.astro'
 import Nav from '@/components/Nav.astro'
 import Hero from '@/components/Hero.astro'
 import Moment from '@/components/Moment.astro'
@@ -10,6 +11,7 @@ import Contact from '@/components/Contact.astro'
 ---
 
 <Layout>
+  <GpuField slot="backdrop" />
   <Nav />
   <main>
     <Hero />
