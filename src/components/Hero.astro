@@ -112,4 +112,28 @@ const sat = satelliteAttrs({
     bottom: 1.5rem; left: var(--gutter);
     font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint);
   }
+
+  /* Hero content tucks down + scales + fades as the section scrolls away —
+     the v2 feel, now native CSS scroll-driven (no framer, no JS). */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .content {
+        animation: hero-tuck linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 90%;
+        transform-origin: left top;
+      }
+      .scroll-hint {
+        animation: hint-fade linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 30%;
+      }
+    }
+  }
+  @keyframes hero-tuck {
+    to { transform: translateY(90px) scale(0.95); opacity: 0; }
+  }
+  @keyframes hint-fade {
+    to { opacity: 0; }
+  }
 </style>
