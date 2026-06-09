@@ -33,7 +33,13 @@ const cardGrid3 = Style.make({
   },
 })
 
+// The query container lives on a full-width wrapper (.czap-vp) that excludes
+// the fixed background/nav/parallax — container-type would otherwise become
+// their containing block and break `position: fixed` (the orbs vanished).
+// Full-width + no padding ⇒ container width == viewport width, so the
+// @container thresholds match the v2 viewport breakpoints exactly.
 const css = [
+  '.czap-vp { container-name: viewport-width; container-type: inline-size; }',
   layout(heroGrid, 'hero-grid', 'grid-template-columns: minmax(0, 1fr);'),
   layout(cardGrid3, 'grid-3', 'grid-template-columns: minmax(0, 1fr);'),
 ].join('\n')
