@@ -9,6 +9,8 @@ const {
   description = 'Most software makes users carry its complexity. I build software that feels like thinking — systems that match how humans actually work.',
 } = Astro.props
 
+import TokenStyles from '@components/TokenStyles.astro'
+
 const siteUrl = 'https://heyoub.dev'
 const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`
 ---
@@ -192,6 +194,9 @@ const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png
       ]
     }
     </script>
+
+    <!-- Brand palette, cast from LiteShip Tokens (one definition → CSS vars) -->
+    <TokenStyles />
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />

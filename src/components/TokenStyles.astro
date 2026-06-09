@@ -1,0 +1,17 @@
+---
+import { TokenCSSCompiler } from '@czap/compiler'
+import { tokens, brand } from '@/lib/tokens'
+
+// Cast the authored LiteShip Tokens → CSS custom properties at SSR time.
+// Emits :root --czap-<name> vars (+ themed html[data-theme] overrides).
+// globals.css aliases its --accent/--purple/etc. to these, so the brand
+// palette genuinely flows from one LiteShip definition to every surface.
+const css = tokens
+  .map((t) => {
+    const r = TokenCSSCompiler.compile(t, brand)
+    return `${r.customProperties}\n${r.themed}`
+  })
+  .join('\n')
+---
+
+<style is:global set:html={css}></style>

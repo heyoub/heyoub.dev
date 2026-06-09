@@ -6,8 +6,9 @@ interface Props {
   height?: string
   overlay?: 'gradient' | 'dark' | 'none'
   class?: string
+  lite?: boolean
 }
-const { src, height = '60vh', overlay = 'gradient', class: className = '' } = Astro.props
+const { src, height = '60vh', overlay = 'gradient', class: className = '', lite = false } = Astro.props
 
 // Precompute each narrative line's treatment (avoids `<`/`<=` inside JSX,
 // which Astro's compiler misparses).
@@ -23,10 +24,14 @@ const lineItems = momentContent.lines.map((line, i) => {
 ---
 
 <div class={`vi relative overflow-hidden ${className}`} style={`height:${height}`}>
-  <!-- video (subtle internal parallax) -->
+  <!-- video (subtle internal parallax) — poster image on Save-Data/low tier -->
   <div class="vi-video absolute inset-0 w-full h-[130%] -top-[15%]">
-    <video class="w-full h-full object-cover" src={src} muted playsinline autoplay preload="metadata"
-      poster="/assets/Hero_3.webp" disablepictureinpicture></video>
+    {lite ? (
+      <img class="w-full h-full object-cover" src="/assets/Hero_3.webp" alt="" loading="lazy" decoding="async" />
+    ) : (
+      <video class="w-full h-full object-cover" src={src} muted playsinline autoplay preload="metadata"
+        poster="/assets/Hero_3.webp" disablepictureinpicture></video>
+    )}
   </div>
 
   {overlay === 'gradient' && <div class="absolute inset-0 bg-gradient-to-b from-bg-primary via-transparent to-bg-primary"></div>}

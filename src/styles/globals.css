@@ -4,24 +4,27 @@
 
 @layer base {
   :root {
+    /* Palette aliased to the LiteShip token cast — TokenStyles.astro emits the
+       --czap-* values from authored Tokens (src/lib/tokens.ts). Fallbacks keep
+       the exact look if the cast is ever absent. One definition → every surface. */
     /* Backgrounds */
-    --bg-primary: #0a0a0b;
-    --bg-secondary: #111113;
-    --bg-tertiary: #18181b;
-    
+    --bg-primary: var(--czap-bg-primary, #0a0a0b);
+    --bg-secondary: var(--czap-bg-secondary, #111113);
+    --bg-tertiary: var(--czap-bg-tertiary, #18181b);
+
     /* Text */
-    --text-primary: #fafafa;
-    --text-secondary: #a1a1aa;
-    --text-muted: #52525b;
-    
+    --text-primary: var(--czap-text-primary, #fafafa);
+    --text-secondary: var(--czap-text-secondary, #a1a1aa);
+    --text-muted: var(--czap-text-muted, #52525b);
+
     /* Accents */
-    --accent: #22d3ee;
+    --accent: var(--czap-accent, #22d3ee);
     --accent-glow: rgba(34, 211, 238, 0.15);
-    --purple: #a78bfa;
-    --green: #22c55e;
-    --orange: #fb923c;
-    --warm: #fbbf24;
-    --pink: #f472b6;
+    --purple: var(--czap-purple, #a78bfa);
+    --green: var(--czap-green, #22c55e);
+    --orange: var(--czap-orange, #fb923c);
+    --warm: var(--czap-warm, #fbbf24);
+    --pink: var(--czap-pink, #f472b6);
     
     /* Gradients */
     --gradient-start: #06b6d4;

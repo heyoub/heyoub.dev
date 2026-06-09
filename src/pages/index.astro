@@ -10,6 +10,11 @@ import GalleryScroll from '@components/GalleryScroll.astro'
 import OpenTo from '@components/OpenTo.astro'
 import ParallaxVideo from '@components/ParallaxVideo.astro'
 import ContactDecompile from '@components/ContactDecompile.astro'
+
+// LiteShip device tier (resolved server-side by czapMiddleware): drop the
+// heavy autoplay videos to posters on Save-Data / reduced-motion / low-end.
+const { tier, capabilities } = Astro.locals.czap
+const lite = capabilities.connection?.saveData === true || tier.motion === 'none' || tier.cap === 'static'
 ---
 
 <Layout>
@@ -28,12 +33,12 @@ import ContactDecompile from '@components/ContactDecompile.astro'
   <main class="relative">
     <Hero />
 
-    <VideoInterlude src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4" height="50vh" overlay="gradient" />
+    <VideoInterlude src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4" height="50vh" overlay="gradient" lite={lite} />
 
     <CoreThesis />
     <GalleryScroll />
     <OpenTo />
-    <ParallaxVideo />
+    <ParallaxVideo lite={lite} />
 
     <ContactDecompile />
   </main>
