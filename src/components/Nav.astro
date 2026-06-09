@@ -1,0 +1,39 @@
+---
+const links = [
+  { label: 'Thesis', href: '#thesis' },
+  { label: 'Proof', href: '#proof' },
+  { label: 'Build', href: '#build' },
+  { label: 'Connect', href: '#connect' },
+]
+---
+
+<nav class="nav">
+  <a href="#top" class="brand mono">heyoub<span class="c-accent">.dev</span></a>
+  <div class="links mono">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    <a href="https://cal.com/eassa-ayoub-hf9yfh" class="cta" target="_blank" rel="noopener">Book a call →</a>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem var(--gutter);
+    backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
+  }
+  .brand { font-size: 0.95rem; font-weight: 500; letter-spacing: -0.01em; }
+  .links { display: flex; align-items: center; gap: clamp(0.75rem, 2vw, 1.75rem); font-size: 0.78rem; }
+  .links a { color: var(--muted); transition: color 0.2s; }
+  .links a:hover { color: var(--text); }
+  .cta { color: var(--accent) !important; }
+  @media (max-width: 640px) {
+    .links a:not(.cta) { display: none; }
+  }
+</style>

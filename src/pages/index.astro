@@ -1,122 +1,22 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import { satelliteAttrs, resolveInitialStateFallback } from '@czap/astro'
-import { heroLayout } from '@/lib/boundaries'
-
-// Resolved server-side by czapMiddleware from Client Hints + User-Agent,
-// BEFORE this HTML is sent. The page knows the machine before it paints.
-const { tier, capabilities: cap } = Astro.locals.czap
-
-const HIGH = tier.cap === 'gpu' || tier.cap === 'animated'
-
-// The hero composition boundary, serialized into data-czap-* so the client
-// boundary evaluator can take over live. SSR picks a sane first bearing.
-const sat = satelliteAttrs({
-  boundary: heroLayout,
-  initialState: resolveInitialStateFallback(heroLayout),
-})
-
-const net = cap.connection?.effectiveType ?? 'unknown'
-const readout: Array<[string, string]> = [
-  ['capability', tier.cap],
-  ['motion', tier.motion],
-  ['design', tier.design],
-  ['viewport·hint', `${cap.viewportWidth ?? '?'}px`],
-  ['dpr', String(cap.devicePixelRatio ?? '?')],
-  ['gpu·tier', String(cap.gpu ?? '?')],
-  ['cores', String(cap.cores ?? '?')],
-  ['memory', `${cap.memory ?? '?'} GiB`],
-  ['network', net],
-  ['save-data', cap.connection?.saveData ? 'on' : 'off'],
-  ['reduced-motion', cap.prefersReducedMotion ? 'reduce' : 'no-preference'],
-  ['scheme', cap.prefersColorScheme ?? 'dark'],
-]
+import Nav from '@/components/Nav.astro'
+import Hero from '@/components/Hero.astro'
+import Moment from '@/components/Moment.astro'
+import Thesis from '@/components/Thesis.astro'
+import Proof from '@/components/Proof.astro'
+import OpenTo from '@/components/OpenTo.astro'
+import Contact from '@/components/Contact.astro'
 ---
 
 <Layout>
-  <main class="shell">
-    <p class="mono kicker">heyoub.dev · v3 · powered by LiteShip <span class="dim">/ the CZAP engine</span></p>
-
-    <section {...sat} class={`${sat.class} hero hero--${tier.cap}`}>
-      <h1 class="title">
-        This page already <em>knows your machine.</em>
-      </h1>
-      <p class="lede">
-        No flash. No client-side guess that throws away the first paint. The edge read
-        your device at the door and resolved the experience before a byte of body shipped.
-        <strong>The computer carries the complexity.</strong> I vote computer.
-      </p>
-
-      <!-- Phase 0.5: device-tier branch. Same vocabulary, different surface. -->
-      {HIGH ? (
-        <div class="rig rig--full">
-          <span class="mono tag">FULL RIG — {tier.cap}</span>
-          <p>WebGL field + audio-reactive hero + scroll-scrubbed Timeline land here. Your machine earned it.</p>
-        </div>
-      ) : (
-        <div class="rig rig--lean">
-          <span class="mono tag">LEAN RIG — {tier.cap}</span>
-          <p>Static poster + CSS-only motion. Lighter, faster, intentional — never a spinner on a slow pipe.</p>
-        </div>
-      )}
-    </section>
-
-    <section class="readout">
-      <p class="mono dim small">// Astro.locals.czap — resolved server-side, refines as Client Hints arrive</p>
-      <dl class="grid">
-        {readout.map(([k, v]) => (
-          <div class="cell">
-            <dt class="mono small dim">{k}</dt>
-            <dd class="mono val">{v}</dd>
-          </div>
-        ))}
-      </dl>
-      <p class="mono small dim">
-        hero bearing (resize me — the boundary evaluator updates this live once hydrated):
-        <span class="val" data-czap-readout>{sat['data-czap-state']}</span>
-      </p>
-    </section>
+  <Nav />
+  <main>
+    <Hero />
+    <Moment />
+    <Thesis />
+    <Proof />
+    <OpenTo />
+    <Contact />
   </main>
-
-  <!-- Mirror the satellite's live data-czap-state into the readout, proving
-       the client boundary evaluator is driving named states from viewport.width. -->
-  <script>
-    const host = document.querySelector('[data-czap-boundary]')
-    const out = document.querySelector('[data-czap-readout]')
-    if (host && out) {
-      const sync = () => { out.textContent = host.getAttribute('data-czap-state') || '—' }
-      new MutationObserver(sync).observe(host, { attributes: true, attributeFilter: ['data-czap-state'] })
-      sync()
-    }
-  </script>
 </Layout>
-
-<style>
-  .shell { max-width: 72rem; margin: 0 auto; padding: clamp(2rem, 6vw, 6rem) 8vw; }
-  .kicker { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: clamp(2rem, 8vw, 5rem); }
-  .dim { color: var(--muted); }
-  .small { font-size: 0.72rem; }
-
-  .hero { display: grid; gap: 1.5rem; max-width: 46rem; }
-  .title { font-family: var(--font-serif); font-size: clamp(2.5rem, 8vw, 6rem); line-height: 0.98; letter-spacing: -0.02em; font-weight: 400; }
-  .title em { font-style: italic; color: var(--accent); }
-  .lede { font-size: clamp(1rem, 2.4vw, 1.3rem); color: var(--muted); font-weight: 300; max-width: 38rem; }
-  .lede strong { color: var(--text); font-weight: 500; }
-
-  /* The hero recomposes per named bearing — driven by data-czap-state. */
-  .czap-satellite[data-czap-state='cinematic'] .title { font-size: clamp(4rem, 8vw, 7rem); }
-  .czap-satellite[data-czap-state='stacked'] .lede { font-size: 1rem; }
-
-  .rig { border: 1px solid var(--surface); border-radius: 0.75rem; padding: 1.25rem 1.5rem; background: color-mix(in srgb, var(--surface) 60%, transparent); }
-  .rig .tag { font-size: 0.65rem; letter-spacing: 0.2em; }
-  .rig p { margin-top: 0.5rem; color: var(--muted); font-size: 0.95rem; }
-  .rig--full { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
-  .rig--full .tag { color: var(--accent); }
-  .rig--lean .tag { color: var(--purple); }
-
-  .readout { margin-top: clamp(3rem, 8vw, 6rem); border-top: 1px solid var(--surface); padding-top: 2rem; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 1px; background: var(--surface); border: 1px solid var(--surface); border-radius: 0.5rem; overflow: hidden; margin: 1rem 0; }
-  .cell { background: var(--bg); padding: 0.85rem 1rem; }
-  .cell dt { text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.3rem; }
-  .val { color: var(--accent); }
-</style>

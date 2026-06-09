@@ -1,0 +1,76 @@
+---
+import { contactConfig as c, getLinkDisplayValue } from '@/data/footer'
+import { projectManifest } from '@/data/manifest'
+
+// Build the "decompile" source view as an HTML string — gives full control
+// over syntax tokens + real links without fighting JSX brace parsing.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+const cmt = (s: string) => `<span class="cmt">// ${esc(s)}</span>`
+const kw = (s: string) => `<span class="kw">${s}</span>`
+const v = (s: string) => `<span class="var">${s}</span>`
+const pr = (s: string) => `<span class="prop">${esc(s)}</span>`
+const str = (s: string) => `<span class="str">"${esc(s)}"</span>`
+const lnk = (href: string, disp: string, ext = true) =>
+  `<a href="${esc(href)}" class="str link"${ext ? ' target="_blank" rel="noopener"' : ''}>"${esc(disp)}"</a>`
+
+const lines: string[] = []
+lines.push(cmt(c.code.openComment))
+lines.push(`${kw('export const')} ${v('contact')} = {`)
+lines.push(`  ${pr('heading')}: ${str(c.heading)},`)
+for (const l of c.links) {
+  lines.push(`  ${pr(l.key)}: ${lnk(l.href, getLinkDisplayValue(l), l.external ?? false)},`)
+}
+lines.push(`  ${pr('status')}: { ${pr('building')}: <span class="bool">${c.status.building}</span>, ${pr('where')}: ${str(c.status.location)} },`)
+lines.push('}')
+lines.push('')
+lines.push(cmt('shipped — pull on the same thread'))
+lines.push(`${kw('export const')} ${v('projects')} = [`)
+for (const p of projectManifest) {
+  const stack = p.pitch.stack.map((s) => str(s)).join(', ')
+  lines.push(`  { ${pr('name')}: ${str(p.name)}, ${pr('pitch')}: ${str(p.pitch.tagline)},`)
+  lines.push(`     ${pr('stack')}: [${stack}],`)
+  lines.push(`     ${pr('live')}: ${lnk(p.siteUrl ?? '#', (p.siteUrl ?? '').replace('https://', ''))} },`)
+}
+lines.push(']')
+lines.push(cmt(c.code.closeComment))
+const codeHtml = lines.join('\n')
+---
+
+<section class="contact wrap" id="connect">
+  <!-- "Decompile" view: contact + projects rendered as a source file. The
+       same data is also cast to /manifest.json for machines — one vocabulary,
+       two surfaces (the cognitive-first flex). -->
+  <div class="editor reveal">
+    <div class="chrome">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="file mono">{c.code.filename}</span>
+      <a class="manifest mono" href="/manifest.json" target="_blank" rel="noopener">view machine manifest →</a>
+    </div>
+    <pre class="code mono"><code set:html={codeHtml}></code></pre>
+  </div>
+
+  <footer class="foot mono">
+    <span>© {c.status.year} Eassa Ayoub · {c.status.location}</span>
+    <span>Built with Astro + <a href="https://github.com/heyoub/LiteShip" class="c-accent" target="_blank" rel="noopener">LiteShip</a> — dogfood &amp; showcase</span>
+  </footer>
+</section>
+
+<style>
+  .contact { position: relative; z-index: 2; padding-block: var(--section-y); }
+  .editor { border: 1px solid var(--bg-3); border-radius: 0.75rem; overflow: hidden; background: #0d1117; box-shadow: 0 30px 80px rgba(0,0,0,0.4); }
+  .chrome { display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1rem; background: #161b22; border-bottom: 1px solid #30363d; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; background: #30363d; }
+  .dot:nth-child(1) { background: #ff5f56; } .dot:nth-child(2) { background: #ffbd2e; } .dot:nth-child(3) { background: #27c93f; }
+  .file { margin-left: 0.5rem; font-size: 0.78rem; color: var(--muted); }
+  .manifest { margin-left: auto; font-size: 0.72rem; color: var(--accent); }
+  .code { padding: 1.5rem; font-size: clamp(0.72rem, 1.6vw, 0.85rem); line-height: 1.7; overflow-x: auto; color: #c9d1d9; }
+  .code :global(.cmt) { color: #6e7681; font-style: italic; }
+  .code :global(.kw) { color: #ff7b72; }
+  .code :global(.var) { color: #d2a8ff; }
+  .code :global(.prop) { color: #79c0ff; }
+  .code :global(.str) { color: #a5d6ff; }
+  .code :global(.bool) { color: #ffa657; }
+  .code :global(.link) { text-decoration: underline; text-decoration-color: color-mix(in srgb, #a5d6ff 40%, transparent); }
+  .code :global(.link:hover) { color: var(--accent); }
+  .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; font-size: 0.72rem; color: var(--faint); }
+</style>

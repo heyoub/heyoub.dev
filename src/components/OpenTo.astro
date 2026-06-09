@@ -1,0 +1,45 @@
+---
+import { openToContent as o } from '@/data/content'
+---
+
+<section class="opento wrap" id="build">
+  <div class="head reveal">
+    <h2 class="title">{o.heading}</h2>
+    <p class="desc measure">{o.description}</p>
+  </div>
+
+  <div class="services">
+    {o.services.map((s) => (
+      <article class={`svc reveal svc--${s.accent}`}>
+        <h3>{s.title}</h3>
+        <p>{s.description}</p>
+      </article>
+    ))}
+  </div>
+
+  <ul class="roles reveal">
+    {o.roles.map((r) => <li class="mono">{r}</li>)}
+  </ul>
+</section>
+
+<style>
+  .opento {
+    position: relative; z-index: 2; padding-block: var(--section-y);
+    background: radial-gradient(50% 60% at 50% 0%, color-mix(in srgb, var(--accent) 5%, transparent), transparent);
+    border-block: 1px solid color-mix(in srgb, var(--text) 5%, transparent);
+  }
+  .head { text-align: center; margin-bottom: 3rem; }
+  .title { font-family: var(--font-serif); font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
+  .desc { margin-inline: auto; color: var(--muted); font-size: clamp(1rem, 2.2vw, 1.2rem); }
+
+  .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
+  .svc { border-radius: 0.75rem; padding: 1.6rem; border: 1px solid color-mix(in srgb, var(--text) 8%, transparent); background: color-mix(in srgb, var(--bg-2) 50%, transparent); }
+  .svc h3 { font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .svc p { color: var(--muted); font-size: 0.95rem; }
+  .svc--accent { border-top: 2px solid var(--accent); }
+  .svc--purple { border-top: 2px solid var(--purple); }
+  .svc--green { border-top: 2px solid var(--green); }
+
+  .roles { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+  .roles li { font-size: 0.72rem; letter-spacing: 0.08em; padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--text) 12%, transparent); color: var(--muted); }
+</style>

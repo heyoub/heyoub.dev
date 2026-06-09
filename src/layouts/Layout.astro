@@ -1,4 +1,6 @@
 ---
+import '@/styles/global.css'
+
 interface Props {
   title?: string
   description?: string
@@ -7,6 +9,10 @@ const {
   title = 'Eassa Ayoub — Cognitive-First Systems',
   description = 'Most software makes users carry its complexity. I build software that feels like thinking.',
 } = Astro.props
+
+// Server-resolved tier drives a body data-attribute so CSS can adapt the
+// whole document to the device class without a client round-trip.
+const { tier } = Astro.locals.czap
 ---
 
 <!doctype html>
@@ -15,34 +21,25 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="generator" content="Astro + LiteShip (CZAP)" />
     <link rel="icon" type="image/png" href="/assets/logo/AXLG.png" />
+    <link rel="alternate" type="application/json" href="/manifest.json" title="Machine manifest" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <title>{title}</title>
-    <style is:global>
-      :root {
-        --bg: #0a0a0b;
-        --surface: #111113;
-        --text: #fafafa;
-        --muted: #a1a1aa;
-        --accent: #22d3ee;
-        --purple: #a78bfa;
-        --grad-start: #06b6d4;
-        --grad-end: #8b5cf6;
-        --font-serif: ui-serif, Georgia, 'Times New Roman', serif;
-        --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
-      }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html { background: var(--bg); color: var(--text); }
-      body {
-        min-height: 100dvh;
-        font-family: var(--font-serif);
-        -webkit-font-smoothing: antialiased;
-        line-height: 1.5;
-        overflow-x: hidden;
-      }
-      .mono { font-family: var(--font-mono); }
-    </style>
   </head>
-  <body>
+  <body data-tier={tier.cap} data-motion={tier.motion}>
+    <div class="noise"></div>
+    <slot name="backdrop" />
     <slot />
+
+    <!-- Continuous scroll signal → --czap-scroll CSS var + czap:uniform-update.
+         The ~10-line bridge that unlocks scroll-driven shader/CSS motion the
+         LiteShip-native way (Phase 3). -->
+    <script>
+      import { startScrollBridge } from '@/lib/scroll-bridge'
+      startScrollBridge()
+    </script>
   </body>
 </html>
