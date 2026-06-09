@@ -1,74 +1,49 @@
 ---
-import { satelliteAttrs } from '@czap/astro'
-import { heroLayout } from '@/lib/boundaries'
-
-// The WebGL background, on LiteShip. Omitted entirely for reduced-motion;
-// the @czap GPU runtime also skips WebGL init on static/styled tiers, leaving
-// the CSS gradient fallback. Carries heroLayout so u_state tracks the layout.
+// The WebGL background — a real Three.js scene (orbs + grid), driven by
+// LiteShip. Server omits it for reduced-motion (motion tier 'none'); the
+// client also bails on static/styled capability tiers, leaving the CSS
+// gradient fallback. Three.js is lazy-imported so low-end devices that bail
+// never download it.
 const { tier } = Astro.locals.czap
 const show = tier.motion !== 'none'
-const sat = satelliteAttrs({ boundary: heroLayout })
 ---
 
 <div class="scene" aria-hidden="true">
-  {show && (
-    <canvas
-      class="scene-canvas"
-      data-czap-boundary={sat['data-czap-boundary']}
-      data-czap-shader-type="glsl"
-      data-czap-shader-src="/shaders/field.frag"
-    ></canvas>
-  )}
+  {show && <canvas class="scene-canvas"></canvas>}
 </div>
 
 {show && (
   <script>
-    import gpuDirective from '@czap/astro/client-directives/gpu'
+    import { cardGrid } from '../lib/boundaries'
 
-    const mount = () => {
-      const el = document.querySelector('.scene-canvas') as HTMLCanvasElement | null
-      if (!el) return
+    const mobileBreak = cardGrid.thresholds[1] ?? 768 // boundary defines where orbs stack
+    const isMobileNow = () => window.innerWidth < mobileBreak
 
-      // Ensure the drawing buffer matches the displayed size (otherwise it
-      // renders into the default 300×150 and upscales to mush).
-      const resize = () => {
-        const dpr = Math.min(window.devicePixelRatio || 1, 2)
-        el.width = Math.round((el.clientWidth || window.innerWidth) * dpr)
-        el.height = Math.round((el.clientHeight || window.innerHeight) * dpr)
-      }
-      resize()
-      window.addEventListener('resize', resize, { passive: true })
+    const start = async () => {
+      const canvas = document.querySelector('.scene-canvas') as HTMLCanvasElement | null
+      if (!canvas) return
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-      // Invoke @czap's GPU runtime directly (Astro ignores custom client
-      // directives on plain elements) — same path client:gpu would run.
-      gpuDirective(() => Promise.resolve({ default: () => {} }), {}, el)
+      // LiteShip device tier gates quality (and skips the heavy path entirely
+      // on low-end). data-czap-tier is set by the detect script + GPU upgrade.
+      const tier = document.documentElement.getAttribute('data-czap-tier') ?? 'reactive'
+      const force = location.search.includes('gl=force') // debug: bypass tier gate (e.g. headless)
+      if (!force && (tier === 'static' || tier === 'styled')) return
+      const high = tier === 'gpu' || tier === 'animated'
+      const quality = high ? { segments: 64, maxDpr: 2 } : { segments: 32, maxDpr: 1.5 }
 
-      // Feed pointer + scroll into the shader through the runtime's
-      // czap:uniform-update channel (u_mx / u_my / u_scroll). rAF-coalesced.
-      let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, sv = 0, st = false
-      const send = (uniform: string, value: number) =>
-        document.dispatchEvent(new CustomEvent('czap:uniform-update', { detail: { uniform, value } }))
+      const { initScene } = await import('../lib/scene3d')
+      const handle = initScene(canvas, { isMobile: isMobileNow(), ...quality })
+
       window.addEventListener('pointermove', (e) => {
-        tx = (e.clientX / window.innerWidth) * 2 - 1
-        ty = -((e.clientY / window.innerHeight) * 2 - 1)
+        handle.setPointer((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1))
       }, { passive: true })
-      const loop = () => {
-        cx += (tx - cx) * 0.05; cy += (ty - cy) * 0.05
-        send('u_mx', cx); send('u_my', cy)
-        if (st) { st = false; send('u_scroll', sv) }
-        raf = requestAnimationFrame(loop)
-      }
-      loop()
-      window.addEventListener('scroll', () => {
-        const max = document.documentElement.scrollHeight - window.innerHeight
-        sv = max > 0 ? Math.min(1, window.scrollY / max) : 0
-        st = true
-      }, { passive: true })
-      document.addEventListener('astro:before-swap', () => cancelAnimationFrame(raf), { once: true })
+      window.addEventListener('resize', () => handle.setMobile(isMobileNow()), { passive: true })
+      document.addEventListener('astro:before-swap', () => handle.dispose(), { once: true })
     }
 
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true })
-    else mount()
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true })
+    else start()
   </script>
 )}
 
@@ -78,9 +53,10 @@ const sat = satelliteAttrs({ boundary: heroLayout })
     inset: 0;
     z-index: -100;
     pointer-events: none;
+    /* static fallback shown on low tiers / reduced-motion / before the scene mounts */
     background:
-      radial-gradient(40% 40% at 78% 24%, color-mix(in srgb, #06b6d4 10%, transparent), transparent 60%),
-      radial-gradient(38% 38% at 20% 78%, color-mix(in srgb, #8b5cf6 10%, transparent), transparent 60%),
+      radial-gradient(40% 40% at 78% 24%, color-mix(in srgb, #06b6d4 12%, transparent), transparent 60%),
+      radial-gradient(38% 38% at 22% 78%, color-mix(in srgb, #8b5cf6 12%, transparent), transparent 60%),
       var(--bg-primary);
   }
   .scene-canvas { width: 100%; height: 100%; display: block; }
