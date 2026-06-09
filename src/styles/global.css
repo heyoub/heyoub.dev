@@ -91,6 +91,19 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent);
 }
 
+/* Visible proof of the continuous scroll bridge: width tracks --czap-scroll
+   (0→1) with zero JS in the style — the bridge just writes the variable. */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: calc(var(--czap-scroll) * 100%);
+  background: linear-gradient(90deg, var(--grad-start), var(--grad-end));
+  z-index: 60;
+  pointer-events: none;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
 .noise {
   position: fixed;
   inset: 0;

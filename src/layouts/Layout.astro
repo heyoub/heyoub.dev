@@ -30,6 +30,7 @@ const { tier } = Astro.locals.czap
     <title>{title}</title>
   </head>
   <body data-tier={tier.cap} data-motion={tier.motion}>
+    <div class="scroll-progress"></div>
     <div class="noise"></div>
     <slot name="backdrop" />
     <slot />
