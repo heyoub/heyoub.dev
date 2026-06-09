@@ -53,10 +53,22 @@ export const contactConfig: ContactConfig = {
       href: 'https://github.com/heyoub',
       external: true,
     },
+    {
+      key: 'crates',
+      label: 'crates.io',
+      href: 'https://crates.io/users/heyoub',
+      external: true,
+    },
+    {
+      key: 'npm',
+      label: 'npm',
+      href: 'https://www.npmjs.com/~heyoub',
+      external: true,
+    },
   ],
   status: {
     building: true,
-    location: 'Philadelphia, PA',
+    location: 'Drexel Hill, PA',
     year: new Date().getFullYear(),
   },
   code: {
