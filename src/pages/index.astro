@@ -1,26 +1,81 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import GpuField from '@/components/GpuField.astro'
-import Nav from '@/components/Nav.astro'
-import AudioToggle from '@/components/AudioToggle.astro'
-import Hero from '@/components/Hero.astro'
-import Moment from '@/components/Moment.astro'
-import Thesis from '@/components/Thesis.astro'
-import Proof from '@/components/Proof.astro'
-import OpenTo from '@/components/OpenTo.astro'
-import Contact from '@/components/Contact.astro'
+import Layout from '../layouts/Layout.astro'
+
+// React components as islands
+import { Nav } from '@components/layout/Nav'
+import { ScrollProgress } from '@components/effects/ScrollProgress'
+import { Hero } from '@components/sections/Hero'
+import { VideoInterlude } from '@components/sections/VideoInterlude'
+import { CoreThesis } from '@components/sections/CoreThesis'
+import { GalleryScroll, ParallaxVideo } from '@components/sections/GalleryScroll'
+import { OpenTo } from '@components/sections/OpenTo'
+import { ContactDecompile } from '@components/sections/ContactDecompile'
+import { Scene } from '@components/three/Scene'
 ---
 
 <Layout>
-  <GpuField slot="backdrop" />
-  <Nav />
-  <AudioToggle />
-  <main>
-    <Hero />
-    <Moment />
-    <Thesis />
-    <Proof />
-    <OpenTo />
-    <Contact />
+  <!-- WebGL Background - only on client, no SSR for Three.js -->
+  <Scene client:only="react" />
+
+  <!-- Noise overlay - pure CSS, no JS needed -->
+  <div class="noise-overlay"></div>
+
+  <!-- Scroll progress bar - magical gradient with section nodes -->
+  <ScrollProgress client:idle />
+
+  <!-- Navigation - needs immediate interactivity -->
+  <Nav client:load />
+
+  <!-- Main Content -->
+  <main class="relative">
+    <!-- Hero - load immediately for LCP -->
+    <Hero client:load />
+
+    <!-- Video interlude - hydrate when visible -->
+    <VideoInterlude
+      client:visible
+      src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4"
+      height="50vh"
+      overlay="gradient"
+    />
+
+    <!-- Below-fold sections - hydrate when visible -->
+    <CoreThesis client:visible />
+    <GalleryScroll client:visible />
+    <OpenTo client:visible />
+    <ParallaxVideo client:visible />
+
+    <!-- Footer -->
+    <ContactDecompile client:visible />
   </main>
 </Layout>
+
+<!-- Lenis smooth scroll - initialized globally -->
+<script>
+  import Lenis from 'lenis'
+
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 2,
+    infinite: false,
+  })
+
+  let rafId: number
+
+  function raf(time: number) {
+    lenis.raf(time)
+    rafId = requestAnimationFrame(raf)
+  }
+
+  rafId = requestAnimationFrame(raf)
+
+  document.addEventListener('astro:before-swap', () => {
+    cancelAnimationFrame(rafId)
+    lenis.destroy()
+  }, { once: true })
+</script>

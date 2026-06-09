@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "heyoub.dev — Eassa Ayoub. Cognitive-first systems, built on LiteShip (the CZAP engine). A dogfood and showcase.",
+  "description": "heyoub.dev — Eassa Ayoub. The real site, on Astro + React, with LiteShip (CZAP) as the adaptive engine underneath.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -13,8 +13,19 @@
   },
   "dependencies": {
     "astro": "^6.4.4",
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/sitemap": "^3.7.3",
     "@astrojs/node": "^10.1.3",
-    "effect": "4.0.0-beta.32",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "three": "^0.184.0",
+    "@react-three/fiber": "^9.6.1",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/postprocessing": "^3.0.4",
+    "framer-motion": "^12.40.0",
+    "lenis": "^1.3.23",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.5",
     "@czap/core": "0.1.4",
     "@czap/quantizer": "0.1.4",
     "@czap/compiler": "0.1.4",
@@ -22,16 +33,18 @@
     "@czap/vite": "0.1.4",
     "@czap/edge": "0.1.4",
     "@czap/detect": "0.1.4",
-    "@czap/web": "0.1.4",
-    "@czap/scene": "0.1.4",
-    "@czap/assets": "0.1.4",
-    "@czap/worker": "0.1.4",
-    "@czap/cloudflare": "0.1.4"
+    "effect": "4.0.0-beta.32"
   },
   "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
     "vite": "^8.0.0",
     "typescript": "^5.9.3",
-    "@astrojs/check": "^0.9.4"
+    "@astrojs/check": "^0.9.4",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/three": "^0.184.0"
   },
   "packageManager": "pnpm@10.32.1",
   "pnpm": {
