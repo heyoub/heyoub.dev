@@ -5,7 +5,7 @@ interface Props { lite?: boolean }
 const { lite = false } = Astro.props
 ---
 
-<div class="relative h-[60vh] lg:h-[80vh] -mx-[8vw]" style="clip-path: inset(0)">
+<div class="relative h-[60vh] lg:h-[80vh]" style="clip-path: inset(0)">
   {lite ? (
     <div class="fixed inset-0 w-full h-full pointer-events-none" aria-hidden="true"
       style="background: radial-gradient(60% 60% at 50% 50%, color-mix(in srgb, var(--purple) 22%, transparent), var(--bg-primary))"></div>
