@@ -42,7 +42,7 @@ export const projectManifest: ProjectLink[] = [
       filename: 'batpak.rs',
       tagline: 'Seven Rust crates. Every one earns its keep.',
       blurb:
-        "Shipped in dependency order, each crate dragged through the full gauntlet before it's allowed near crates.io — CI, mutation testing, semver and public-API checks, consumer smoke, dry-run publish. No 'works on my machine.' First sign it was real: an engineer cloned it into a healthcare digital-twin without asking. That's the only review that counts.",
+        "Seven crates shipped in dependency order, each dragged through the full gauntlet before it goes near crates.io — CI, mutation testing, semver and public-API checks, consumer smoke, dry-run publish. No 'works on my machine.'",
       stack: ['Rust', 'Cargo', 'CI/CD'],
       links: [
         { label: 'crate', url: 'https://crates.io/crates/batpak', display: 'crates.io/crates/batpak' },
