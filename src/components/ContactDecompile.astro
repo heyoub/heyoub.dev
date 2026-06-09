@@ -1,0 +1,139 @@
+---
+import { contactConfig, getLinkDisplayValue } from '@/data/footer'
+import { projectManifest } from '@/data/manifest'
+const { links, status, code } = contactConfig
+const tabs = [
+  { id: 'contact', label: code.filename },
+  { id: 'fbf', label: 'the/FBF' },
+  ...projectManifest.map((p) => ({ id: p.pitch.filename, label: p.pitch.filename })),
+]
+---
+
+<footer id="footer" class="bg-editor-bg border-t border-editor-border flex flex-col" data-reveal>
+  <!-- Tab bar -->
+  <div role="presentation" class="flex justify-between items-center px-4 py-3 bg-editor-chrome border-b border-editor-border">
+    <div class="flex gap-0 overflow-x-auto scrollbar-hide">
+      {tabs.map((tab) => (
+        <button data-tabbtn={tab.id} class="cd-tab font-mono text-xs px-4 py-2 flex items-center gap-2 whitespace-nowrap transition-colors text-text-muted bg-editor-chrome hover:text-text-secondary hover:bg-editor-bg/50">
+          <span class="text-[0.65rem] opacity-60" aria-hidden="true">⟨/⟩</span>{tab.label}
+        </button>
+      ))}
+    </div>
+    <div class="flex gap-2 shrink-0 ml-4" aria-hidden="true">
+      <span class="w-3 h-3 rounded-full bg-editor-red"></span>
+      <span class="w-3 h-3 rounded-full bg-editor-yellow"></span>
+      <span class="w-3 h-3 rounded-full bg-editor-green"></span>
+    </div>
+  </div>
+
+  <!-- Code content -->
+  <div class="flex-1 relative overflow-auto">
+    <div aria-hidden="true" class="hidden md:block absolute left-0 top-0 bottom-0 w-12 bg-editor-bg border-r border-editor-border py-6 pr-4">
+      <div class="flex flex-col items-end font-mono text-xs text-editor-gray leading-relaxed" data-linenums></div>
+    </div>
+
+    <div class="code-block py-4 md:py-6 px-4 md:px-8 md:pl-20 font-mono text-[clamp(0.7rem,1.5vw,0.875rem)] leading-relaxed">
+      <!-- contact -->
+      <div data-panel="contact">
+        <p class="code-line"><span class="code-comment code-comment--with-slashes">{code.filename}</span></p>
+        <p class="code-line"><span class="code-comment code-comment--with-slashes">{code.openComment}</span></p>
+        <p class="code-line">&nbsp;</p>
+        <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">links</span> <span class="code-punctuation">=</span> <span class="code-punctuation">{'{'}</span></p>
+        <dl class="code-object-body">
+          {links.map((link, i) => (
+            <div class="code-line code-property">
+              <dt class="code-key">{link.key}</dt>
+              <dd><a href={link.href} class="code-string code-link" target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{getLinkDisplayValue(link)}</a><span class="code-punctuation" aria-hidden="true">{i < links.length - 1 ? ',' : ''}</span></dd>
+            </div>
+          ))}
+        </dl>
+        <p class="code-line"><span class="code-punctuation">{'};'}</span></p>
+        <p class="code-line">&nbsp;</p>
+        <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">status</span> <span class="code-punctuation">=</span> <span class="code-punctuation">{'{'}</span></p>
+        <address class="code-object-body not-italic">
+          <div class="code-line code-property"><span class="code-key">building</span><span class="code-boolean">{String(status.building)}</span><span class="code-punctuation" aria-hidden="true">,</span></div>
+          <div class="code-line code-property"><span class="code-key">location</span><span class="code-string">{status.location}</span><span class="code-punctuation" aria-hidden="true">,</span></div>
+          <div class="code-line code-property"><span class="code-key">year</span><span class="code-number">{status.year}</span></div>
+        </address>
+        <p class="code-line"><span class="code-punctuation">{'};'}</span></p>
+        <p class="code-line">&nbsp;</p>
+        <p class="code-line"><span class="code-comment code-comment--with-slashes">{code.closeComment}</span></p>
+      </div>
+
+      <!-- fbf -->
+      <div data-panel="fbf" hidden>
+        <p class="code-line"><span class="code-comment code-comment--with-slashes">the/FBF</span></p>
+        <p class="code-line"><span class="code-comment code-comment--with-slashes">the line never stops.</span></p>
+        <p class="code-line">&nbsp;</p>
+        <p class="code-line"><span class="code-comment code-comment--with-slashes">Modular power for autonomous systems. We make the batteries</span></p>
+        <p class="code-line"><span class="code-comment code-comment--with-slashes">everyone forgets to include. Then we write about why they work.</span></p>
+        <p class="code-line">&nbsp;</p>
+        <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">packs</span> <span class="code-punctuation">=</span> <span class="code-punctuation">[</span></p>
+        <p class="code-line" style="padding-left:1.5rem"><span class="code-string">the/agents.BP</span></p>
+        <p class="code-line"><span class="code-punctuation">{'];'}</span></p>
+        <p class="code-line">&nbsp;</p>
+        <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">links</span> <span class="code-punctuation">=</span> <span class="code-punctuation">{'{'}</span></p>
+        <dl class="code-object-body">
+          <div class="code-line code-property"><dt class="code-key">factory</dt><dd><a href="https://freebatteryfactory.com" class="code-string code-link" target="_blank" rel="noopener noreferrer">freebatteryfactory.com</a><span class="code-punctuation" aria-hidden="true">,</span></dd></div>
+          <div class="code-line code-property"><dt class="code-key">devPacks</dt><dd><a href="https://batterypack.dev" class="code-string code-link" target="_blank" rel="noopener noreferrer">batterypack.dev</a></dd></div>
+        </dl>
+        <p class="code-line"><span class="code-punctuation">{'};'}</span></p>
+      </div>
+
+      <!-- projects -->
+      {projectManifest.map((project) => (
+        <div data-panel={project.pitch.filename} hidden>
+          <p class="code-line"><span class="code-comment code-comment--with-slashes">{project.pitch.filename}</span></p>
+          <p class="code-line"><span class="code-comment code-comment--with-slashes">{project.pitch.tagline}</span></p>
+          <p class="code-line">&nbsp;</p>
+          <p class="code-line"><span class="code-comment code-comment--with-slashes">{project.pitch.blurb}</span></p>
+          <p class="code-line">&nbsp;</p>
+          <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">stack</span> <span class="code-punctuation">=</span> <span class="code-punctuation">[</span></p>
+          {project.pitch.stack.map((tech, i) => (
+            <p class="code-line" style="padding-left:1.5rem"><span class="code-string">{tech}</span><span class="code-punctuation" aria-hidden="true">{i < project.pitch.stack.length - 1 ? ',' : ''}</span></p>
+          ))}
+          <p class="code-line"><span class="code-punctuation">{'];'}</span></p>
+          <p class="code-line">&nbsp;</p>
+          <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">links</span> <span class="code-punctuation">=</span> <span class="code-punctuation">{'{'}</span></p>
+          <dl class="code-object-body">
+            {project.pitch.links.map((link, i) => (
+              <div class="code-line code-property"><dt class="code-key">{link.label}</dt><dd><a href={link.url} class="code-string code-link" target="_blank" rel="noopener noreferrer">{link.display}</a><span class="code-punctuation" aria-hidden="true">{i < project.pitch.links.length - 1 ? ',' : ''}</span></dd></div>
+            ))}
+          </dl>
+          <p class="code-line"><span class="code-punctuation">{'};'}</span></p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Status bar -->
+  <div role="status" class="flex justify-between items-center px-8 md:pl-20 py-3 bg-editor-chrome border-t border-editor-border">
+    <div class="flex items-center gap-3 text-editor-gray-light">
+      <span class="w-2 h-2 rounded-full bg-green animate-pulse" aria-hidden="true"></span>
+      <span class="font-mono text-xs">building</span>
+    </div>
+    <small class="font-mono text-[0.65rem] tracking-wider text-editor-gray">© {status.year} Eassa Ayoub · {status.location}</small>
+  </div>
+</footer>
+
+<style>
+  .cd-tab.is-active { color: var(--text-primary); background: var(--editor-bg); border-bottom: 2px solid var(--accent); }
+</style>
+
+<script>
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'))
+  const btns = Array.from(document.querySelectorAll<HTMLElement>('[data-tabbtn]'))
+  const gutter = document.querySelector<HTMLElement>('[data-linenums]')
+  const show = (id: string) => {
+    panels.forEach((p) => (p.hidden = p.dataset.panel !== id))
+    btns.forEach((b) => b.classList.toggle('is-active', b.dataset.tabbtn === id))
+    const active = panels.find((p) => p.dataset.panel === id)
+    if (gutter && active) {
+      const n = active.querySelectorAll('.code-line, .code-property').length
+      gutter.innerHTML = Array.from({ length: Math.max(n, 1) }, (_, i) => `<span>${i + 1}</span>`).join('')
+    }
+  }
+  btns.forEach((b) => b.addEventListener('click', () => show(b.dataset.tabbtn!)))
+  window.addEventListener('editor-tab', (e) => show((e as CustomEvent<{ tab: string }>).detail.tab))
+  show('contact')
+</script>

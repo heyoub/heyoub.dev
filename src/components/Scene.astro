@@ -1,0 +1,76 @@
+---
+import { satelliteAttrs } from '@czap/astro'
+import { heroLayout } from '@/lib/boundaries'
+
+// The WebGL background, on LiteShip. Omitted entirely for reduced-motion;
+// the @czap GPU runtime also skips WebGL init on static/styled tiers, leaving
+// the CSS gradient fallback. Carries heroLayout so u_state tracks the layout.
+const { tier } = Astro.locals.czap
+const show = tier.motion !== 'none'
+const sat = satelliteAttrs({ boundary: heroLayout })
+---
+
+<div class="scene" aria-hidden="true">
+  {show && (
+    <canvas
+      class="scene-canvas"
+      data-czap-boundary={sat['data-czap-boundary']}
+      data-czap-shader-type="glsl"
+      data-czap-shader-src="/shaders/field.frag"
+    ></canvas>
+  )}
+</div>
+
+{show && (
+  <script>
+    import gpuDirective from '@czap/astro/client-directives/gpu'
+
+    const mount = () => {
+      const el = document.querySelector('.scene-canvas')
+      if (!el) return
+      // Invoke @czap's GPU runtime directly (Astro ignores custom client
+      // directives on plain elements) — same path client:gpu would run.
+      gpuDirective(() => Promise.resolve({ default: () => {} }), {}, el as HTMLElement)
+
+      // Feed pointer + scroll into the shader through the runtime's
+      // czap:uniform-update channel (u_mx / u_my / u_scroll).
+      let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0
+      const send = (uniform: string, value: number) =>
+        document.dispatchEvent(new CustomEvent('czap:uniform-update', { detail: { uniform, value } }))
+      window.addEventListener('pointermove', (e) => {
+        tx = (e.clientX / window.innerWidth) * 2 - 1
+        ty = -((e.clientY / window.innerHeight) * 2 - 1)
+      }, { passive: true })
+      const loop = () => {
+        cx += (tx - cx) * 0.05; cy += (ty - cy) * 0.05
+        send('u_mx', cx); send('u_my', cy)
+        raf = requestAnimationFrame(loop)
+      }
+      loop()
+      const onScroll = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight
+        send('u_scroll', max > 0 ? Math.min(1, window.scrollY / max) : 0)
+      }
+      window.addEventListener('scroll', onScroll, { passive: true })
+      onScroll()
+      document.addEventListener('astro:before-swap', () => cancelAnimationFrame(raf), { once: true })
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true })
+    else mount()
+  </script>
+)}
+
+<style>
+  .scene {
+    position: fixed;
+    inset: 0;
+    z-index: -100;
+    pointer-events: none;
+    background:
+      radial-gradient(40% 40% at 78% 24%, color-mix(in srgb, #06b6d4 10%, transparent), transparent 60%),
+      radial-gradient(38% 38% at 20% 78%, color-mix(in srgb, #8b5cf6 10%, transparent), transparent 60%),
+      var(--bg-primary);
+  }
+  .scene-canvas { width: 100%; height: 100%; display: block; }
+</style>

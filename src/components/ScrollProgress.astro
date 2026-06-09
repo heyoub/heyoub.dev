@@ -1,0 +1,43 @@
+---
+const DOTS = [
+  { top: '12%', right: '1.2rem', size: 3 },
+  { top: '28%', right: '0.8rem', size: 2 },
+  { top: '44%', right: '1.5rem', size: 2.5 },
+  { top: '60%', right: '0.6rem', size: 2 },
+  { top: '76%', right: '1.3rem', size: 3 },
+  { top: '90%', right: '0.9rem', size: 2 },
+]
+---
+
+<div class="sp fixed top-0 right-0 bottom-0 z-[100] pointer-events-none" data-scroll-progress style="opacity:0;transition:opacity .3s">
+  <div class="sp-counter absolute top-4 right-3 font-mono text-[9px] tracking-[0.2em] flex items-center gap-2">
+    <span class="text-text-muted/40">SCROLL</span>
+    <span class="text-accent/70 tabular-nums" data-sp-pct>000</span>
+    <span class="text-text-muted/40">%</span>
+  </div>
+  {DOTS.map((dot) => (
+    <div class="sp-dot absolute rounded-full" data-pos={parseFloat(dot.top) / 100}
+      style={`top:${dot.top}; right:${dot.right}; width:${dot.size}px; height:${dot.size}px; background-color: var(--accent); opacity:0.1; transition: opacity .3s, transform .3s, box-shadow .3s`}></div>
+  ))}
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-scroll-progress]')
+  const pct = document.querySelector<HTMLElement>('[data-sp-pct]')
+  const dots = Array.from(document.querySelectorAll<HTMLElement>('.sp-dot'))
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight
+    const v = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0
+    if (root) root.style.opacity = v > 0.02 && v < 0.99 ? '1' : '0'
+    if (pct) pct.textContent = Math.round(v * 100).toString().padStart(3, '0')
+    for (const d of dots) {
+      const p = parseFloat(d.dataset.pos || '0')
+      const dist = Math.abs(v - p)
+      d.style.opacity = dist < 0.08 ? '0.9' : v > p ? '0.4' : '0.1'
+      d.style.transform = dist < 0.08 ? 'scale(1.4)' : 'scale(1)'
+      d.style.boxShadow = dist < 0.08 ? '0 0 8px rgba(34,211,238,0.6)' : 'none'
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+</script>

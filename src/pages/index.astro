@@ -1,58 +1,48 @@
 ---
-import Layout from '../layouts/Layout.astro'
-
-// React components as islands
-import { Nav } from '@components/layout/Nav'
-import { ScrollProgress } from '@components/effects/ScrollProgress'
-import { Hero } from '@components/sections/Hero'
-import { VideoInterlude } from '@components/sections/VideoInterlude'
-import { CoreThesis } from '@components/sections/CoreThesis'
-import { GalleryScroll, ParallaxVideo } from '@components/sections/GalleryScroll'
-import { OpenTo } from '@components/sections/OpenTo'
-import { ContactDecompile } from '@components/sections/ContactDecompile'
-import { Scene } from '@components/three/Scene'
+import Layout from '@/layouts/Layout.astro'
+import Scene from '@components/Scene.astro'
+import ScrollProgress from '@components/ScrollProgress.astro'
+import Nav from '@components/Nav.astro'
+import Hero from '@components/Hero.astro'
+import VideoInterlude from '@components/VideoInterlude.astro'
+import CoreThesis from '@components/CoreThesis.astro'
+import GalleryScroll from '@components/GalleryScroll.astro'
+import OpenTo from '@components/OpenTo.astro'
+import ParallaxVideo from '@components/ParallaxVideo.astro'
+import ContactDecompile from '@components/ContactDecompile.astro'
 ---
 
 <Layout>
-  <!-- WebGL Background - only on client, no SSR for Three.js -->
-  <Scene client:only="react" />
+  <!-- WebGL background — now a LiteShip GPU shader -->
+  <Scene />
 
-  <!-- Noise overlay - pure CSS, no JS needed -->
+  <!-- Noise overlay -->
   <div class="noise-overlay"></div>
 
-  <!-- Scroll progress bar - magical gradient with section nodes -->
-  <ScrollProgress client:idle />
+  <!-- Scroll progress -->
+  <ScrollProgress />
 
-  <!-- Navigation - needs immediate interactivity -->
-  <Nav client:load />
+  <!-- Navigation -->
+  <Nav />
 
-  <!-- Main Content -->
   <main class="relative">
-    <!-- Hero - load immediately for LCP -->
-    <Hero client:load />
+    <Hero />
 
-    <!-- Video interlude - hydrate when visible -->
-    <VideoInterlude
-      client:visible
-      src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4"
-      height="50vh"
-      overlay="gradient"
-    />
+    <VideoInterlude src="/assets/fs/3141208-uhd_3840_2160_25fps.mp4" height="50vh" overlay="gradient" />
 
-    <!-- Below-fold sections - hydrate when visible -->
-    <CoreThesis client:visible />
-    <GalleryScroll client:visible />
-    <OpenTo client:visible />
-    <ParallaxVideo client:visible />
+    <CoreThesis />
+    <GalleryScroll />
+    <OpenTo />
+    <ParallaxVideo />
 
-    <!-- Footer -->
-    <ContactDecompile client:visible />
+    <ContactDecompile />
   </main>
 </Layout>
 
-<!-- Lenis smooth scroll - initialized globally -->
+<!-- Lenis smooth scroll + scroll-reveal init (vanilla, no React) -->
 <script>
   import Lenis from 'lenis'
+  import { initReveal } from '@/lib/reveal'
 
   const lenis = new Lenis({
     duration: 1.2,
@@ -66,13 +56,13 @@ import { Scene } from '@components/three/Scene'
   })
 
   let rafId: number
-
   function raf(time: number) {
     lenis.raf(time)
     rafId = requestAnimationFrame(raf)
   }
-
   rafId = requestAnimationFrame(raf)
+
+  initReveal()
 
   document.addEventListener('astro:before-swap', () => {
     cancelAnimationFrame(rafId)

@@ -1,0 +1,70 @@
+---
+import { proofPoints } from '@/data/projects'
+import { pathContent, pillars } from '@/data/content'
+
+const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: pillars[2]! } as const
+---
+
+<section id="work" class="relative min-h-screen px-[8vw]">
+  <!-- Sticky fading header -->
+  <div class="sticky top-20 z-0 py-[clamp(2.5rem,8vw,6rem)] pointer-events-none gallery-header">
+    <div>
+      <div class="section-label">The Work</div>
+      <h2 class="font-serif text-[clamp(1.5rem,4vw,2.5rem)] max-w-2xl">Where the pattern shows up</h2>
+    </div>
+  </div>
+
+  <!-- Main card -->
+  <div class="relative z-10 p-6 lg:p-10 bg-bg-tertiary border border-white/5 mb-16" data-reveal>
+    <div class="absolute top-0 left-0 w-16 h-px bg-gradient-to-r from-accent to-transparent"></div>
+    <div class="absolute top-0 left-0 h-16 w-px bg-gradient-to-b from-accent to-transparent"></div>
+    <div class="absolute bottom-0 right-0 w-16 h-px bg-gradient-to-l from-purple to-transparent"></div>
+    <div class="absolute bottom-0 right-0 h-16 w-px bg-gradient-to-t from-purple to-transparent"></div>
+
+    <div class="grid lg:grid-cols-2 gap-8 lg:gap-16">
+      <div>
+        <h3 class="font-serif text-[clamp(1.5rem,4vw,2.5rem)] mb-6 leading-tight">
+          {pathContent.heading[0]}<br /><span class="text-text-secondary">{pathContent.heading[1]}</span>
+        </h3>
+        <p class="text-text-secondary font-light text-[clamp(0.95rem,2vw,1.1rem)] leading-relaxed">{pathContent.body}</p>
+      </div>
+
+      <div class="space-y-6" data-reveal-stagger>
+        {proofPoints.map((point) => {
+          const principle = principleMap[point.principle]
+          return (
+            <div class="group">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-1.5 h-1.5 rounded-full" style={`background-color: var(--${principle.accent})`}></div>
+                <span class="font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-wider uppercase text-accent">{principle.label}</span>
+              </div>
+              <p class="text-text-secondary text-[clamp(0.85rem,1.5vw,0.95rem)] mb-2 pl-4 border-l border-white/10 group-hover:border-accent/30 transition-colors">
+                {principle.title} — <span class="text-text-muted">{principle.summary}</span>
+              </p>
+              <p class="text-text-primary text-[clamp(0.9rem,1.75vw,1rem)] pl-4 font-light">
+                → {point.proof}
+                {point.link && (
+                  <a href={point.link.url} target="_blank" rel="noopener noreferrer" class="ml-2 text-accent/70 hover:text-accent text-[clamp(0.7rem,1.25vw,0.8rem)] font-mono transition-colors">[{point.link.label}]</a>
+                )}
+              </p>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* header fades as you scroll past it (v2 scroll-linked fade) */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .gallery-header {
+        animation: gh-fade linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 80%;
+      }
+    }
+  }
+  @keyframes gh-fade { to { opacity: 0; transform: translateY(-20px); } }
+</style>

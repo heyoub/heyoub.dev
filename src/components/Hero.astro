@@ -1,0 +1,90 @@
+---
+import { satelliteAttrs, resolveInitialStateFallback } from '@czap/astro'
+import { heroLayout } from '@/lib/boundaries'
+import { heroContent as h } from '@/data/content'
+
+// Same responsive layout as v2 (lg: grid), with the heroLayout boundary
+// carried on the section so LiteShip drives the named state underneath.
+const sat = satelliteAttrs({ boundary: heroLayout, initialState: resolveInitialStateFallback(heroLayout) })
+---
+
+<section {...sat} class={`${sat.class} relative min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center px-[8vw] gap-8 md:gap-16 py-24 md:py-0 overflow-hidden`}>
+  <!-- Content -->
+  <div class="hero-content max-w-xl lg:max-w-none">
+    <h1 class="font-serif text-[clamp(2.5rem,8vw,7rem)] font-normal leading-[0.95] tracking-tight mb-3 md:mb-4 animate-fadeInUp" style="animation-delay:0.4s">
+      {h.name.first} <span class="italic text-text-secondary">{h.name.last}</span>
+    </h1>
+
+    <div class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-[0.3em] uppercase text-accent mb-6 md:mb-8 animate-fadeInUp" style="animation-delay:0.2s">
+      {h.label}
+    </div>
+
+    <p class="text-[clamp(1rem,2.5vw,1.25rem)] font-light text-text-secondary leading-relaxed mb-6 md:mb-8 animate-fadeInUp" style="animation-delay:0.6s">
+      {h.tagline.before}{' '}
+      <strong class="text-text-primary font-medium">{h.tagline.emphasis}</strong>
+      {h.tagline.after}
+    </p>
+
+    <div class="grid grid-cols-[1fr_auto_auto] gap-6 max-w-2xl animate-fadeInUp" style="animation-delay:0.8s">
+      <!-- Quote -->
+      <div class="flex items-center gap-4 border-l-2 border-accent/30 pl-4">
+        <p class="text-[clamp(0.95rem,2vw,1.125rem)] font-light text-text-secondary">
+          {h.quote.regular}{' '}<span class="text-text-primary italic">{h.quote.emphasis}</span>
+        </p>
+      </div>
+
+      <!-- Book a Call square -->
+      <div class="flex items-center justify-center p-2">
+        <a href={h.cta.href} target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300 flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight">
+          <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">{h.cta.label}</span>
+          <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">{h.cta.action}</span>
+        </a>
+      </div>
+
+      <!-- FBF square -->
+      <div class="flex items-center justify-center p-2">
+        <a href="https://freebatteryfactory.com" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary transition-all duration-300 flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
+          <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">the</span>
+          <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-purple group-hover:text-bg-primary transition-colors">FBF</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo -->
+  <div class="hero-content flex justify-center items-center order-first lg:order-last mt-16 lg:mt-0 animate-fadeInUp" style="animation-delay:0.5s">
+    <div class="w-full max-w-[380px] aspect-[380/480] bg-gradient-to-br from-bg-tertiary to-bg-secondary border border-white/[0.08] relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-500 to-purple-500"></div>
+      <img src={h.photo.src} alt={h.photo.alt} class="w-full h-full object-cover object-top" loading="eager" decoding="async" width={380} height={480} />
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero-hint absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 md:left-[8vw] md:translate-x-0 flex flex-col md:flex-row items-center gap-2 md:gap-4 font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-widest text-text-muted" aria-hidden="true">
+    <div class="w-px md:w-12 h-8 md:h-px bg-gradient-to-b md:bg-gradient-to-r from-accent/50 via-accent to-transparent hint-line"></div>
+    <span class="hidden md:inline">{h.scrollHint}</span>
+  </div>
+</section>
+
+<style>
+  /* hero content tucks down + scales as you scroll away (v2 feel) */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .hero-content {
+        animation: hero-tuck linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 95%;
+      }
+      .hero-hint {
+        animation: hint-out linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 25%;
+      }
+    }
+  }
+  @keyframes hero-tuck { to { transform: translateY(120px) scale(0.95); opacity: 0; } }
+  @keyframes hint-out { to { opacity: 0; } }
+  .hint-line { animation: hint-pulse 1.5s ease-in-out infinite; }
+  @keyframes hint-pulse { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.2); } }
+  @media (prefers-reduced-motion: reduce) { .animate-fadeInUp { animation: none !important; } }
+</style>

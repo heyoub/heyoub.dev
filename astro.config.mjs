@@ -1,15 +1,28 @@
 import { defineConfig } from 'astro/config'
 import { fileURLToPath } from 'node:url'
-import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
+import node from '@astrojs/node'
+import { integration as czap } from '@czap/astro'
 
-// Your real site: Astro + React islands + Three.js + framer-motion + Lenis,
-// exactly as built. The frontend-hq workspace path aliases, inlined.
+// Your real site, on Astro + LiteShip. No React. SSR so czapMiddleware can
+// resolve the device tier per-request into Astro.locals.czap before paint.
 const src = fileURLToPath(new URL('./src', import.meta.url))
 
 export default defineConfig({
   site: 'https://heyoub.dev',
-  integrations: [react(), sitemap()],
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+  integrations: [
+    czap({
+      detect: true,
+      gpu: { enabled: true, preferWebGPU: false },
+      stream: { enabled: true },
+      llm: { enabled: true },
+      workers: { enabled: true },
+      wasm: { enabled: true },
+    }),
+    sitemap(),
+  ],
   vite: {
     resolve: {
       alias: {
@@ -20,8 +33,6 @@ export default defineConfig({
         '@data': `${src}/data`,
         '@hooks': `${src}/hooks`,
       },
-      dedupe: ['react', 'react-dom'],
     },
-    ssr: { noExternal: ['framer-motion'] },
   },
 })

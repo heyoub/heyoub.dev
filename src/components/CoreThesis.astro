@@ -1,0 +1,85 @@
+---
+import { coreThesisContent as t, stackPyramid } from '@/data/content'
+---
+
+<section id="thesis" class="py-[clamp(2.5rem,10vw,10rem)] px-[8vw] bg-bg-secondary border-y border-white/5">
+  <div class="max-w-5xl mx-auto" data-reveal>
+    <!-- Opening hook -->
+    <div class="text-center mb-12 md:mb-16">
+      <p class="font-mono text-[clamp(0.7rem,1.5vw,0.85rem)] tracking-[0.2em] uppercase text-text-muted mb-4">{t.hook}</p>
+      <h2 class="font-serif text-[clamp(1.8rem,4vw,2.8rem)] font-normal leading-snug mb-6">
+        {t.headline.regular} <em class="text-accent">{t.headline.emphasis}</em>
+      </h2>
+      <h3 class="font-serif text-[clamp(1.2rem,2.5vw,1.6rem)] font-normal leading-snug mb-6 max-w-3xl mx-auto">{t.problem.hook}</h3>
+
+      <div class="space-y-3 max-w-3xl mx-auto mb-8">
+        {t.problem.narrative.map((line) => (
+          <p class="text-text-secondary font-light text-[clamp(1rem,2vw,1.15rem)] leading-relaxed">{line}</p>
+        ))}
+      </div>
+
+      <div class="border-l-2 border-accent/30 pl-6 py-4 text-left max-w-3xl mx-auto mb-10">
+        <p class="font-mono text-[clamp(0.7rem,1.5vw,0.85rem)] tracking-[0.2em] uppercase text-accent mb-2">{t.problem.definition.term}</p>
+        <p class="text-text-secondary font-light text-[clamp(1rem,2vw,1.15rem)] leading-relaxed italic">{t.problem.definition.meaning}</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-3 md:gap-4 max-w-3xl mx-auto" data-reveal-stagger>
+        {t.problem.stats.map((stat) => (
+          <div class="p-4 md:p-5 bg-bg-tertiary/50 border border-white/5 hover:border-white/10 transition-all duration-300">
+            <div class="font-serif text-[clamp(1.5rem,3vw,2rem)] font-normal mb-2" style={`color: var(--${stat.accent})`}>{stat.value}</div>
+            <p class="text-text-secondary font-light text-[clamp(0.85rem,1.5vw,0.95rem)] leading-snug">{stat.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Universal truth -->
+    <blockquote class="border-l-2 border-accent/30 pl-6 py-4 my-8 md:my-10 max-w-3xl mx-auto">
+      <p class="text-[clamp(1rem,2vw,1.2rem)] font-light text-text-secondary leading-relaxed italic">
+        {t.universalTruth.before} <span class="text-accent not-italic font-medium">{t.universalTruth.emphasis}</span> {t.universalTruth.after}
+      </p>
+    </blockquote>
+
+    <!-- Tech stack pyramid -->
+    <div class="pt-6 md:pt-8 border-t border-white/5">
+      <div class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-[0.3em] uppercase text-text-muted mb-8 text-center">{t.techStackLabel}</div>
+
+      <div class="relative max-w-[85%] mx-auto">
+        <!-- floating labels (desktop) -->
+        <div class="hidden lg:block absolute inset-0 z-10 pointer-events-none">
+          {stackPyramid.map((layer, i) => (
+            <div class="absolute w-full" style={`top:${(i / stackPyramid.length) * 100}%`}>
+              <div class="absolute right-full mr-4 flex items-center gap-2" style={`left:${i * 8}%; transform: translateX(-100%)`}>
+                <span class="font-mono text-[10px] tracking-[0.2em] text-accent/50">{layer.label}</span>
+                <span class="w-4 h-px bg-accent/20"></span>
+              </div>
+              <div class="absolute left-full ml-4 flex items-center gap-2" style={`right:${i * 8}%`}>
+                <span class="w-4 h-px bg-white/10"></span>
+                <span class="font-mono text-[9px] tracking-[0.1em] text-text-muted/40 whitespace-nowrap">{layer.hint}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- the pyramid -->
+        <div class="flex flex-col items-center gap-3">
+          {stackPyramid.map((layer) => (
+            <div class="flex justify-center gap-1.5 md:gap-2">
+              {layer.techs.map((tech) => (
+                <span class="px-2 py-1 font-mono text-[clamp(0.55rem,1.1vw,0.65rem)] border transition-all duration-300 hover:scale-105"
+                  style={`border-color: color-mix(in srgb, var(--${tech.color}) 40%, transparent); color: var(--${tech.color}); background-color: color-mix(in srgb, var(--${tech.color}) 5%, transparent);`}>{tech.name}</span>
+              ))}
+            </div>
+          ))}
+          <div class="mt-1"><span class="font-mono text-[10px] text-accent/30">▼</span></div>
+        </div>
+
+        <div class="lg:hidden flex justify-center gap-4 mt-6 flex-wrap">
+          {stackPyramid.map((layer) => (
+            <span class="font-mono text-[8px] tracking-[0.15em] text-accent/30">{layer.label}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
