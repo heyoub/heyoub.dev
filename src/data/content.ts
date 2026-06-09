@@ -38,7 +38,7 @@ export const heroContent: HeroContent = {
     first: 'Eassa',
     last: 'Ayoub',
   },
-  label: 'Systems Builder · AI Workflow Infrastructure · Rust & TypeScript',
+  label: 'Cognitive-First Systems · Former Operator',
   tagline: {
     before: 'Most software makes users carry its complexity. I build',
     emphasis: 'software that feels like thinking',
@@ -228,8 +228,10 @@ export const stackPyramid: StackLayer[] = [
     hint: 'where cycles matter',
     techs: [
       { name: 'Rust', color: 'orange' },
+      { name: 'OCaml', color: 'warm' },
+      { name: 'Go', color: 'accent' },
       { name: 'WASM', color: 'purple' },
-      { name: 'Cargo', color: 'warm' },
+      { name: 'Python', color: 'green' },
     ],
   },
   {
@@ -237,25 +239,24 @@ export const stackPyramid: StackLayer[] = [
     hint: 'where state lives',
     techs: [
       { name: 'TypeScript', color: 'accent' },
-      { name: 'Effect', color: 'accent' },
-      { name: 'Node.js', color: 'green' },
+      { name: 'Elixir', color: 'purple' },
+      { name: 'Phoenix', color: 'purple' },
+      { name: 'Effect-TS', color: 'accent' },
     ],
   },
   {
     label: 'PRODUCT',
-    hint: 'where people land',
+    hint: 'where users live',
     techs: [
-      { name: 'Astro', color: 'orange' },
       { name: 'React', color: 'accent' },
-      { name: 'Vitest', color: 'green' },
+      { name: 'Convex', color: 'accent' },
     ],
   },
   {
     label: 'INTELLIGENCE',
-    hint: 'where agents work',
+    hint: 'where patterns emerge',
     techs: [
-      { name: 'MCP', color: 'purple' },
-      { name: 'Agents', color: 'warm' },
+      { name: 'PyTorch', color: 'orange' },
     ],
   },
 ]

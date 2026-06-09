@@ -14,21 +14,18 @@ export interface ProofPoint {
 
 export const proofPoints: ProofPoint[] = [
   {
-    id: 'attention-liteship',
+    id: 'attention-crm',
     principle: 'attention',
-    proof: 'LiteShip: name the few states, cast them to every surface from one definition. The UI carries less.',
-    link: { label: 'repo', url: 'https://github.com/heyoub/LiteShip', type: 'repo' },
+    proof: 'CRM rebuild. Max three choices per screen. Decision fatigue gone.',
   },
   {
-    id: 'rent-batpak',
+    id: 'rent-memory',
     principle: 'rent',
-    proof: 'BatPAK: seven Rust crates, each earning its place — release gates, semver checks, dry-run publish. No dead weight.',
-    link: { label: 'crate', url: 'https://crates.io/crates/batpak', type: 'live' },
+    proof: 'Agent memory with real retrieval and decay. No wrapper theater.',
   },
   {
-    id: 'constraints-boundaries',
+    id: 'constraints-compliance',
     principle: 'constraints',
-    proof: 'Declared boundaries and public-API checks that compile. Illegal states are type errors, not runbook notes.',
-    link: { label: 'repo', url: 'https://github.com/heyoub/LiteShip', type: 'repo' },
+    proof: 'Regulatory rules that compile. Illegal states are type errors.',
   },
 ]

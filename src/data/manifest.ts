@@ -19,38 +19,6 @@ export interface ProjectLink {
 
 export const projectManifest: ProjectLink[] = [
   {
-    name: 'LiteShip',
-    gitUrl: 'https://github.com/heyoub/LiteShip',
-    siteUrl: 'https://www.npmjs.com/package/@czap/core',
-    pitch: {
-      filename: 'liteship.ts',
-      tagline: 'One boundary — CSS, GLSL, ARIA, AI, all at once',
-      blurb:
-        'Adaptive projection on Astro: declared boundaries cast to every surface from one definition. A multi-package @czap/* workspace — 3,534 tests, 97% line coverage, 18 packages. This very site runs on it.',
-      stack: ['TypeScript', 'Astro', 'Effect', 'Vitest'],
-      links: [
-        { label: 'npm', url: 'https://www.npmjs.com/package/@czap/core', display: 'npmjs.com/@czap/core' },
-        { label: 'repo', url: 'https://github.com/heyoub/LiteShip', display: 'github.com/heyoub/LiteShip' },
-      ],
-    },
-  },
-  {
-    name: 'BatPAK',
-    gitUrl: 'https://github.com/heyoub/batpak',
-    siteUrl: 'https://crates.io/crates/batpak',
-    pitch: {
-      filename: 'batpak.rs',
-      tagline: 'Seven Rust crates, release discipline as code',
-      blurb:
-        'Seven published crates (batpak, syncbat, netbat + macro/bench support) on hard release discipline: CI, mutation testing, semver & public-API checks, consumer smoke, dry-run publish. crates.io v0.8.0.',
-      stack: ['Rust', 'Cargo', 'CI/CD'],
-      links: [
-        { label: 'crate', url: 'https://crates.io/crates/batpak', display: 'crates.io/crates/batpak' },
-        { label: 'repo', url: 'https://github.com/heyoub/batpak', display: 'github.com/heyoub/batpak' },
-      ],
-    },
-  },
-  {
     name: 'Scrubah.PII',
     gitUrl: 'https://github.com/Heyoub/scrubah.pii',
     siteUrl: 'https://scrubah-pii.heyoub.dev',
