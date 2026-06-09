@@ -10,6 +10,7 @@ const {
 } = Astro.props
 
 import TokenStyles from '@components/TokenStyles.astro'
+import LayoutStyles from '@components/LayoutStyles.astro'
 
 const siteUrl = 'https://heyoub.dev'
 const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`
@@ -197,6 +198,8 @@ const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png
 
     <!-- Brand palette, cast from LiteShip Tokens (one definition → CSS vars) -->
     <TokenStyles />
+    <!-- Responsive layout, driven by LiteShip boundaries → @container CSS -->
+    <LayoutStyles />
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />

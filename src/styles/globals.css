@@ -50,6 +50,9 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Query container for the LiteShip boundary @container CSS (HeroGridStyle).
+       inline-size tracks viewport width; fixed children stay viewport-relative. */
+    container: viewport-width / inline-size;
   }
 
   /* Selection */

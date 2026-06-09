@@ -23,7 +23,7 @@ import { coreThesisContent as t, stackPyramid } from '@/data/content'
         <p class="text-text-secondary font-light text-[clamp(1rem,2vw,1.15rem)] leading-relaxed italic">{t.problem.definition.meaning}</p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-3 md:gap-4 max-w-3xl mx-auto" data-reveal-stagger>
+      <div class="grid czap-grid-3 gap-3 md:gap-4 max-w-3xl mx-auto" data-reveal-stagger>
         {t.problem.stats.map((stat) => (
           <div class="p-4 md:p-5 bg-bg-tertiary/50 border border-white/5 hover:border-white/10 transition-all duration-300">
             <div class="font-serif text-[clamp(1.5rem,3vw,2rem)] font-normal mb-2" style={`color: var(--${stat.accent})`}>{stat.value}</div>

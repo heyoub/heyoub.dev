@@ -29,7 +29,7 @@ const lineItems = momentContent.lines.map((line, i) => {
     {lite ? (
       <img class="w-full h-full object-cover" src="/assets/Hero_3.webp" alt="" loading="lazy" decoding="async" />
     ) : (
-      <video class="w-full h-full object-cover" src={src} muted playsinline autoplay preload="metadata"
+      <video class="w-full h-full object-cover" src={src} muted loop playsinline autoplay preload="metadata"
         poster="/assets/Hero_3.webp" disablepictureinpicture></video>
     )}
   </div>
@@ -70,22 +70,10 @@ const lineItems = momentContent.lines.map((line, i) => {
 </style>
 
 <script>
-  // boomerang: play forward to (duration-4s), then ease back to 4s
+  // Smooth forward loop (the old per-frame reverse-seek on a 4K video was the
+  // jank source). Nudge playbackRate down slightly for a calmer, dreamier feel.
   document.querySelectorAll<HTMLVideoElement>('.vi video').forEach((video) => {
-    const BUFFER = 4
-    let dir: 'forward' | 'reverse' = 'forward'
-    let raf = 0
-    const tick = () => {
-      if (video.duration && !video.paused) {
-        const end = video.duration - BUFFER
-        if (dir === 'forward' && video.currentTime >= end) dir = 'reverse'
-        else if (dir === 'reverse' && video.currentTime <= BUFFER) dir = 'forward'
-        if (dir === 'reverse') video.currentTime = Math.max(BUFFER, video.currentTime - 0.033)
-      }
-      raf = requestAnimationFrame(tick)
-    }
+    video.playbackRate = 0.85
     video.play().catch(() => {})
-    raf = requestAnimationFrame(tick)
-    document.addEventListener('astro:before-swap', () => cancelAnimationFrame(raf), { once: true })
   })
 </script>
