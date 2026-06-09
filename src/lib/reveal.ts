@@ -3,7 +3,7 @@
 // children of [data-reveal-stagger] cascade via CSS nth-child delays.
 export function initReveal(): void {
   if (typeof window === 'undefined') return
-  const els = document.querySelectorAll<HTMLElement>('[data-reveal]')
+  const els = document.querySelectorAll<HTMLElement>('[data-reveal], [data-reveal-stagger]')
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (reduce) {
     els.forEach((el) => el.classList.add('is-visible'))
