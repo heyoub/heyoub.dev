@@ -25,7 +25,9 @@ const DOTS = [
   const root = document.querySelector<HTMLElement>('[data-scroll-progress]')
   const pct = document.querySelector<HTMLElement>('[data-sp-pct]')
   const dots = Array.from(document.querySelectorAll<HTMLElement>('.sp-dot'))
-  const onScroll = () => {
+  let ticking = false
+  const paint = () => {
+    ticking = false
     const max = document.documentElement.scrollHeight - window.innerHeight
     const v = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0
     if (root) root.style.opacity = v > 0.02 && v < 0.99 ? '1' : '0'
@@ -38,6 +40,7 @@ const DOTS = [
       d.style.boxShadow = dist < 0.08 ? '0 0 8px rgba(34,211,238,0.6)' : 'none'
     }
   }
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(paint) } }
   window.addEventListener('scroll', onScroll, { passive: true })
-  onScroll()
+  paint()
 </script>

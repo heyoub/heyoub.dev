@@ -26,15 +26,26 @@ const sat = satelliteAttrs({ boundary: heroLayout })
     import gpuDirective from '@czap/astro/client-directives/gpu'
 
     const mount = () => {
-      const el = document.querySelector('.scene-canvas')
+      const el = document.querySelector('.scene-canvas') as HTMLCanvasElement | null
       if (!el) return
+
+      // Ensure the drawing buffer matches the displayed size (otherwise it
+      // renders into the default 300×150 and upscales to mush).
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2)
+        el.width = Math.round((el.clientWidth || window.innerWidth) * dpr)
+        el.height = Math.round((el.clientHeight || window.innerHeight) * dpr)
+      }
+      resize()
+      window.addEventListener('resize', resize, { passive: true })
+
       // Invoke @czap's GPU runtime directly (Astro ignores custom client
       // directives on plain elements) — same path client:gpu would run.
-      gpuDirective(() => Promise.resolve({ default: () => {} }), {}, el as HTMLElement)
+      gpuDirective(() => Promise.resolve({ default: () => {} }), {}, el)
 
       // Feed pointer + scroll into the shader through the runtime's
-      // czap:uniform-update channel (u_mx / u_my / u_scroll).
-      let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0
+      // czap:uniform-update channel (u_mx / u_my / u_scroll). rAF-coalesced.
+      let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, sv = 0, st = false
       const send = (uniform: string, value: number) =>
         document.dispatchEvent(new CustomEvent('czap:uniform-update', { detail: { uniform, value } }))
       window.addEventListener('pointermove', (e) => {
@@ -44,15 +55,15 @@ const sat = satelliteAttrs({ boundary: heroLayout })
       const loop = () => {
         cx += (tx - cx) * 0.05; cy += (ty - cy) * 0.05
         send('u_mx', cx); send('u_my', cy)
+        if (st) { st = false; send('u_scroll', sv) }
         raf = requestAnimationFrame(loop)
       }
       loop()
-      const onScroll = () => {
+      window.addEventListener('scroll', () => {
         const max = document.documentElement.scrollHeight - window.innerHeight
-        send('u_scroll', max > 0 ? Math.min(1, window.scrollY / max) : 0)
-      }
-      window.addEventListener('scroll', onScroll, { passive: true })
-      onScroll()
+        sv = max > 0 ? Math.min(1, window.scrollY / max) : 0
+        st = true
+      }, { passive: true })
       document.addEventListener('astro:before-swap', () => cancelAnimationFrame(raf), { once: true })
     }
 
