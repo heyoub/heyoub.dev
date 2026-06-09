@@ -19,6 +19,38 @@ export interface ProjectLink {
 
 export const projectManifest: ProjectLink[] = [
   {
+    name: 'LiteShip',
+    gitUrl: 'https://github.com/heyoub/LiteShip',
+    siteUrl: 'https://www.npmjs.com/package/@czap/core',
+    pitch: {
+      filename: 'liteship.ts',
+      tagline: 'Name the states once. Everything else falls in line.',
+      blurb:
+        "Most 'responsive' UIs are a junk drawer of media queries held together with hope. LiteShip makes you name the few states that actually matter, then casts them to every surface listening — CSS, shaders, the screen reader, an AI manifest — from one source. 3,534 tests, 97% coverage, 18 packages. This site is running on it right now.",
+      stack: ['TypeScript', 'Astro', 'Effect', 'Vitest'],
+      links: [
+        { label: 'npm', url: 'https://www.npmjs.com/package/@czap/core', display: 'npmjs.com/@czap/core' },
+        { label: 'repo', url: 'https://github.com/heyoub/LiteShip', display: 'github.com/heyoub/LiteShip' },
+      ],
+    },
+  },
+  {
+    name: 'BatPAK',
+    gitUrl: 'https://github.com/heyoub/batpak',
+    siteUrl: 'https://crates.io/crates/batpak',
+    pitch: {
+      filename: 'batpak.rs',
+      tagline: 'Seven Rust crates. Every one earns its keep.',
+      blurb:
+        "Shipped in dependency order, each crate dragged through the full gauntlet before it's allowed near crates.io — CI, mutation testing, semver and public-API checks, consumer smoke, dry-run publish. No 'works on my machine.' First sign it was real: an engineer cloned it into a healthcare digital-twin without asking. That's the only review that counts.",
+      stack: ['Rust', 'Cargo', 'CI/CD'],
+      links: [
+        { label: 'crate', url: 'https://crates.io/crates/batpak', display: 'crates.io/crates/batpak' },
+        { label: 'repo', url: 'https://github.com/heyoub/batpak', display: 'github.com/heyoub/batpak' },
+      ],
+    },
+  },
+  {
     name: 'Scrubah.PII',
     gitUrl: 'https://github.com/Heyoub/scrubah.pii',
     siteUrl: 'https://scrubah-pii.heyoub.dev',

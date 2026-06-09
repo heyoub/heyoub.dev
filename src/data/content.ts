@@ -228,10 +228,8 @@ export const stackPyramid: StackLayer[] = [
     hint: 'where cycles matter',
     techs: [
       { name: 'Rust', color: 'orange' },
-      { name: 'OCaml', color: 'warm' },
-      { name: 'Go', color: 'accent' },
       { name: 'WASM', color: 'purple' },
-      { name: 'Python', color: 'green' },
+      { name: 'Cargo', color: 'warm' },
     ],
   },
   {
@@ -239,24 +237,25 @@ export const stackPyramid: StackLayer[] = [
     hint: 'where state lives',
     techs: [
       { name: 'TypeScript', color: 'accent' },
-      { name: 'Elixir', color: 'purple' },
-      { name: 'Phoenix', color: 'purple' },
-      { name: 'Effect-TS', color: 'accent' },
+      { name: 'Effect', color: 'accent' },
+      { name: 'Node.js', color: 'green' },
     ],
   },
   {
     label: 'PRODUCT',
     hint: 'where users live',
     techs: [
+      { name: 'Astro', color: 'orange' },
       { name: 'React', color: 'accent' },
-      { name: 'Convex', color: 'accent' },
+      { name: 'Vitest', color: 'green' },
     ],
   },
   {
     label: 'INTELLIGENCE',
     hint: 'where patterns emerge',
     techs: [
-      { name: 'PyTorch', color: 'orange' },
+      { name: 'MCP', color: 'purple' },
+      { name: 'Agents', color: 'warm' },
     ],
   },
 ]
