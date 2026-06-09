@@ -91,10 +91,10 @@ export function initScene(
       shader.uniforms.uTime = { value: 0 }
       shader.uniforms.uDistort = { value: cfg.distort }
       shader.vertexShader = `uniform float uTime; uniform float uDistort;\n${SNOISE}\n` + shader.vertexShader
-      // Low-frequency, slow noise → smooth broad wobble (not spikes).
+      // Low-frequency, VERY slow noise → calm, elegant morphing (not a jitter).
       shader.vertexShader = shader.vertexShader.replace(
         '#include <begin_vertex>',
-        `#include <begin_vertex>\n  float czapN = snoise(position * 0.55 + uTime * 0.5);\n  transformed += normal * czapN * uDistort;`,
+        `#include <begin_vertex>\n  float czapN = snoise(position * 0.5 + uTime * 0.08);\n  transformed += normal * czapN * uDistort;`,
       )
       shaderRef.current = shader
     }
@@ -106,7 +106,7 @@ export function initScene(
   // Grid plane (the v2 GridPlane shader)
   const gridMat = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false,
-    uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color('#22d3ee') }, uOpacity: { value: 0.03 } },
+    uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color('#22d3ee') }, uOpacity: { value: 0.07 } },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
     fragmentShader: `uniform float uTime; uniform vec3 uColor; uniform float uOpacity; varying vec2 vUv;
       void main(){
@@ -147,8 +147,8 @@ export function initScene(
       mesh.position.x = base[0] + Math.sin(t * cfg.speed) * 0.3 + px * strength
       mesh.position.y = base[1] + Math.cos(t * cfg.speed * 0.8) * 0.2 + py * strength
       mesh.position.z = base[2]
-      mesh.rotation.x = t * 0.1
-      mesh.rotation.y = t * 0.15
+      mesh.rotation.x = t * 0.04
+      mesh.rotation.y = t * 0.06
       if (shaderRef.current) shaderRef.current.uniforms.uTime.value = t
     }
     gridMat.uniforms.uTime.value = t
