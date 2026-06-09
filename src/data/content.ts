@@ -247,6 +247,7 @@ export const stackPyramid: StackLayer[] = [
     techs: [
       { name: 'Astro', color: 'orange' },
       { name: 'React', color: 'accent' },
+      { name: 'Convex', color: 'accent' },
       { name: 'Vitest', color: 'green' },
     ],
   },
