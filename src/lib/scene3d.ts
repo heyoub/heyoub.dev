@@ -45,9 +45,21 @@ float snoise(vec3 v){
   return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
 }`
 
+// Mood targets streamed in from the AnimatedQuantizer (scene-mood.ts) — the
+// quantizer owns the easing between states, so these land pre-interpolated
+// every frame during a crossing. All multipliers of the calm baseline.
+export interface SceneMoodOutputs {
+  distortAmp?: number // × cfg.distort
+  rotSpeed?: number // × base rotation/drift speed
+  orbOpacity?: number // absolute orb opacity
+  emissive?: number // absolute emissive intensity
+  gridOpacity?: number // absolute grid line opacity
+}
+
 export interface SceneHandle {
   setMobile(isMobile: boolean): void
   setPointer(x: number, y: number): void
+  setMood(mood: SceneMoodOutputs): void
   dispose(): void
 }
 
@@ -134,6 +146,8 @@ export function initScene(
   window.addEventListener('resize', resize, { passive: true })
 
   let px = 0, py = 0, tx = 0, ty = 0
+  // Mood baseline = the calm hero look; the quantizer streams eased values in.
+  const mood: Required<SceneMoodOutputs> = { distortAmp: 1, rotSpeed: 1, orbOpacity: 0.32, emissive: 0.55, gridOpacity: 0.07 }
   const clock = new THREE.Clock()
   let raf = 0
   const tick = () => {
@@ -144,14 +158,21 @@ export function initScene(
       const base = isMobile ? cfg.mobilePosition : cfg.position
       const size = isMobile ? cfg.mobileSize : cfg.size
       mesh.scale.setScalar(size)
-      mesh.position.x = base[0] + Math.sin(t * cfg.speed) * 0.3 + px * strength
-      mesh.position.y = base[1] + Math.cos(t * cfg.speed * 0.8) * 0.2 + py * strength
+      mesh.position.x = base[0] + Math.sin(t * cfg.speed * mood.rotSpeed) * 0.3 + px * strength
+      mesh.position.y = base[1] + Math.cos(t * cfg.speed * mood.rotSpeed * 0.8) * 0.2 + py * strength
       mesh.position.z = base[2]
-      mesh.rotation.x = t * 0.04
-      mesh.rotation.y = t * 0.06
-      if (shaderRef.current) shaderRef.current.uniforms.uTime.value = t
+      mesh.rotation.x = t * 0.04 * mood.rotSpeed
+      mesh.rotation.y = t * 0.06 * mood.rotSpeed
+      const mat = mesh.material as THREE.MeshPhysicalMaterial
+      mat.opacity = mood.orbOpacity
+      mat.emissiveIntensity = mood.emissive
+      if (shaderRef.current) {
+        shaderRef.current.uniforms.uTime.value = t
+        shaderRef.current.uniforms.uDistort.value = cfg.distort * mood.distortAmp
+      }
     }
     gridMat.uniforms.uTime.value = t
+    gridMat.uniforms.uOpacity.value = mood.gridOpacity
     renderer.render(scene, camera)
     raf = requestAnimationFrame(tick)
   }
@@ -160,6 +181,7 @@ export function initScene(
   return {
     setMobile(m) { isMobile = m; resize() },
     setPointer(x, y) { tx = x; ty = y },
+    setMood(m) { Object.assign(mood, m) },
     dispose() {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)

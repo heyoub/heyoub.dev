@@ -3,45 +3,52 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "heyoub.dev — Eassa Ayoub. The real site, rebuilt on Astro + LiteShip (CZAP). Zero React.",
+  "description": "heyoub.dev \u2014 Eassa Ayoub. The real site, rebuilt on Astro + LiteShip (CZAP). Zero React.",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/czap-audit.mjs && astro build",
     "preview": "astro preview",
     "start": "node ./dist/server/entry.mjs",
-    "check": "astro check"
+    "check": "astro check",
+    "audit:czap": "node scripts/czap-audit.mjs"
   },
   "dependencies": {
-    "astro": "^6.4.4",
-    "@astrojs/sitemap": "^3.7.3",
     "@astrojs/node": "^10.1.3",
-    "lenis": "^1.3.23",
-    "three": "^0.184.0",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.5",
-    "@czap/core": "0.1.4",
-    "@czap/quantizer": "0.1.4",
-    "@czap/compiler": "0.1.4",
+    "@astrojs/sitemap": "^3.7.3",
     "@czap/astro": "0.1.4",
-    "@czap/vite": "0.1.4",
-    "@czap/edge": "0.1.4",
+    "@czap/compiler": "0.1.4",
+    "@czap/core": "0.1.4",
     "@czap/detect": "0.1.4",
-    "effect": "4.0.0-beta.32"
+    "@czap/edge": "0.1.4",
+    "@czap/quantizer": "0.1.4",
+    "@czap/vite": "0.1.4",
+    "astro": "^6.4.4",
+    "clsx": "^2.1.1",
+    "effect": "4.0.0-beta.32",
+    "lenis": "^1.3.23",
+    "tailwind-merge": "^2.5.5",
+    "three": "^0.184.0"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.17",
+    "@astrojs/check": "^0.9.4",
+    "@czap/audit": "0.1.4",
+    "@czap/cli": "0.1.4",
+    "@types/three": "^0.184.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
-    "vite": "^8.0.0",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.9.3",
-    "@astrojs/check": "^0.9.4",
-    "@types/three": "^0.184.0"
+    "vite": "^8.0.0"
   },
   "packageManager": "pnpm@10.32.1",
   "pnpm": {
     "overrides": {
       "@czap/_spine": "0.1.4"
     },
-    "onlyBuiltDependencies": ["esbuild", "sharp", "msgpackr-extract"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "msgpackr-extract"
+    ]
   }
 }

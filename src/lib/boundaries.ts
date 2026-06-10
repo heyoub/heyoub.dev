@@ -26,3 +26,20 @@ export const cardGrid = Boundary.make({
   ] as const,
   hysteresis: 32,
 })
+
+// The scene-mood regime — quantizes scroll progress (0–100%) into the named
+// moods the WebGL background moves through as you read the page. Fed through
+// Q.from(sceneMood).outputs({ glsl, css }) + AnimatedQuantizer (scene-mood.ts),
+// so one boundary drives shader uniforms AND CSS vars with eased crossings.
+// The directive runtime can't read scroll signals itself (viewport.* only),
+// so the scene chunk feeds live.evaluate() — quantizer is signal-agnostic.
+export const sceneMood = Boundary.make({
+  input: 'scroll.progress',
+  at: [
+    [0, 'arrival'], // hero — calm, luminous, grid barely there
+    [18, 'thesis'], // the argument — orbs recede, grid sharpens
+    [55, 'work'], // the proof — most kinetic the scene gets
+    [85, 'sendoff'], // contact — settle back down, warmest glow
+  ] as const,
+  hysteresis: 5,
+})

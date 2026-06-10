@@ -10,7 +10,7 @@ import { heroContent as h } from '@/data/content'
 const { class: satClass, ...satData } = satelliteAttrs({ boundary: heroLayout, initialState: resolveInitialStateFallback(heroLayout) })
 ---
 
-<section class={`${satClass} czap-hero-grid relative min-h-screen grid items-center px-[8vw] gap-8 md:gap-16 py-24 md:py-0 overflow-hidden`} {...satData}>
+<section id="hero-satellite" class={`${satClass} czap-hero-grid relative min-h-screen grid items-center px-[8vw] gap-8 md:gap-16 py-24 md:py-0 overflow-hidden`} {...satData}>
   <!-- Content -->
   <div class="hero-content max-w-xl lg:max-w-none">
     <h1 class="font-serif text-[clamp(2.5rem,8vw,7rem)] font-normal leading-[0.95] tracking-tight mb-3 md:mb-4 animate-fadeInUp" style="animation-delay:0.4s">
@@ -90,3 +90,24 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: heroLayout, i
   @keyframes hint-pulse { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.2); } }
   @media (prefers-reduced-motion: reduce) { .animate-fadeInUp { animation: none !important; } }
 </style>
+
+<script>
+  // Hydrate the heroLayout boundary OFF the main thread. Astro never fires
+  // custom client directives on plain elements (no islands here — zero
+  // React), so we invoke the published directive entrypoint ourselves: it
+  // parses data-czap-boundary off the element, evaluates it in a Web Worker
+  // over a SharedArrayBuffer SPSC ring when crossOriginIsolated (COOP/COEP
+  // set in middleware), and falls back to inline evaluation when not.
+  // @container CSS owns the visuals; this keeps data-czap-state live for
+  // every non-CSS consumer without costing the main thread anything.
+  import workerDirective from '@czap/astro/client-directives/worker'
+
+  const boot = () => {
+    const tier = document.documentElement.getAttribute('data-czap-tier') ?? 'reactive'
+    if (tier === 'static') return // honor the zero-JS budget at the floor
+    const el = document.getElementById('hero-satellite')
+    if (el) workerDirective(() => Promise.resolve(), {}, el)
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true })
+  else boot()
+</script>

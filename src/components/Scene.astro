@@ -35,11 +35,16 @@ const show = tier.motion !== 'none'
       const { initScene } = await import('../lib/scene3d')
       const handle = initScene(canvas, { isMobile: isMobileNow(), ...quality })
 
+      // Mood: the sceneMood boundary + AnimatedQuantizer stream eased GLSL
+      // values into the scene as you scroll (and cast CSS vars on <html>).
+      const { initSceneMood } = await import('../lib/scene-mood')
+      const mood = initSceneMood((outputs) => handle.setMood(outputs))
+
       window.addEventListener('pointermove', (e) => {
         handle.setPointer((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1))
       }, { passive: true })
       window.addEventListener('resize', () => handle.setMobile(isMobileNow()), { passive: true })
-      document.addEventListener('astro:before-swap', () => handle.dispose(), { once: true })
+      document.addEventListener('astro:before-swap', () => { mood.dispose(); handle.dispose() }, { once: true })
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true })
@@ -53,11 +58,15 @@ const show = tier.motion !== 'none'
     inset: 0;
     z-index: -100;
     pointer-events: none;
-    /* static fallback shown on low tiers / reduced-motion / before the scene mounts */
+    /* static fallback shown on low tiers / reduced-motion / before the scene
+       mounts. --czap-mood-glow is the sceneMood boundary's CSS cast — on
+       tiers where the GLSL target is gated off, the same quantizer still
+       breathes through this gradient. */
     background:
-      radial-gradient(40% 40% at 78% 24%, color-mix(in srgb, #06b6d4 12%, transparent), transparent 60%),
-      radial-gradient(38% 38% at 22% 78%, color-mix(in srgb, #8b5cf6 12%, transparent), transparent 60%),
+      radial-gradient(40% 40% at 78% 24%, color-mix(in srgb, #06b6d4 calc(var(--czap-mood-glow, 0.22) * 55%), transparent), transparent 60%),
+      radial-gradient(38% 38% at 22% 78%, color-mix(in srgb, #8b5cf6 calc(var(--czap-mood-glow, 0.22) * 55%), transparent), transparent 60%),
       var(--bg-primary);
+    transition: background 900ms ease;
   }
   .scene-canvas { width: 100%; height: 100%; display: block; }
 </style>

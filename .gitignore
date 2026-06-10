@@ -20,3 +20,4 @@ pnpm-debug.log*
 !.vscode/extensions.json
 # wrangler (later, for cloudflare)
 .wrangler/
+.czap-audit/

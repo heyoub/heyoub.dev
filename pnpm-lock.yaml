@@ -60,6 +60,12 @@ importers:
       '@astrojs/check':
         specifier: ^0.9.4
         version: 0.9.9(prettier@3.8.3)(typescript@5.9.3)
+      '@czap/audit':
+        specifier: 0.1.4
+        version: 0.1.4
+      '@czap/cli':
+        specifier: 0.1.4
+        version: 0.1.4
       '@types/three':
         specifier: ^0.184.0
         version: 0.184.1
@@ -167,11 +173,32 @@ packages:
     resolution: {integrity: sha512-E5G1G++NQ+zABm8Xpsf/LEb4PYIlZyYFvFXsgpBdSRv+WA0DroLKhEXUNqQvSjA08CzrHsdM3mNDsfUThKNgtg==}
     engines: {node: '>=22.0.0'}
 
+  '@czap/assets@0.1.4':
+    resolution: {integrity: sha512-s7/sv0U3t7n0o0NdXA9C2mO/AAfkS1SzBXTReE69lUPMReoqRONzWgr67hWmXyixmMTpEpHoYp36Uzu6tS/G3g==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      effect: '>=4.0.0-beta.0'
+
   '@czap/astro@0.1.4':
     resolution: {integrity: sha512-CCMfSpWuGbLkjhNsX/+xqLJjYVM8o3A1Lb6hp3SuQGl7RkWpWREGUV/qKiiS8SfbFz35JLIFeUtPl3nDG7dbxA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       astro: '>=6.0.0'
+      effect: '>=4.0.0-beta.0'
+
+  '@czap/audit@0.1.4':
+    resolution: {integrity: sha512-NxSFZDTlD80vbKndHmZgA8U/oGcQ6t1DimvUlvAzqDTkjUcHMGZhRDAdBrDxDcVPrZVTzICO6AECiRHkZYI+cQ==}
+    engines: {node: '>=22.0.0'}
+
+  '@czap/cli@0.1.4':
+    resolution: {integrity: sha512-7edLZMRsYEz9x815YLUZ5yO1P8dkIMRXV3tHTqrVM0tuwLH1nQOT8fJInx051uISy5rddhUYJ1qzOc4YR7N2BA==}
+    engines: {node: '>=22.0.0'}
+    hasBin: true
+
+  '@czap/command@0.1.4':
+    resolution: {integrity: sha512-JdIIA3ctZGIsfRhaSlY56nq5jXa1wUHaBnsyJXhWfFrT4bHhrxH08lIlok9XCiTWahcf7JoinupIsaGg71oa9w==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
       effect: '>=4.0.0-beta.0'
 
   '@czap/compiler@0.1.4':
@@ -200,6 +227,12 @@ packages:
 
   '@czap/quantizer@0.1.4':
     resolution: {integrity: sha512-jHaEZzEztdSrwAKQBldRiSL8qo9dSwWqIo/EFeoV5fOQbelUlSL7wJtgD0HAmWMlkaocZ1u9narmw0kc0EFaFA==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      effect: '>=4.0.0-beta.0'
+
+  '@czap/scene@0.1.4':
+    resolution: {integrity: sha512-qeTxOXqQuhmtAjnrKuZ7lXmLHfrul1+PYklZUszZX1kynvPyb4vPH6PxF5lDH1mVLMFoOMOr1KiQg8iPczcP1A==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
@@ -2755,6 +2788,12 @@ snapshots:
 
   '@czap/_spine@0.1.4': {}
 
+  '@czap/assets@0.1.4(effect@4.0.0-beta.32)':
+    dependencies:
+      '@czap/_spine': 0.1.4
+      '@czap/core': 0.1.4(effect@4.0.0-beta.32)
+      effect: 4.0.0-beta.32
+
   '@czap/astro@0.1.4(astro@6.4.4(@types/node@24.13.1)(jiti@1.21.7)(lightningcss@1.32.0)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.27.7)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
       '@czap/core': 0.1.4(effect@4.0.0-beta.32)
@@ -2767,6 +2806,26 @@ snapshots:
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - vite
+
+  '@czap/audit@0.1.4':
+    dependencies:
+      fast-glob: 3.3.3
+      typescript: 5.9.3
+
+  '@czap/cli@0.1.4':
+    dependencies:
+      '@czap/assets': 0.1.4(effect@4.0.0-beta.32)
+      '@czap/audit': 0.1.4
+      '@czap/command': 0.1.4(effect@4.0.0-beta.32)
+      '@czap/core': 0.1.4(effect@4.0.0-beta.32)
+      '@czap/scene': 0.1.4(effect@4.0.0-beta.32)
+      effect: 4.0.0-beta.32
+
+  '@czap/command@0.1.4(effect@4.0.0-beta.32)':
+    dependencies:
+      '@czap/assets': 0.1.4(effect@4.0.0-beta.32)
+      '@czap/core': 0.1.4(effect@4.0.0-beta.32)
+      effect: 4.0.0-beta.32
 
   '@czap/compiler@0.1.4(effect@4.0.0-beta.32)':
     dependencies:
@@ -2793,6 +2852,12 @@ snapshots:
 
   '@czap/quantizer@0.1.4(effect@4.0.0-beta.32)':
     dependencies:
+      '@czap/core': 0.1.4(effect@4.0.0-beta.32)
+      effect: 4.0.0-beta.32
+
+  '@czap/scene@0.1.4(effect@4.0.0-beta.32)':
+    dependencies:
+      '@czap/_spine': 0.1.4
       '@czap/core': 0.1.4(effect@4.0.0-beta.32)
       effect: 4.0.0-beta.32
 
