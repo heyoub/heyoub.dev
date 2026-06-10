@@ -1,0 +1,50 @@
+// Boundary → @container CSS, shared by two consumers:
+//   LayoutStyles.astro    — inline <style> on cache miss / outside the edge
+//   src/middleware.ts     — the KV edge-cache compile() callback, so repeat
+//                           requests at the same tier skip recompilation
+import { Style } from '@czap/core'
+import { StyleCSSCompiler } from '@czap/compiler'
+import { heroLayout, cardGrid } from './boundaries'
+
+// Layout driven by LiteShip boundaries, compiled to real @container queries
+// (resolved against the `viewport-width` container on .czap-vp). Pure CSS, no
+// first-paint shift — but the responsive layout is sourced from boundaries
+// (the same heroLayout also feeds the shader's u_state), not hand-written
+// media queries. We pair the compiler's @container blocks with our own
+// un-scoped base rule (StyleCSSCompiler emits the base inside @scope, whose
+// proximity would otherwise outrank the plain @container overrides).
+function layout(style: Style.Shape, name: string, base: string): string {
+  const r = StyleCSSCompiler.compile(style, name)
+  const blocks = (r.layers.match(/@container[\s\S]*?\}\s*\}/g) ?? []).join('\n')
+  return `.czap-${name} { ${base} }\n${blocks}`
+}
+
+const heroGrid = Style.make({
+  boundary: heroLayout,
+  base: { properties: { 'grid-template-columns': 'minmax(0, 1fr)' } },
+  states: {
+    split: { properties: { 'grid-template-columns': 'minmax(0, 1fr) minmax(0, 1fr)' } },
+    cinematic: { properties: { 'grid-template-columns': 'minmax(0, 1.05fr) minmax(0, 0.95fr)' } },
+  },
+})
+
+const cardGrid3 = Style.make({
+  boundary: cardGrid,
+  base: { properties: { 'grid-template-columns': 'minmax(0, 1fr)' } },
+  states: {
+    triple: { properties: { 'grid-template-columns': 'repeat(3, minmax(0, 1fr))' } },
+  },
+})
+
+// The query container lives on a full-width wrapper (.czap-vp) that excludes
+// the fixed background/nav/parallax — container-type would otherwise become
+// their containing block and break `position: fixed` (the orbs vanished).
+// Full-width + no padding ⇒ container width == viewport width, so the
+// @container thresholds match the v2 viewport breakpoints exactly.
+export function compileLayoutCss(): string {
+  return [
+    '.czap-vp { container-name: viewport-width; container-type: inline-size; }',
+    layout(heroGrid, 'hero-grid', 'grid-template-columns: minmax(0, 1fr);'),
+    layout(cardGrid3, 'grid-3', 'grid-template-columns: minmax(0, 1fr);'),
+  ].join('\n')
+}

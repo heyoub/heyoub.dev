@@ -1,17 +1,18 @@
 import { defineConfig } from 'astro/config'
 import { fileURLToPath } from 'node:url'
 import sitemap from '@astrojs/sitemap'
-import node from '@astrojs/node'
+import cloudflare from '@astrojs/cloudflare'
 import { integration as czap } from '@czap/astro'
 
-// Your real site, on Astro + LiteShip. No React. SSR so czapMiddleware can
-// resolve the device tier per-request into Astro.locals.czap before paint.
+// Your real site, on Astro + LiteShip. No React. SSR on Cloudflare Workers so
+// cloudflareMiddleware can resolve the device tier per-request (with the
+// compiled boundary CSS cached in Workers KV at the edge) before paint.
 const src = fileURLToPath(new URL('./src', import.meta.url))
 
 export default defineConfig({
   site: 'https://heyoub.dev',
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: cloudflare(),
   integrations: [
     czap({
       detect: true,

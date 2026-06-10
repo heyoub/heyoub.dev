@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "heyoub-dev",
+  "compatibility_date": "2026-06-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "kv_namespaces": [
+    {
+      // czap boundary-CSS edge cache — id filled in at first deploy
+      // (wrangler kv namespace create CZAP_BOUNDARY_CACHE)
+      "binding": "CZAP_BOUNDARY_CACHE",
+      "id": "placeholder-set-at-deploy"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
