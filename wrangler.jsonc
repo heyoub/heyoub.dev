@@ -5,10 +5,14 @@
   "compatibility_flags": ["nodejs_compat"],
   "kv_namespaces": [
     {
-      // czap boundary-CSS edge cache — id filled in at first deploy
-      // (wrangler kv namespace create CZAP_BOUNDARY_CACHE)
+      // czap boundary-CSS edge cache, keyed by (boundary, tier)
       "binding": "CZAP_BOUNDARY_CACHE",
-      "id": "placeholder-set-at-deploy"
+      "id": "1f4a087ddb884b82a2de16471ae30b96"
+    },
+    {
+      // Astro sessions (the cloudflare adapter wires this binding by default)
+      "binding": "SESSION",
+      "id": "ca1d7320a6c84611ab0f2e8f72146301"
     }
   ],
   "observability": {
