@@ -3,6 +3,10 @@
   "name": "heyoub-dev",
   "compatibility_date": "2026-06-08",
   "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    { "pattern": "heyoub.dev", "custom_domain": true },
+    { "pattern": "www.heyoub.dev", "custom_domain": true }
+  ],
   "kv_namespaces": [
     {
       // czap boundary-CSS edge cache, keyed by (boundary, tier)

@@ -7,7 +7,15 @@ import { heroContent as h } from '@/data/content'
 // carried on the section so LiteShip drives the named state underneath.
 // Merge the satellite class into ours; spread only the data-czap-* attrs so
 // the explicit class (with all the layout utilities) isn't clobbered.
-const { class: satClass, ...satData } = satelliteAttrs({ boundary: heroLayout, initialState: resolveInitialStateFallback(heroLayout) })
+// directive: 'worker' → since 0.1.5 the boot scanner activates the worker
+// client directive natively off the data-czap-directive marker (evaluates
+// the boundary over a SharedArrayBuffer ring under crossOriginIsolated);
+// the manual entrypoint invocation this site shipped against 0.1.4 is gone.
+const { class: satClass, ...satData } = satelliteAttrs({
+  boundary: heroLayout,
+  initialState: resolveInitialStateFallback(heroLayout),
+  directive: 'worker',
+})
 ---
 
 <section id="hero-satellite" class={`${satClass} czap-hero-grid relative min-h-screen grid items-center px-[8vw] gap-8 md:gap-16 py-24 md:py-0 overflow-hidden`} {...satData}>
@@ -91,23 +99,3 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: heroLayout, i
   @media (prefers-reduced-motion: reduce) { .animate-fadeInUp { animation: none !important; } }
 </style>
 
-<script>
-  // Hydrate the heroLayout boundary OFF the main thread. Astro never fires
-  // custom client directives on plain elements (no islands here — zero
-  // React), so we invoke the published directive entrypoint ourselves: it
-  // parses data-czap-boundary off the element, evaluates it in a Web Worker
-  // over a SharedArrayBuffer SPSC ring when crossOriginIsolated (COOP/COEP
-  // set in middleware), and falls back to inline evaluation when not.
-  // @container CSS owns the visuals; this keeps data-czap-state live for
-  // every non-CSS consumer without costing the main thread anything.
-  import workerDirective from '@czap/astro/client-directives/worker'
-
-  const boot = () => {
-    const tier = document.documentElement.getAttribute('data-czap-tier') ?? 'reactive'
-    if (tier === 'static') return // honor the zero-JS budget at the floor
-    const el = document.getElementById('hero-satellite')
-    if (el) workerDirective(() => Promise.resolve(), {}, el)
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true })
-  else boot()
-</script>
