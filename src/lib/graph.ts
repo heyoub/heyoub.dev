@@ -18,6 +18,7 @@ import {
   CanonicalCbor,
   AddressedDigest,
   projectionKeys,
+  Cap,
   HLC,
   type Boundary,
 } from '@czap/core'
@@ -30,6 +31,7 @@ import type {
   EntityNode,
   ProjectionNode,
   PoseNode,
+  PolicyNode,
   ContentAddress,
   CellMeta,
 } from '@czap/core'
@@ -119,11 +121,27 @@ function boundaryNodes(
 
 // heroLayout + cardGrid cast to css (the page / OG layout); sceneMood carries
 // the numeric mood poses the video cast renders frames from.
-const parts = [
-  boundaryNodes(heroLayout, 'hero-grid'),
-  boundaryNodes(cardGrid, 'card-grid'),
-  boundaryNodes(sceneMood, 'scene-mood', MOOD_GLSL),
-]
+const hero = boundaryNodes(heroLayout, 'hero-grid')
+const cards = boundaryNodes(cardGrid, 'card-grid')
+const scene = boundaryNodes(sceneMood, 'scene-mood', MOOD_GLSL)
+
+// A capability policy for the scene surface: it wants up to the `gpu` rung and
+// grants every rung below it, so the escalation chooser (chooseRung) reports
+// the admitted cast targets for a runtime site. Read by /graph.json.
+const sceneComponent = scene.nodes.find((n) => n.family === 'component') as ComponentNode
+export const scenePolicy: PolicyNode = sealNode<PolicyNode>({
+  _tag: 'DocGraphPolicyNode',
+  _version: 1,
+  family: 'policy',
+  id: UNSEALED,
+  meta,
+  appliesTo: [sceneComponent.id],
+  requires: 'gpu',
+  grants: Cap.from(['static', 'styled', 'reactive', 'animated', 'gpu']),
+  sites: ['browser', 'edge'],
+})
+
+const parts = [hero, cards, { nodes: [scenePolicy], edges: [] }, scene]
 
 // Content-addressing means identical nodes collapse to one id (e.g. the
 // `viewport.width` signal shared by heroLayout + cardGrid). Dedupe by id so the
