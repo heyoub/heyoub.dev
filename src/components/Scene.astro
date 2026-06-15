@@ -84,6 +84,31 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
       // The gpu directive owns the GL context + RAF loop; we own the scroll →
       // uniform bridge. It no-ops on reduced-motion internally.
       const mood = initSceneMood(canvas)
+
+      // The integration's GPU probe upgrades data-czap-tier AFTER the boot scan,
+      // so a capable device can boot the directive against the conservative
+      // initial tier and bail (the canvas stays at its default 300x150). If it
+      // hasn't rendered shortly after, clear the bound marker and re-run the
+      // scanner so the directive re-reads the now-upgraded tier. Idempotent:
+      // once rendered (canvas backing == display size) we stop; a genuinely
+      // low-tier device just re-bails and keeps the CSS fallback.
+      // This site's hero shows its shader on any WebGL2-capable, motion-OK
+      // device — the GPU probe tiers conservatively (and upgrades after the boot
+      // scan), so we lift data-czap-tier ourselves. The directive still bails to
+      // the CSS gradient if WebGL2 is actually unavailable; reduced-motion keeps
+      // the static fallback.
+      const motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      let tries = 0
+      const ensure = (): void => {
+        if (canvas.clientWidth > 0 && canvas.width === canvas.clientWidth) return // rendering
+        if (tries++ > 3 || !motionOK) return
+        if ('WebGL2RenderingContext' in window) document.documentElement.setAttribute('data-czap-tier', 'gpu')
+        canvas.removeAttribute('data-czap-directive-bound')
+        document.dispatchEvent(new CustomEvent('astro:after-swap'))
+        setTimeout(ensure, 700)
+      }
+      setTimeout(ensure, 600)
+
       document.addEventListener('astro:before-swap', () => mood.dispose(), { once: true })
     }
 
