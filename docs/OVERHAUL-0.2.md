@@ -39,6 +39,46 @@ site's job changes with it.
 
 ---
 
+## Implementation status — branch `feat/liteship-0.2-overhaul` (2026-06-15)
+
+Built, committed, builds clean (`czap audit --consumer` 0/0, `astro check` 0 errors, `astro build`
+green). Pixel/visual confirmation pending the dev-server demo.
+
+**Shipped:**
+- **P1** — `@czap/* → 0.2.0`, prefer WebGPU, dropped unused stream/llm/wasm directives **and all
+  three.js** (`scene3d.ts` deleted, `three`/`@types/three` removed).
+- **P2 edge** — `middleware.ts` derives the boundary id from `virtual:czap/boundaries` (no
+  hand-typed id / KV binding). Kept the `.czap-vp`-scoped compile as CSS source (see finding #7).
+- **P2 spine** — `src/lib/graph.ts`: the site as one sealed/validated `DocumentGraph` (signal /
+  component / entity / projection / **policy** / pose) + `/graph.json`.
+- **§4 shader cast ★** — `public/shaders/scene.{frag,wgsl}`: GLSL + net-new **WGSL** full-screen
+  mood background via `client:gpu` native boot; scroll→uniforms on the **RAF spine** (replaces the
+  16ms `AnimatedQuantizer`). WGSL where `navigator.gpu` exists, GLSL default.
+- **§5A** — RAF-spine smoothness (delivered in the shader bridge).
+- **§5B ★** — `DisplayFidelity.astro`: wide-gamut **P3 / rec2020 + HDR** palette via
+  `@media (color-gamut)`.
+- **§7** — `RenderBadge.astro` (visible tier/gamut/casts) + `chooseRung` verdict in `/graph.json`.
+- **§9** — the honest version: the **dual-export proof** (one graph → `astro-page` + `video` casts
+  under one shared-source receipt) in `/graph.json`. *Not* replacing stock footage — see below.
+- **§11 inspector** — auto-on in dev (`Alt+Shift+C`), excluded from prod.
+
+**Deferred, with rationale (not laziness — real framework-fit limits, logged as upstream findings):**
+- **§9 generative footage** — the shipped ffmpeg encoder rasterizes frames as *solid colors* (hash
+  of state) and `exportAstroPage` yields HTML-not-image; real footage needs a BYO offscreen renderer
+  + system ffmpeg, and would *downgrade* the good-looking stock interludes. Kept stock footage; shipped
+  the dual-export proof instead.
+- **§6 SVG egress** — `SVGSystem` is built for the scene/video ECS pipeline, not standalone DOM SVG;
+  the shader + CSS already cover motion across tiers.
+- **§8 `viewport.height`** — container-query size containment conflicts with the fixed-layer
+  architecture; can't be safely tuned without visual iteration.
+- **§9A beat-reactivity, §10 state cleanups** — out of "no new surface / keep it a website" scope.
+
+**Upstream findings filed:** `@quantize` has no container-target opt-out (forces `:root`); no
+`Graph.make` builder (hand-assembled node records); `preferWebGPU` is a no-op stub (consumer routes
+capability→cast); ffmpeg encoder is a solid-color PoC; `exportAstroPage` is markup-not-image.
+
+---
+
 ## 0. Snapshot — where the site is today
 
 Current state (audited 2026-06-15, all `@czap/*` at `0.1.5`):
