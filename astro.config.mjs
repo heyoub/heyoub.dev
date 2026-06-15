@@ -15,12 +15,16 @@ export default defineConfig({
   adapter: cloudflare(),
   integrations: [
     czap({
+      // detect / gpu default-on; 0.2.0 auto-registers directives (no rename
+      // ritual). preferWebGPU lights up the net-new WGSL cast where supported,
+      // falling back to the GLSL cast otherwise. workers stays on for the
+      // off-thread hero boundary (COOP/COEP). stream/llm/wasm dropped: no SSE,
+      // AI is out of scope here, and wasm is opt-in (TS fallback is identical).
       detect: true,
-      gpu: { enabled: true, preferWebGPU: false },
-      stream: { enabled: true },
-      llm: { enabled: true },
+      gpu: { enabled: true, preferWebGPU: true },
       workers: { enabled: true },
-      wasm: { enabled: true },
+      stream: { enabled: false },
+      llm: { enabled: false },
     }),
     sitemap(),
   ],
