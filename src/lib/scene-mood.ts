@@ -1,141 +1,136 @@
-// Scene mood → the GPU shader cast, on the RAF spine.
+// Scene mood → the GPU shader cast, via the LiteShip quantizer.
 //
-// The sceneMood boundary quantizes scroll into four named moods; this bridges
-// scroll → the live shader's uniforms. Unlike the old AnimatedQuantizer path
-// (which eased over 900ms on a fixed ~16ms Effect.sleep AFTER a discrete
-// crossing), the mood now tracks scroll position *continuously*: a passive,
-// rAF-coalesced scroll listener blends the two bracketing moods and dispatches
-// `czap:uniform-update` to the canvas — the client:gpu runtime binds detail.glsl
-// every frame, and the shader's own RAF loop animates u_time. Scroll-linked, so
-// it never lags and never over-runs. The same blend also casts --czap-mood-*
-// CSS vars (the gradient fallback on tiers where the shader is gated off).
+// The sceneMood boundary quantizes scroll into four named moods. The
+// AnimatedQuantizer eases the *mood* uniforms between those states (tier-gated:
+// below the `physics` motion tier it degrades to CSS-only), and we stream the
+// eased values onto the shader through czap:uniform-update. Easing the mood
+// off the quantizer (rather than tracking raw scroll 1:1) keeps it stable —
+// scroll jitter no longer jitters the orbs. The shader's own RAF loop animates
+// the lava flow via u_time; the quantizer owns only the slow mood crossings.
+//   • glsl  → u_* mood uniforms + u_state on the canvas (the shader)
+//   • css   → --czap-mood-* vars on <html> (the gradient fallback)
+//   • u_scroll → a light continuous parallax input, fed on scroll (disjoint
+//     uniform, so it never fights the eased mood values)
+import { Q, AnimatedQuantizer } from '@czap/quantizer'
+import { Millis, Easing, type MotionTier } from '@czap/core'
+import { Effect, Stream, Fiber } from 'effect'
 import { sceneMood } from './boundaries'
-import { MOOD_GLSL, MOOD_CSS, MOOD_STATES } from '@/data/scene-moods'
+import { MOOD_GLSL, MOOD_CSS, MOOD_STATES, type MoodState } from '@/data/scene-moods'
 
-// sceneMood scroll.progress stops: arrival 0, thesis 18, work 55, sendoff 85.
-const STOPS = sceneMood.thresholds as readonly number[]
-const UNIFORM_KEYS = ['distortAmp', 'rotSpeed', 'orbOpacity', 'emissive', 'gridOpacity'] as const
+// u_-prefixed mood table to match the shader's uniform names.
+const GLSL_U = Object.fromEntries(
+  MOOD_STATES.map((s) => [s, Object.fromEntries(Object.entries(MOOD_GLSL[s]).map(([k, v]) => [`u_${k}`, v]))]),
+) as Record<MoodState, Record<string, number>>
 
-const lerp = (a: number, b: number, t: number): number => a + (b - a) * t
+declare global {
+  // Written (frozen) by the @czap/astro detect script in <head>.
+  var __CZAP_DETECT__: { tier?: string; motionTier?: string } | undefined
+}
 
-/** Blend the two moods bracketing scroll progress `p` (0..100). */
-function blendAt(p: number): {
-  glsl: Record<string, number>
-  css: Record<string, number>
-  stateNorm: number
-} {
-  let i = 0
-  while (i < STOPS.length - 1 && p >= STOPS[i + 1]) i++
-  const lo = MOOD_STATES[i]
-  const hi = MOOD_STATES[Math.min(i + 1, MOOD_STATES.length - 1)]
-  const span = (STOPS[i + 1] ?? 100) - STOPS[i]
-  const t = span > 0 ? Math.min(1, Math.max(0, (p - STOPS[i]) / span)) : 0
-
-  const glsl: Record<string, number> = {}
-  for (const k of UNIFORM_KEYS) glsl['u_' + k] = lerp(MOOD_GLSL[lo][k], MOOD_GLSL[hi][k], t)
-
-  const css: Record<string, number> = {}
-  for (const k of Object.keys(MOOD_CSS[lo])) {
-    css[k] = lerp(MOOD_CSS[lo][k] as number, MOOD_CSS[hi][k] as number, t)
-  }
-  return { glsl, css, stateNorm: (i + t) / (MOOD_STATES.length - 1) }
+const MOTION_TIERS: ReadonlySet<string> = new Set(['none', 'transitions', 'animations', 'physics', 'compute'])
+function currentMotionTier(): MotionTier {
+  const d = globalThis.__CZAP_DETECT__?.motionTier
+  return (d && MOTION_TIERS.has(d) ? d : 'physics') as MotionTier
+}
+const stateNorm = (s: string): number => {
+  const i = MOOD_STATES.indexOf(s as MoodState)
+  return i < 0 ? 0 : i / (MOOD_STATES.length - 1)
 }
 
 export interface SceneMoodHandle {
   dispose(): void
 }
 
-/**
- * Wire scroll → shader uniforms + CSS mood vars. `canvas` is the client:gpu
- * element; `czap:uniform-update` events on it drive the shader. Returns a
- * disposer (removes the listener). On reduced-motion the shader is parked and
- * we just set the calm `arrival` mood once for the CSS gradient.
- */
 export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
   const root = document.documentElement
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  let lastScroll = 0
 
-  // WGSL has no auto u_time/u_resolution, so that path streams `time` through
-  // the 4-slot struct each frame; the GLSL path only needs to update on scroll
-  // (the shader's own RAF loop animates via the auto u_time uniform).
-  const isWgsl = (canvas.getAttribute('data-czap-shader-type') ?? 'glsl') === 'wgsl'
-  const progress = (): number => {
-    const max = root.scrollHeight - window.innerHeight
-    return max > 0 ? (window.scrollY / max) * 100 : 0
-  }
-
-  const apply = (p: number, timeSec: number): void => {
-    const { glsl, css, stateNorm } = blendAt(p)
+  // Update only the uniform keys present — GL retains the rest, so the eased
+  // mood (from the quantizer) and u_scroll (from the scroll handler) coexist.
+  const dispatch = (glsl: Record<string, number>, wgsl: Record<string, number>): void => {
     canvas.dispatchEvent(
-      new CustomEvent('czap:uniform-update', {
-        bubbles: true,
-        detail: {
-          discrete: {},
-          aria: {},
-          css,
-          glsl: { ...glsl, u_state: stateNorm, u_scroll: p / 100 },
-          // WGSL mirror — 4-slot uniform buffer; see scene.wgsl.
-          wgsl: {
-            state_index: Math.round(stateNorm * (MOOD_STATES.length - 1)),
-            emissive: glsl.u_emissive,
-            scroll: p / 100,
-            time: timeSec,
-          },
-        },
-      }),
+      new CustomEvent('czap:uniform-update', { bubbles: true, detail: { discrete: {}, css: {}, aria: {}, glsl, wgsl } }),
     )
-    for (const [k, v] of Object.entries(css)) root.style.setProperty(k, String(v))
   }
 
   if (reduce) {
-    apply(0, 0)
+    dispatch({ ...GLSL_U.arrival, u_state: 0, u_scroll: 0 }, { state_index: 0, emissive: GLSL_U.arrival.u_emissive, scroll: 0 })
+    for (const [k, v] of Object.entries(MOOD_CSS.arrival)) root.style.setProperty(k, String(v))
     return { dispose() {} }
   }
 
-  const start = performance.now()
+  // .force('glsl') so the shader is fed even on the 'transitions' motion tier
+  // (which otherwise emits css+aria only). The gpu directive already gates the
+  // shader to reactive+ capability tiers; this just stops the quantizer from
+  // dropping the mood uniforms once the shader IS live.
+  const config = Q.from(sceneMood, { tier: currentMotionTier() }).force('glsl').outputs({ glsl: GLSL_U, css: MOOD_CSS })
+  let evaluate: ((v: number) => void) | null = null
 
-  if (isWgsl) {
-    // Continuous RAF: feed time + current scroll every frame. Pause when hidden.
-    let raf = 0
-    let running = true
-    const loop = (): void => {
-      if (!running) return
-      apply(progress(), (performance.now() - start) / 1000)
-      raf = requestAnimationFrame(loop)
-    }
-    const onVisibility = (): void => {
-      if (document.hidden) {
-        running = false
-        cancelAnimationFrame(raf)
-      } else if (!running) {
-        running = true
-        raf = requestAnimationFrame(loop)
-      }
-    }
-    document.addEventListener('visibilitychange', onVisibility)
-    raf = requestAnimationFrame(loop)
-    return {
-      dispose() {
-        running = false
-        cancelAnimationFrame(raf)
-        document.removeEventListener('visibilitychange', onVisibility)
-      },
-    }
-  }
+  const program = Effect.gen(function* () {
+    const live = yield* config.create()
+    const animated = yield* AnimatedQuantizer.make(
+      live,
+      { '*': { duration: Millis(900), easing: Easing.easeInOutCubic } },
+      GLSL_U,
+    )
 
-  // GLSL path: rAF-coalesced scroll updates (time is the shader's auto uniform).
+    // Eased mood uniforms → shader (the quantizer, mixed in).
+    yield* Effect.forkScoped(
+      Stream.runForEach(animated.interpolated, (frame) =>
+        Effect.sync(() => {
+          const out = frame.outputs as Record<string, number>
+          dispatch(
+            { ...out, u_state: stateNorm(frame.state) },
+            { state_index: Math.round(stateNorm(frame.state) * (MOOD_STATES.length - 1)), emissive: out.u_emissive ?? 0, scroll: lastScroll },
+          )
+        }),
+      ),
+    )
+
+    // CSS mood vars (tier-gated — present even when the glsl target is gated off).
+    yield* Effect.forkScoped(
+      Stream.runForEach(live.outputChanges, (outputs) =>
+        Effect.sync(() => {
+          const css = (outputs as { css?: Record<string, string | number> }).css
+          if (!css) return
+          for (const [k, v] of Object.entries(css)) root.style.setProperty(k, String(v))
+        }),
+      ),
+    )
+
+    evaluate = (v) => live.evaluate(v)
+    yield* Effect.never
+  })
+
+  const fiber = Effect.runFork(Effect.scoped(program))
+
+  // Seed the starting mood so the shader isn't stuck at the GLSL uniform default
+  // (all 0 → faint) before the first scroll-driven transition. Re-push on a
+  // couple of delays + on gpu-ready to cover the directive's async shader
+  // compile (it may subscribe to czap:uniform-update after this first call).
+  const seed = (): void =>
+    dispatch(
+      { ...GLSL_U.arrival, u_state: 0, u_scroll: lastScroll },
+      { state_index: 0, emissive: GLSL_U.arrival.u_emissive, scroll: lastScroll },
+    )
+  seed()
+  const seedTimers = [setTimeout(seed, 300), setTimeout(seed, 900)]
+  canvas.addEventListener('czap:gpu-ready', seed)
+
   let pending = false
   const onScroll = (): void => {
     if (pending) return
     pending = true
     requestAnimationFrame(() => {
       pending = false
-      apply(progress(), 0)
+      const max = root.scrollHeight - window.innerHeight
+      lastScroll = max > 0 ? window.scrollY / max : 0
+      evaluate?.(lastScroll * 100) // boundary input is scroll.progress 0..100
+      dispatch({ u_scroll: lastScroll }, { scroll: lastScroll })
     })
   }
   window.addEventListener('scroll', onScroll, { passive: true })
-  // Re-push the current mood once the shader program is live (covers the
-  // async compile race so the first paint isn't the u_state=0 default).
   canvas.addEventListener('czap:gpu-ready', onScroll)
   onScroll()
 
@@ -143,6 +138,9 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
     dispose() {
       window.removeEventListener('scroll', onScroll)
       canvas.removeEventListener('czap:gpu-ready', onScroll)
+      canvas.removeEventListener('czap:gpu-ready', seed)
+      seedTimers.forEach(clearTimeout)
+      Effect.runFork(Fiber.interrupt(fiber))
     },
   }
 }

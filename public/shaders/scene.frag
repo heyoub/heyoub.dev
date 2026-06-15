@@ -1,70 +1,128 @@
 #version 300 es
-// The scene background — a LiteShip GPU cast (replaces the old vanilla three.js
-// orbs). Drift + glow + grid are driven by the sceneMood boundary: u_state is
-// the normalized mood index, and the per-mood uniforms below are streamed in
-// continuously on the RAF spine (BlendTree-blended) via czap:uniform-update.
+// The scene background — LiteShip GPU cast (GLSL), lava-lamp style. Smooth
+// metaball "blobs" rise and merge over a perspective floor grid. Tuned for low
+// GPU cost: no per-step 3D noise, ~44 march steps, cheap 4-tap normal — so it
+// doesn't starve the rest of the page's compositing. Driven by the sceneMood
+// boundary via the AnimatedQuantizer (eased, tier-gated) on czap:uniform-update.
 precision highp float;
 
 in vec2 v_uv;
 out vec4 fragColor;
 
-// Auto-provided by the client:gpu runtime.
 uniform float u_time;        // seconds since mount
 uniform vec2 u_resolution;   // canvas px
 uniform float u_state;       // mood index, normalized 0..1
 
-// Per-mood uniforms (czap:uniform-update detail.glsl, BlendTree-smoothed).
-uniform float u_distortAmp;  // flow turbulence
-uniform float u_rotSpeed;    // drift speed
-uniform float u_orbOpacity;  // orb presence
+uniform float u_distortAmp;  // blob pulse amplitude (lava wobble)
+uniform float u_rotSpeed;    // lava flow speed
+uniform float u_orbOpacity;  // blob presence
 uniform float u_emissive;    // glow strength
-uniform float u_gridOpacity; // grid presence
-uniform float u_scroll;      // continuous scroll progress 0..1
+uniform float u_gridOpacity; // floor grid presence
+uniform float u_scroll;      // scroll progress 0..1
 
-// Brand orbs.
 const vec3 CYAN = vec3(0.024, 0.714, 0.831);   // #06b6d4
 const vec3 VIOLET = vec3(0.545, 0.361, 0.965); // #8b5cf6
-const vec3 BASE = vec3(0.03, 0.04, 0.06);       // near --bg-primary
+const vec3 WARM = vec3(0.98, 0.62, 0.25);
+const vec3 BASE = vec3(0.027, 0.031, 0.043);    // ~--bg-primary
 
-// Cheap value-noise flow field for organic distortion.
-float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float noise(vec2 p) {
-  vec2 i = floor(p), f = fract(p);
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(hash(i), hash(i + vec2(1, 0)), u.x),
-             mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), u.x), u.y);
+float smin(float a, float b, float k) {
+  float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
+  return mix(b, a, h) - k * h * (1.0 - h);
 }
 
-float orb(vec2 uv, vec2 c, float r, float distort, float t) {
-  vec2 d = uv - c;
-  d += distort * 0.08 * vec2(noise(uv * 3.0 + t), noise(uv * 3.0 - t));
-  float dist = length(d * vec2(u_resolution.x / u_resolution.y, 1.0));
-  return smoothstep(r, r * 0.25, dist);
+// Three big blobs that slowly rise / fall / drift through the frame — the lava
+// lamp. Pure analytic (no noise), cheap to evaluate many times per pixel. Kept
+// large and central so they read as solid bodies, not a distant haze.
+vec3 blobCenter(float i, float t) {
+  float ph = i * 2.39996;
+  return vec3(
+    sin(t * (0.21 + i * 0.06) + ph * 1.7) * 0.85,         // gentle x drift
+    sin(t * (0.30 + i * 0.05) + ph) * 1.45,               // vertical lava travel
+    -0.2 + cos(t * 0.14 + ph) * 0.45);
+}
+
+// Scene SDF; writes the dominant blob color into `col`.
+float map(vec3 p, out vec3 col) {
+  float t = u_time * 0.4 * (0.4 + u_rotSpeed);
+  float pulse = 1.0 + 0.14 * u_distortAmp * sin(t * 0.7);
+  vec3 cols[3] = vec3[3](CYAN, VIOLET, WARM);
+
+  float d = 1e9;
+  vec3 acc = vec3(0.0);
+  float wsum = 0.0;
+  for (float i = 0.0; i < 3.0; i += 1.0) {
+    vec3 c = blobCenter(i, t);
+    c.y += (0.5 - u_scroll * 0.4); // mood/scroll lifts the field a touch
+    float r = (1.25 - i * 0.12) * pulse;   // big blobs
+    float di = length(p - c) - r;
+    d = (i == 0.0) ? di : smin(d, di, 0.6); // less merge → stays distinct
+    float w = 1.0 / (0.12 + max(di, 0.0));
+    acc += cols[int(i)] * w;
+    wsum += w;
+  }
+  col = acc / max(wsum, 0.001);
+  return d;
+}
+
+// Cheap tetrahedron normal (4 taps vs 6).
+vec3 calcNormal(vec3 p) {
+  const vec2 e = vec2(1.0, -1.0) * 0.0025;
+  vec3 d;
+  return normalize(
+    e.xyy * map(p + e.xyy, d) + e.yyx * map(p + e.yyx, d) +
+    e.yxy * map(p + e.yxy, d) + e.xxx * map(p + e.xxx, d));
 }
 
 void main() {
-  vec2 uv = v_uv;
-  float t = u_time * 0.06 * (0.4 + u_rotSpeed);
+  vec2 uv = (v_uv * 2.0 - 1.0);
+  uv.x *= u_resolution.x / max(u_resolution.y, 1.0);
 
-  // Two orbs drift on slow lissajous paths; scroll nudges them apart.
-  vec2 c1 = vec2(0.78 + 0.05 * sin(t), 0.24 + 0.04 * cos(t * 0.8) + u_scroll * 0.06);
-  vec2 c2 = vec2(0.22 + 0.05 * cos(t * 0.9), 0.78 + 0.04 * sin(t * 1.1) - u_scroll * 0.06);
-
-  float o1 = orb(uv, c1, 0.42, u_distortAmp, t) * u_orbOpacity;
-  float o2 = orb(uv, c2, 0.40, u_distortAmp, t + 10.0) * u_orbOpacity;
-
+  // Close + wide so the blobs dominate the frame (read as bodies, not haze).
+  vec3 ro = vec3(0.0, 0.1, 3.6);
+  vec3 rd = normalize(vec3(uv * 1.15, -1.35));
   vec3 col = BASE;
-  col += CYAN * o1 * (0.6 + u_emissive);
-  col += VIOLET * o2 * (0.6 + u_emissive);
 
-  // Faint moving grid — sharpens with the 'work' mood.
-  vec2 g = fract(uv * vec2(u_resolution.x / u_resolution.y, 1.0) * 18.0 + vec2(0.0, -u_scroll * 4.0));
-  float grid = smoothstep(0.0, 0.04, min(g.x, g.y)) ;
-  col += (1.0 - grid) * u_gridOpacity * mix(CYAN, VIOLET, u_state) * 0.5;
+  // --- perspective floor grid ---
+  if (rd.y < -0.0015) {
+    float tf = (-2.3 - ro.y) / rd.y;
+    if (tf > 0.0) {
+      vec3 hit = ro + rd * tf;
+      vec2 g = abs(fract(hit.xz * 0.5 - 0.5) - 0.5) / fwidth(hit.xz * 0.5);
+      float line = 1.0 - min(min(g.x, g.y), 1.0);
+      float fade = exp(-tf * 0.06) * smoothstep(0.0, 0.2, -rd.y);
+      col += line * fade * u_gridOpacity * 6.0 * mix(CYAN, VIOLET, u_state);
+    }
+  }
 
-  // Subtle vignette so edges settle into the page.
-  float vig = smoothstep(1.2, 0.3, length(uv - 0.5));
-  col *= mix(0.85, 1.0, vig);
+  // --- raymarch the blobs (track closest approach for a tight rim halo) ---
+  float t = 0.0;
+  vec3 bc = CYAN;
+  float minD = 1e9;
+  bool hit = false;
+  for (int i = 0; i < 48; i++) {
+    vec3 p = ro + rd * t;
+    float d = map(p, bc);
+    minD = min(minD, d);
+    if (d < 0.004) { hit = true; break; }
+    t += d * 0.9;
+    if (t > 12.0) break;
+  }
+  if (hit) {
+    vec3 p = ro + rd * t;
+    vec3 n = calcNormal(p);
+    float rim = pow(1.0 - max(dot(n, -rd), 0.0), 2.5);
+    float lit = 0.45 + 0.55 * max(dot(n, normalize(vec3(0.5, 0.8, 0.6))), 0.0);
+    vec3 blob = bc * (0.65 + u_emissive * 1.1) * lit + bc * rim * 1.6;
+    // Floor the alpha so the lava clearly reads even at low mood opacity.
+    col = mix(col, blob, clamp(0.3 + u_orbOpacity * 2.0, 0.0, 1.0));
+  } else {
+    // Tight halo hugging the silhouette only — NOT a full-screen fog.
+    float halo = smoothstep(0.55, 0.0, minD);
+    col += bc * halo * halo * u_orbOpacity * (0.6 + u_emissive) * 0.9;
+  }
+
+  float vig = smoothstep(1.5, 0.3, length(v_uv - 0.5));
+  col *= mix(0.8, 1.0, vig);
 
   fragColor = vec4(col, 1.0);
 }

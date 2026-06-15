@@ -36,18 +36,40 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
 </div>
 
 {show && (
-  <!-- Upgrade the cast to the net-new WGSL/WebGPU path where supported. Runs at
-       parse time (is:inline) so the attributes are flipped before the deferred
-       gpu directive boots. GLSL stays the default → no black-canvas fallback on
-       devices without WebGPU. (preferWebGPU integration config is an upstream
-       no-op today, so the consumer routes capability → cast here.) -->
+  <!-- The net-new WGSL/WebGPU cast is opt-in via ?cast=wgsl. GLSL is the default
+       everywhere: WGSL's uniform buffer is 4 slots with no room for resolution,
+       so it can't run the aspect-correct raymarch the GLSL cast does — GLSL is
+       the richer visual; WGSL stays a demonstrable artifact on WebGPU devices.
+       Runs at parse time (is:inline) so attributes flip before the gpu directive
+       boots. (preferWebGPU integration config is an upstream no-op.) -->
   <script is:inline>
     (function () {
-      if (!('gpu' in navigator)) return
-      var c = document.querySelector('.scene-canvas')
-      if (!c) return
-      c.setAttribute('data-czap-shader-type', 'wgsl')
-      c.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
+      var search = location.search
+      // ?cast=wgsl — opt into the net-new WGSL/WebGPU path.
+      if (('gpu' in navigator) && /[?&]cast=wgsl/.test(search)) {
+        var c0 = document.querySelector('.scene-canvas')
+        if (c0) {
+          c0.setAttribute('data-czap-shader-type', 'wgsl')
+          c0.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
+        }
+      }
+      // ?gl=force — bypass the device-tier gate (demo / debug, or a capable
+      // device the edge tiered conservatively). The async GPU probe can lower
+      // data-czap-tier AFTER the boot scan, so we re-assert 'gpu', clear the
+      // bound marker, and re-trigger the scanner (it re-scans on after-swap) a
+      // few times until the probe has settled.
+      if (/[?&]gl=force/.test(search)) {
+        var force = function () {
+          document.documentElement.setAttribute('data-czap-tier', 'gpu')
+          var c = document.querySelector('.scene-canvas')
+          if (c) c.removeAttribute('data-czap-directive-bound')
+          document.dispatchEvent(new CustomEvent('astro:after-swap'))
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', force, { once: true })
+        else force()
+        setTimeout(force, 400)
+        setTimeout(force, 1200)
+      }
     })()
   </script>
 )}
