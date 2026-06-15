@@ -34,11 +34,13 @@ float smin(float a, float b, float k) {
 // lamp. Pure analytic (no noise), cheap to evaluate many times per pixel. Kept
 // large and central so they read as solid bodies, not a distant haze.
 vec3 blobCenter(float i, float t) {
-  float ph = i * 2.39996;
-  return vec3(
-    sin(t * (0.21 + i * 0.06) + ph * 1.7) * 0.85,         // gentle x drift
-    sin(t * (0.30 + i * 0.05) + ph) * 1.45,               // vertical lava travel
-    -0.2 + cos(t * 0.14 + ph) * 0.45);
+  float ph = i * 2.39996; // golden-angle phase offset per blob
+  // Sum of incommensurate sines → quasi-random, never-repeating drift (organic
+  // lava wander without the cost/popping of real noise).
+  float x = sin(t * 0.17 + ph * 1.7) * 0.55 + sin(t * 0.071 + ph * 2.3) * 0.42;
+  float y = sin(t * 0.23 + ph) * 0.92 + sin(t * 0.089 + ph * 1.3) * 0.6;
+  float z = cos(t * 0.13 + ph) * 0.4 + sin(t * 0.053 + ph * 0.7) * 0.3 - 0.2;
+  return vec3(x, y, z);
 }
 
 // Scene SDF; writes the dominant blob color into `col`.
@@ -55,7 +57,7 @@ float map(vec3 p, out vec3 col) {
     c.y += (0.5 - u_scroll * 0.4); // mood/scroll lifts the field a touch
     float r = (1.25 - i * 0.12) * pulse;   // big blobs
     float di = length(p - c) - r;
-    d = (i == 0.0) ? di : smin(d, di, 0.6); // less merge → stays distinct
+    d = (i == 0.0) ? di : smin(d, di, 0.95); // smooth gooey merges (no popping)
     float w = 1.0 / (0.12 + max(di, 0.0));
     acc += cols[int(i)] * w;
     wsum += w;

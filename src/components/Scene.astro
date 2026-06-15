@@ -53,23 +53,9 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
           c0.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
         }
       }
-      // ?gl=force — bypass the device-tier gate (demo / debug, or a capable
-      // device the edge tiered conservatively). The async GPU probe can lower
-      // data-czap-tier AFTER the boot scan, so we re-assert 'gpu', clear the
-      // bound marker, and re-trigger the scanner (it re-scans on after-swap) a
-      // few times until the probe has settled.
-      if (/[?&]gl=force/.test(search)) {
-        var force = function () {
-          document.documentElement.setAttribute('data-czap-tier', 'gpu')
-          var c = document.querySelector('.scene-canvas')
-          if (c) c.removeAttribute('data-czap-directive-bound')
-          document.dispatchEvent(new CustomEvent('astro:after-swap'))
-        }
-        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', force, { once: true })
-        else force()
-        setTimeout(force, 400)
-        setTimeout(force, 1200)
-      }
+      // ?gl=force just flags an override; the single re-scan that lifts the
+      // tier lives in the module script below (one place → no double-boot).
+      if (/[?&]gl=force/.test(search)) window.__CZAP_GL_FORCE__ = true
     })()
   </script>
 )}
@@ -93,21 +79,27 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
       // once rendered (canvas backing == display size) we stop; a genuinely
       // low-tier device just re-bails and keeps the CSS fallback.
       // This site's hero shows its shader on any WebGL2-capable, motion-OK
-      // device — the GPU probe tiers conservatively (and upgrades after the boot
-      // scan), so we lift data-czap-tier ourselves. The directive still bails to
-      // the CSS gradient if WebGL2 is actually unavailable; reduced-motion keeps
-      // the static fallback.
-      const motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      let tries = 0
+      // device. The GPU probe tiers conservatively AND upgrades data-czap-tier
+      // AFTER the boot scan, so the directive bails on the initial tier; we lift
+      // it ourselves and re-run the scanner ONCE (a retry only if a slow boot
+      // never landed). Spaced 2.6s so an in-flight shader compile always
+      // finishes first — re-scanning mid-compile would spawn a 2nd render loop
+      // (the flicker/lag). Renders only when the canvas is still default-sized
+      // (i.e. the directive bailed); reduced-motion / no-WebGL2 keep the CSS
+      // fallback.
+      const forced = (window as unknown as { __CZAP_GL_FORCE__?: boolean }).__CZAP_GL_FORCE__ === true
+      const motionOK = forced || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const capable = forced || 'WebGL2RenderingContext' in window
+      let attempts = 0
       const ensure = (): void => {
-        if (canvas.clientWidth > 0 && canvas.width === canvas.clientWidth) return // rendering
-        if (tries++ > 3 || !motionOK) return
-        if ('WebGL2RenderingContext' in window) document.documentElement.setAttribute('data-czap-tier', 'gpu')
+        if (canvas.clientWidth > 0 && canvas.width === canvas.clientWidth) return // already rendering
+        if (attempts++ >= 2 || !motionOK || !capable) return
+        document.documentElement.setAttribute('data-czap-tier', 'gpu')
         canvas.removeAttribute('data-czap-directive-bound')
         document.dispatchEvent(new CustomEvent('astro:after-swap'))
-        setTimeout(ensure, 700)
+        setTimeout(ensure, 2600)
       }
-      setTimeout(ensure, 600)
+      setTimeout(ensure, 700)
 
       document.addEventListener('astro:before-swap', () => mood.dispose(), { once: true })
     }
