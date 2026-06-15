@@ -1,50 +1,68 @@
 ---
-// The WebGL background — a real Three.js scene (orbs + grid), driven by
-// LiteShip. Server omits it for reduced-motion (motion tier 'none'); the
-// client also bails on static/styled capability tiers, leaving the CSS
-// gradient fallback. Three.js is lazy-imported so low-end devices that bail
-// never download it.
+// The WebGL background — now a LiteShip GPU shader cast (no more vanilla
+// three.js). A full-screen fragment shader (/shaders/scene.frag) hydrated by
+// the `gpu` client directive (booted natively off the data-czap-directive
+// marker, like the hero's worker). The sceneMood boundary drives it: scroll →
+// blended uniforms via czap:uniform-update (scene-mood.ts), on the RAF spine.
+//
+// Server omits the canvas for reduced-motion (motion tier 'none'); the gpu
+// directive itself also no-ops on static/styled tiers — both leave the CSS
+// gradient fallback (which still breathes via the --czap-mood-* cast).
+import { satelliteAttrs } from '@czap/astro'
+import { sceneMood } from '@/lib/boundaries'
+import { MOOD_GLSL, MOOD_STATES } from '@/data/scene-moods'
+
 const { tier } = Astro.locals.czap
 const show = tier.motion !== 'none'
+
+// Per-state GLSL uniform payload — u_-prefixed to match scene.frag's uniforms.
+// Carried on the satellite so the inspector shows the active glsl cast; the
+// continuous values are streamed by the RAF bridge.
+const glslStates = Object.fromEntries(
+  MOOD_STATES.map((s) => [s, Object.fromEntries(Object.entries(MOOD_GLSL[s]).map(([k, v]) => [`u_${k}`, v]))]),
+)
+const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, directive: 'gpu', glsl: glslStates })
 ---
 
 <div class="scene" aria-hidden="true">
-  {show && <canvas class="scene-canvas"></canvas>}
+  {show && (
+    <canvas
+      class:list={['scene-canvas', satClass]}
+      data-czap-shader-type="glsl"
+      data-czap-shader-src="/shaders/scene.frag"
+      {...satData}
+    ></canvas>
+  )}
 </div>
 
 {show && (
+  <!-- Upgrade the cast to the net-new WGSL/WebGPU path where supported. Runs at
+       parse time (is:inline) so the attributes are flipped before the deferred
+       gpu directive boots. GLSL stays the default → no black-canvas fallback on
+       devices without WebGPU. (preferWebGPU integration config is an upstream
+       no-op today, so the consumer routes capability → cast here.) -->
+  <script is:inline>
+    (function () {
+      if (!('gpu' in navigator)) return
+      var c = document.querySelector('.scene-canvas')
+      if (!c) return
+      c.setAttribute('data-czap-shader-type', 'wgsl')
+      c.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
+    })()
+  </script>
+)}
+
+{show && (
   <script>
-    import { cardGrid } from '../lib/boundaries'
+    import { initSceneMood } from '@/lib/scene-mood'
 
-    const mobileBreak = cardGrid.thresholds[1] ?? 768 // boundary defines where orbs stack
-    const isMobileNow = () => window.innerWidth < mobileBreak
-
-    const start = async () => {
-      const canvas = document.querySelector('.scene-canvas') as HTMLCanvasElement | null
+    const start = (): void => {
+      const canvas = document.querySelector<HTMLCanvasElement>('.scene-canvas')
       if (!canvas) return
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-      // LiteShip device tier gates quality (and skips the heavy path entirely
-      // on low-end). data-czap-tier is set by the detect script + GPU upgrade.
-      const tier = document.documentElement.getAttribute('data-czap-tier') ?? 'reactive'
-      const force = location.search.includes('gl=force') // debug: bypass tier gate (e.g. headless)
-      if (!force && (tier === 'static' || tier === 'styled')) return
-      const high = tier === 'gpu' || tier === 'animated'
-      const quality = high ? { segments: 64, maxDpr: 2 } : { segments: 32, maxDpr: 1.5 }
-
-      const { initScene } = await import('../lib/scene3d')
-      const handle = initScene(canvas, { isMobile: isMobileNow(), ...quality })
-
-      // Mood: the sceneMood boundary + AnimatedQuantizer stream eased GLSL
-      // values into the scene as you scroll (and cast CSS vars on <html>).
-      const { initSceneMood } = await import('../lib/scene-mood')
-      const mood = initSceneMood((outputs) => handle.setMood(outputs))
-
-      window.addEventListener('pointermove', (e) => {
-        handle.setPointer((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1))
-      }, { passive: true })
-      window.addEventListener('resize', () => handle.setMobile(isMobileNow()), { passive: true })
-      document.addEventListener('astro:before-swap', () => { mood.dispose(); handle.dispose() }, { once: true })
+      // The gpu directive owns the GL context + RAF loop; we own the scroll →
+      // uniform bridge. It no-ops on reduced-motion internally.
+      const mood = initSceneMood(canvas)
+      document.addEventListener('astro:before-swap', () => mood.dispose(), { once: true })
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true })
@@ -58,10 +76,10 @@ const show = tier.motion !== 'none'
     inset: 0;
     z-index: -100;
     pointer-events: none;
-    /* static fallback shown on low tiers / reduced-motion / before the scene
-       mounts. --czap-mood-glow is the sceneMood boundary's CSS cast — on
-       tiers where the GLSL target is gated off, the same quantizer still
-       breathes through this gradient. */
+    /* Static fallback shown on low tiers / reduced-motion / before the shader
+       mounts. --czap-mood-glow is the sceneMood boundary's CSS cast — on tiers
+       where the GLSL target is gated off, the same blend breathes through this
+       gradient. */
     background:
       radial-gradient(40% 40% at 78% 24%, color-mix(in srgb, #06b6d4 calc(var(--czap-mood-glow, 0.22) * 55%), transparent), transparent 60%),
       radial-gradient(38% 38% at 22% 78%, color-mix(in srgb, #8b5cf6 calc(var(--czap-mood-glow, 0.22) * 55%), transparent), transparent 60%),
