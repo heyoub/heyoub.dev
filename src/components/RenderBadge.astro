@@ -1,0 +1,96 @@
+---
+// §7 — the render badge. Makes the invisible visible: what tier the edge
+// resolved this device to, what display gamut it has, and which casts are
+// actually live. The cap/motion/design tiers come from Astro.locals.czap
+// (resolved server-side by the LiteShip edge middleware → correct on first
+// paint); gamut + the real shader path are filled in client-side.
+const { tier } = Astro.locals.czap
+---
+
+<button class="render-badge" type="button" aria-label="Rendering capability tier" data-collapsed>
+  <span class="rb-dot"></span>
+  <span class="rb-text">
+    <span class="rb-tier">{tier.cap}</span>
+    <span class="rb-rest"
+      >· {tier.motion} · <span data-rb="design">{tier.design}</span> · <span data-rb="gamut">srgb</span> ·
+      casts: <span data-rb="casts">css</span></span
+    >
+  </span>
+</button>
+
+<script>
+  const badge = document.querySelector<HTMLButtonElement>('.render-badge')
+  if (badge) {
+    const root = document.documentElement
+    const set = (k: string, v: string) => {
+      const el = badge.querySelector(`[data-rb="${k}"]`)
+      if (el) el.textContent = v
+    }
+    // Gamut: matchMedia is client-authoritative (gamut isn't a Client Hint).
+    const gamut = window.matchMedia('(color-gamut: rec2020)').matches
+      ? 'rec2020'
+      : window.matchMedia('(color-gamut: p3)').matches
+        ? 'p3'
+        : 'srgb'
+    set('gamut', gamut)
+    set('design', root.getAttribute('data-czap-design') ?? 'standard')
+
+    // Live casts: css always; the scene shader contributes glsl or wgsl; aria.
+    const casts = ['css']
+    const canvas = document.querySelector<HTMLCanvasElement>('.scene-canvas')
+    if (canvas) casts.push(canvas.getAttribute('data-czap-shader-type') === 'wgsl' ? 'wgsl' : 'glsl')
+    casts.push('aria')
+    set('casts', casts.join(' '))
+
+    badge.addEventListener('click', () => {
+      badge.toggleAttribute('data-collapsed')
+    })
+  }
+</script>
+
+<style>
+  .render-badge {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--editor-border, #30363d);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-secondary, #111113) 78%, transparent);
+    backdrop-filter: blur(8px);
+    color: var(--text-secondary, #a1a1aa);
+    font-family: 'Space Mono', ui-monospace, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 200ms ease;
+  }
+  .render-badge:hover {
+    opacity: 1;
+  }
+  .rb-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent, #22d3ee);
+    box-shadow: 0 0 8px var(--accent, #22d3ee);
+  }
+  .rb-tier {
+    color: var(--accent, #22d3ee);
+    text-transform: uppercase;
+  }
+  .render-badge[data-collapsed] .rb-rest {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .render-badge {
+      transition: none;
+    }
+  }
+</style>
