@@ -1,0 +1,53 @@
+---
+// §5B display fidelity — wide-gamut (P3 / rec2020) + HDR.
+//
+// Color gamut isn't a Client Hint, so the edge can't resolve it server-side;
+// the native `@media (color-gamut)` query is the correct, first-paint, no-flash
+// mechanism. On a P3/OLED display the brand vivids render richer than sRGB can
+// express; sRGB screens are untouched (they never match the query). We also
+// mirror the detected design tier server-side onto <html data-czap-design> so
+// the tier badge (§7) and inspector can report "rich" when wide-gamut/HDR.
+//
+// These overrides target the *consumed* vars (--accent/--purple/--gradient-*),
+// which live in @layer base; this unlayered :root wins regardless of order.
+const { tier } = Astro.locals.czap
+---
+
+<style is:global>
+  /* Display-P3: ~25% more chroma headroom than sRGB. */
+  @media (color-gamut: p3) {
+    :root {
+      --accent: color(display-p3 0.05 0.85 0.95);
+      --accent-glow: color(display-p3 0.13 0.83 0.93 / 0.18);
+      --purple: color(display-p3 0.66 0.52 1);
+      --gradient-start: color(display-p3 0 0.73 0.86);
+      --gradient-end: color(display-p3 0.55 0.34 1);
+    }
+  }
+  /* rec2020: a touch wider still on capable HDR panels. */
+  @media (color-gamut: rec2020) {
+    :root {
+      --accent: color(rec2020 0 0.88 0.97);
+      --purple: color(rec2020 0.66 0.5 1);
+    }
+  }
+  /* HDR: let the glow bloom a little hotter where the panel can show it. */
+  @media (dynamic-range: high) {
+    :root {
+      --accent-glow: color(display-p3 0.2 0.92 1 / 0.26);
+    }
+  }
+</style>
+
+<script define:vars={{ design: tier.design }}>
+  // Annotate the design tier (server-resolved) + the client-true gamut for the
+  // tier badge / inspector. matchMedia is authoritative for gamut.
+  const el = document.documentElement
+  el.setAttribute('data-czap-design', design)
+  const gamut = window.matchMedia('(color-gamut: rec2020)').matches
+    ? 'rec2020'
+    : window.matchMedia('(color-gamut: p3)').matches
+      ? 'p3'
+      : 'srgb'
+  el.setAttribute('data-czap-gamut', gamut)
+</script>
