@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-pwa/client" />
+/// <reference types="@czap/vite/virtual" />
 
 declare module '*.glsl' {
   const value: string
