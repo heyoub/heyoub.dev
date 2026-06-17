@@ -4,13 +4,12 @@
 // Color gamut isn't a Client Hint, so the edge can't resolve it server-side;
 // the native `@media (color-gamut)` query is the correct, first-paint, no-flash
 // mechanism. On a P3/OLED display the brand vivids render richer than sRGB can
-// express; sRGB screens are untouched (they never match the query). We also
-// mirror the detected design tier server-side onto <html data-czap-design> so
-// the tier badge (§7) and inspector can report "rich" when wide-gamut/HDR.
+// express; sRGB screens are untouched (they never match the query).
 //
 // These overrides target the *consumed* vars (--accent/--purple/--gradient-*),
 // which live in @layer base; this unlayered :root wins regardless of order.
-const { tier } = Astro.locals.czap
+// (The design tier is server-set on <html data-czap-design> in Layout.astro,
+// so this component only needs the client-true gamut probe below.)
 ---
 
 <style is:global>
@@ -39,11 +38,11 @@ const { tier } = Astro.locals.czap
   }
 </style>
 
-<script define:vars={{ design: tier.design }}>
-  // Annotate the design tier (server-resolved) + the client-true gamut for the
-  // tier badge / inspector. matchMedia is authoritative for gamut.
+<script>
+  // Annotate the client-true color gamut for the tier badge / inspector. Gamut
+  // isn't a Client Hint, so the edge can't resolve it — matchMedia is the
+  // authoritative source. (Design tier is server-set on <html> in Layout.astro.)
   const el = document.documentElement
-  el.setAttribute('data-czap-design', design)
   const gamut = window.matchMedia('(color-gamut: rec2020)').matches
     ? 'rec2020'
     : window.matchMedia('(color-gamut: p3)').matches

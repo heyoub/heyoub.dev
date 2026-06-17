@@ -13,7 +13,7 @@ const { tier } = Astro.locals.czap
     <span class="rb-tier">{tier.cap}</span>
     <span class="rb-rest"
       >· {tier.motion} · <span data-rb="design">{tier.design}</span> · <span data-rb="gamut">srgb</span> ·
-      casts: <span data-rb="casts">css</span></span
+      casts: <span data-rb="casts">css</span> · wasm: <span data-rb="wasm">js</span></span
     >
   </span>
 </button>
@@ -41,6 +41,14 @@ const { tier } = Astro.locals.czap
     if (canvas) casts.push(canvas.getAttribute('data-czap-shader-type') === 'wgsl' ? 'wgsl' : 'glsl')
     casts.push('aria')
     set('casts', casts.join(' '))
+
+    // WASM compute kernels: 'js' until the Rust module loads (the fallback is
+    // genuinely active until then), → 'rust ✓' when the astro runtime fires
+    // czap:wasm-ready (it also publishes window.__CZAP_WASM__). Boundary.evaluateBatch
+    // (e.g. the scroll-rail mood map) runs through it once this flips.
+    const markRust = (): void => set('wasm', 'rust ✓')
+    if ('__CZAP_WASM__' in window) markRust()
+    else document.addEventListener('czap:wasm-ready', markRust, { once: true })
 
     badge.addEventListener('click', () => {
       badge.toggleAttribute('data-collapsed')

@@ -70,9 +70,11 @@ const { class: satClass, ...satData } = satelliteAttrs({
   </div>
 
   <!-- Scroll indicator -->
-  <div class="hero-hint absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 md:left-[8vw] md:translate-x-0 flex flex-col md:flex-row items-center gap-2 md:gap-4 font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-widest text-text-muted" aria-hidden="true">
-    <div class="w-px md:w-12 h-8 md:h-px bg-gradient-to-b md:bg-gradient-to-r from-accent/50 via-accent to-transparent hint-line"></div>
-    <span class="hidden md:inline">{h.scrollHint}</span>
+  <div class="hero-hint absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 md:left-[8vw] md:translate-x-0 font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-widest text-text-muted" aria-hidden="true">
+    <div class="hint-inner flex flex-col md:flex-row items-center gap-2 md:gap-4">
+      <div class="w-px md:w-12 h-8 md:h-px bg-gradient-to-b md:bg-gradient-to-r from-accent/50 via-accent to-transparent hint-line"></div>
+      <span class="hidden md:inline">{h.scrollHint}</span>
+    </div>
   </div>
 </section>
 
@@ -85,15 +87,20 @@ const { class: satClass, ...satData } = satelliteAttrs({
         animation-timeline: view();
         animation-range: exit 0% exit 95%;
       }
-      .hero-hint {
-        animation: hint-out linear both;
-        animation-timeline: view();
-        animation-range: exit 0% exit 25%;
+      /* Scroll-linked parallax: the cue drifts up + fades as you scroll, tracking
+         the root scroller (not a timed loop). Mapped over the first ~70vh of
+         scroll so it tracks from the first pixel and is gone by the time the
+         hero's left. On the inner wrapper so it doesn't clobber the hint's
+         translate-x centering. */
+      .hint-inner {
+        animation: hint-drift linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 70vh;
       }
     }
   }
   @keyframes hero-tuck { to { transform: translateY(120px) scale(0.95); opacity: 0; } }
-  @keyframes hint-out { to { opacity: 0; } }
+  @keyframes hint-drift { to { transform: translateY(-70px); opacity: 0; } }
   .hint-line { animation: hint-pulse 1.5s ease-in-out infinite; }
   @keyframes hint-pulse { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.2); } }
   @media (prefers-reduced-motion: reduce) { .animate-fadeInUp { animation: none !important; } }

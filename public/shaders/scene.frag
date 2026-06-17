@@ -35,30 +35,42 @@ float smin(float a, float b, float k) {
 // large and central so they read as solid bodies, not a distant haze.
 vec3 blobCenter(float i, float t) {
   float ph = i * 2.39996; // golden-angle phase offset per blob
-  // Sum of incommensurate sines → quasi-random, never-repeating drift (organic
-  // lava wander without the cost/popping of real noise).
-  float x = sin(t * 0.17 + ph * 1.7) * 0.55 + sin(t * 0.071 + ph * 2.3) * 0.42;
-  float y = sin(t * 0.23 + ph) * 0.92 + sin(t * 0.089 + ph * 1.3) * 0.6;
-  float z = cos(t * 0.13 + ph) * 0.4 + sin(t * 0.053 + ph * 0.7) * 0.3 - 0.2;
-  return vec3(x, y, z);
+  // Hand-placed homes spread across the frame (left-high, center-low, right-high,
+  // far-back-right) so the orbs read as a distributed constellation — distinct
+  // bodies occupying space, like the old three.js orbs, not a central pile. A
+  // small, slow drift layered on top gives a gentle bob, not swimming.
+  vec3 homes[4] = vec3[4](
+    vec3(-1.9,  0.5, -0.2),
+    vec3(-0.4, -0.7,  0.15),
+    vec3( 1.5,  0.6, -0.5),
+    vec3( 2.0, -0.3, -1.0));
+  vec3 home = homes[int(i)];
+  vec3 drift = vec3(
+    sin(t * 0.17 + ph) * 0.18 + sin(t * 0.071 + ph * 2.3) * 0.1,
+    sin(t * 0.23 + ph) * 0.22 + sin(t * 0.089 + ph * 1.3) * 0.13,
+    cos(t * 0.13 + ph) * 0.12);
+  return home + drift;
 }
 
 // Scene SDF; writes the dominant blob color into `col`.
 float map(vec3 p, out vec3 col) {
-  float t = u_time * 0.4 * (0.4 + u_rotSpeed);
-  float pulse = 1.0 + 0.14 * u_distortAmp * sin(t * 0.7);
-  vec3 cols[3] = vec3[3](CYAN, VIOLET, WARM);
+  float t = u_time * 0.17 * (0.4 + u_rotSpeed); // slow, stable drift
+  float pulse = 1.0 + 0.06 * u_distortAmp * sin(t * 0.7); // gentler throb
+  vec3 cols[4] = vec3[4](CYAN, VIOLET, WARM, CYAN);
 
   float d = 1e9;
   vec3 acc = vec3(0.0);
   float wsum = 0.0;
-  for (float i = 0.0; i < 3.0; i += 1.0) {
+  // Four orbs, kept mostly distinct (small smin k) so they read as separate
+  // glowing spheres — the three.js look — that only gently kiss when they pass,
+  // rather than melting into one lava body.
+  for (float i = 0.0; i < 4.0; i += 1.0) {
     vec3 c = blobCenter(i, t);
     c.y += (0.5 - u_scroll * 0.4); // mood/scroll lifts the field a touch
-    float r = (1.25 - i * 0.12) * pulse;   // big blobs
+    float r = (1.1 - i * 0.15) * pulse;   // clearly varied sizes — breaks the pair read
     float di = length(p - c) - r;
-    d = (i == 0.0) ? di : smin(d, di, 0.95); // smooth gooey merges (no popping)
-    float w = 1.0 / (0.12 + max(di, 0.0));
+    d = (i == 0.0) ? di : smin(d, di, 0.12); // distinct orbs — only blend at very close range
+    float w = 1.0 / (0.1 + max(di, 0.0));
     acc += cols[int(i)] * w;
     wsum += w;
   }
@@ -80,7 +92,7 @@ void main() {
   uv.x *= u_resolution.x / max(u_resolution.y, 1.0);
 
   // Close + wide so the blobs dominate the frame (read as bodies, not haze).
-  vec3 ro = vec3(0.0, 0.1, 3.6);
+  vec3 ro = vec3(0.0, 0.1, 4.0);
   vec3 rd = normalize(vec3(uv * 1.15, -1.35));
   vec3 col = BASE;
 
@@ -91,8 +103,8 @@ void main() {
       vec3 hit = ro + rd * tf;
       vec2 g = abs(fract(hit.xz * 0.5 - 0.5) - 0.5) / fwidth(hit.xz * 0.5);
       float line = 1.0 - min(min(g.x, g.y), 1.0);
-      float fade = exp(-tf * 0.06) * smoothstep(0.0, 0.2, -rd.y);
-      col += line * fade * u_gridOpacity * 6.0 * mix(CYAN, VIOLET, u_state);
+      float fade = exp(-tf * 0.05) * smoothstep(0.0, 0.2, -rd.y);
+      col += line * fade * u_gridOpacity * 9.0 * mix(CYAN, VIOLET, u_state);
     }
   }
 
@@ -112,15 +124,17 @@ void main() {
   if (hit) {
     vec3 p = ro + rd * t;
     vec3 n = calcNormal(p);
-    float rim = pow(1.0 - max(dot(n, -rd), 0.0), 2.5);
-    float lit = 0.45 + 0.55 * max(dot(n, normalize(vec3(0.5, 0.8, 0.6))), 0.0);
-    vec3 blob = bc * (0.65 + u_emissive * 1.1) * lit + bc * rim * 1.6;
-    // Floor the alpha so the lava clearly reads even at low mood opacity.
-    col = mix(col, blob, clamp(0.3 + u_orbOpacity * 2.0, 0.0, 1.0));
+    vec3 L = normalize(vec3(0.5, 0.8, 0.6));
+    float lit = 0.45 + 0.55 * max(dot(n, L), 0.0);
+    float rim = pow(1.0 - max(dot(n, -rd), 0.0), 2.0);     // fresnel edge glow
+    float spec = pow(max(dot(reflect(-L, n), -rd), 0.0), 28.0); // glassy hotspot
+    vec3 blob = bc * (0.48 + u_emissive * 0.8) * lit + bc * rim * 0.9 + vec3(1.0) * spec * 0.45;
+    // Quieter presence — lower floor + scale so the orbs sit back behind content.
+    col = mix(col, blob, clamp(0.14 + u_orbOpacity * 1.3, 0.0, 1.0));
   } else {
     // Tight halo hugging the silhouette only — NOT a full-screen fog.
-    float halo = smoothstep(0.55, 0.0, minD);
-    col += bc * halo * halo * u_orbOpacity * (0.6 + u_emissive) * 0.9;
+    float halo = smoothstep(0.45, 0.0, minD);
+    col += bc * halo * halo * u_orbOpacity * (0.6 + u_emissive) * 0.5;
   }
 
   float vig = smoothstep(1.5, 0.3, length(v_uv - 0.5));

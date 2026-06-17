@@ -45,17 +45,18 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
   <script is:inline>
     (function () {
       var search = location.search
+      var canvas = document.querySelector('.scene-canvas')
+      if (!canvas) return
       // ?cast=wgsl — opt into the net-new WGSL/WebGPU path.
       if (('gpu' in navigator) && /[?&]cast=wgsl/.test(search)) {
-        var c0 = document.querySelector('.scene-canvas')
-        if (c0) {
-          c0.setAttribute('data-czap-shader-type', 'wgsl')
-          c0.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
-        }
+        canvas.setAttribute('data-czap-shader-type', 'wgsl')
+        canvas.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
       }
-      // ?gl=force just flags an override; the single re-scan that lifts the
-      // tier lives in the module script below (one place → no double-boot).
-      if (/[?&]gl=force/.test(search)) window.__CZAP_GL_FORCE__ = true
+      // The default boots idiomatically (the gpu directive defers on a low tier
+      // and re-boots itself on czap:detect-ready — 0.2.3, finding F2). ?gl=force
+      // flips the documented data-czap-gpu-force hatch to also render on
+      // sub-reactive devices (e.g. demoing on a weak GPU that tiers 'styled').
+      if (/[?&]gl=force/.test(search)) canvas.setAttribute('data-czap-gpu-force', '')
     })()
   </script>
 )}
@@ -67,40 +68,13 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
     const start = (): void => {
       const canvas = document.querySelector<HTMLCanvasElement>('.scene-canvas')
       if (!canvas) return
-      // The gpu directive owns the GL context + RAF loop; we own the scroll →
-      // uniform bridge. It no-ops on reduced-motion internally.
+      // The gpu directive owns the GL context + RAF loop. On a low provisional
+      // tier it defers and re-boots itself when the probe settles a GPU-admitting
+      // tier (czap:detect-ready — 0.2.3, our finding F2), so capable devices boot
+      // with zero consumer polling; genuinely sub-reactive devices keep the CSS
+      // .scene gradient. (?gl=force flips data-czap-gpu-force to render anyway.)
+      // We own only the scroll → uniform bridge.
       const mood = initSceneMood(canvas)
-
-      // The integration's GPU probe upgrades data-czap-tier AFTER the boot scan,
-      // so a capable device can boot the directive against the conservative
-      // initial tier and bail (the canvas stays at its default 300x150). If it
-      // hasn't rendered shortly after, clear the bound marker and re-run the
-      // scanner so the directive re-reads the now-upgraded tier. Idempotent:
-      // once rendered (canvas backing == display size) we stop; a genuinely
-      // low-tier device just re-bails and keeps the CSS fallback.
-      // This site's hero shows its shader on any WebGL2-capable, motion-OK
-      // device. The GPU probe tiers conservatively AND upgrades data-czap-tier
-      // AFTER the boot scan, so the directive bails on the initial tier; we lift
-      // it ourselves and re-run the scanner ONCE (a retry only if a slow boot
-      // never landed). Spaced 2.6s so an in-flight shader compile always
-      // finishes first — re-scanning mid-compile would spawn a 2nd render loop
-      // (the flicker/lag). Renders only when the canvas is still default-sized
-      // (i.e. the directive bailed); reduced-motion / no-WebGL2 keep the CSS
-      // fallback.
-      const forced = (window as unknown as { __CZAP_GL_FORCE__?: boolean }).__CZAP_GL_FORCE__ === true
-      const motionOK = forced || !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      const capable = forced || 'WebGL2RenderingContext' in window
-      let attempts = 0
-      const ensure = (): void => {
-        if (canvas.clientWidth > 0 && canvas.width === canvas.clientWidth) return // already rendering
-        if (attempts++ >= 2 || !motionOK || !capable) return
-        document.documentElement.setAttribute('data-czap-tier', 'gpu')
-        canvas.removeAttribute('data-czap-directive-bound')
-        document.dispatchEvent(new CustomEvent('astro:after-swap'))
-        setTimeout(ensure, 2600)
-      }
-      setTimeout(ensure, 700)
-
       document.addEventListener('astro:before-swap', () => mood.dispose(), { once: true })
     }
 

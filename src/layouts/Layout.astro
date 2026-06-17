@@ -16,10 +16,20 @@ import RenderBadge from '@components/RenderBadge.astro'
 
 const siteUrl = 'https://heyoub.dev'
 const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`
+
+// Server-resolved tier triple → <html> at first paint (the edge Client-Hints
+// detection in Astro.locals.czap; cf. EdgeTier.tierDataAttributes). The
+// documented rendering-sequence step 3 — the shell carries authored tier into
+// the DOM so design-keyed CSS (wide-gamut palette), the gpu gate, and
+// RenderBadge resolve with zero client flash; the client probe refines the same
+// attrs on settle. cap + motion + design: 0.2.3 split the reduced-motion
+// PREFERENCE onto data-czap-reduced-motion (our finding F1), so data-czap-motion
+// is now purely the motion tier and no longer collides with the head script.
+const czapTier = Astro.locals.czap?.tier
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-czap-cap={czapTier?.cap} data-czap-motion={czapTier?.motion} data-czap-design={czapTier?.design}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -228,6 +238,11 @@ const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png
     will-change: opacity, transform;
   }
   [data-reveal].is-visible { opacity: 1; transform: none; }
+  /* The footer is an opaque full-bleed panel over the fixed scene — fading its
+     opacity would expose the orbs behind it mid-reveal. So it slides up only
+     (stays fully opaque, always occluding the scene). id beats the base rule. */
+  #footer[data-reveal] { opacity: 1; transform: translateY(24px); }
+  #footer[data-reveal].is-visible { transform: none; }
   [data-reveal-stagger] > * { opacity: 0; }
   [data-reveal-stagger].is-visible > * { animation: rv-stagger 0.55s cubic-bezier(0.25, 1, 0.5, 1) both; }
   [data-reveal-stagger].is-visible > *:nth-child(1) { animation-delay: 0.05s; }

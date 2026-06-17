@@ -69,9 +69,12 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
 
   const program = Effect.gen(function* () {
     const live = yield* config.create()
+    // Mood crossings ease on a spring (0.2.1 Easing.spring) instead of plain
+    // cubic — a gentle overshoot-and-settle gives the uniform shifts physical
+    // life. Returns an (t)=>number curve, exactly what the quantizer samples.
     const animated = yield* AnimatedQuantizer.make(
       live,
-      { '*': { duration: Millis(900), easing: Easing.easeInOutCubic } },
+      { '*': { duration: Millis(900), easing: Easing.spring({ stiffness: 160, damping: 20, mass: 1 }) } },
       GLSL_U,
     )
 

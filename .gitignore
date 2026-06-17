@@ -21,3 +21,10 @@ pnpm-debug.log*
 # wrangler (later, for cloudflare)
 .wrangler/
 .czap-audit/
+
+# local backups of pre-optimization video sources (not deployed)
+.video-originals/
+
+# playwright
+test-results/
+playwright-report/

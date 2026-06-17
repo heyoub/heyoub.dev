@@ -18,13 +18,18 @@ export default defineConfig({
       // detect / gpu default-on; 0.2.0 auto-registers directives (no rename
       // ritual). preferWebGPU lights up the net-new WGSL cast where supported,
       // falling back to the GLSL cast otherwise. workers stays on for the
-      // off-thread hero boundary (COOP/COEP). stream/llm/wasm dropped: no SSE,
-      // AI is out of scope here, and wasm is opt-in (TS fallback is identical).
+      // off-thread hero boundary (COOP/COEP).
       detect: true,
       gpu: { enabled: true, preferWebGPU: true },
       workers: { enabled: true },
       stream: { enabled: false },
       llm: { enabled: false },
+      // wasm ON (0.2.1): @czap/core ships czap-compute.wasm; @czap/vite resolves
+      // it off the plain install through the module graph (no path needed, no
+      // hosted artifact). The runtime fires czap:wasm-ready and publishes the
+      // Rust kernels to window.__CZAP_WASM__ — Boundary.evaluateBatch routes
+      // through them. Falls back to the (bit-identical) JS kernels if absent.
+      wasm: { enabled: true },
     }),
     sitemap(),
   ],
