@@ -24,13 +24,15 @@ const lineItems = momentContent.lines.map((line, i) => {
 ---
 
 <div class={`vi relative overflow-hidden ${className}`} style={`height:${height}`}>
-  <!-- video (subtle internal parallax) — poster image on Save-Data/low tier -->
+  <!-- video (subtle internal parallax). Poster is the clip's OWN first frame, so
+       any pre-load / re-buffer flash is the real footage, not a stray image.
+       Save-Data / low tier gets a brand gradient instead of the video. -->
   <div class="vi-video absolute inset-0 w-full h-[130%] -top-[15%]">
     {lite ? (
-      <img class="w-full h-full object-cover" src="/assets/Hero_3.webp" alt="" loading="lazy" decoding="async" />
+      <div class="w-full h-full" style="background: radial-gradient(70% 70% at 50% 45%, color-mix(in srgb, var(--accent) 16%, transparent), var(--bg-primary))"></div>
     ) : (
       <video class="w-full h-full object-cover" src={src} muted loop playsinline autoplay preload="metadata"
-        poster="/assets/Hero_3.webp" disablepictureinpicture></video>
+        poster="/assets/fs/interlude-poster.webp" disablepictureinpicture></video>
     )}
   </div>
 
