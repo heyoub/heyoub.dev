@@ -36,7 +36,7 @@ const lineItems = momentContent.lines.map((line, i) => {
     )}
   </div>
 
-  {overlay === 'gradient' && <div class="absolute inset-0 bg-gradient-to-b from-bg-primary via-transparent to-bg-primary"></div>}
+  {overlay === 'gradient' && <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg-primary"></div>}
   {overlay === 'dark' && <div class="absolute inset-0 bg-bg-primary/60"></div>}
 
   <!-- narrative glass card -->
@@ -51,14 +51,24 @@ const lineItems = momentContent.lines.map((line, i) => {
     </div>
   </div>
 
-  <!-- edge fades -->
+  <!-- bottom edge fade — grounds the clip into the next section. The TOP edge is
+       feathered to transparent via a mask on .vi-video (below), so the video
+       dissolves into the live scene behind it rather than a solid dark bar. -->
   <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-bg-primary to-transparent"></div>
     <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-bg-primary to-transparent"></div>
   </div>
 </div>
 
 <style>
+  /* Feather the top edge to transparent so the clip dissolves into the live
+     scene behind it. The element is overscanned (h-130% / -top-15% for the
+     parallax), so the visible top sits at ~11.5% of the box — the transparent
+     band is placed there, fading to opaque just below. */
+  .vi-video {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 9%, #000 22%, #000 100%);
+    mask-image: linear-gradient(to bottom, transparent 9%, #000 22%, #000 100%);
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .vi { animation: vi-rollup linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }

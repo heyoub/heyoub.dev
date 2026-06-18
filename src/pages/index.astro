@@ -40,10 +40,21 @@ const lite = capabilities.connection?.saveData === true || tier.motion === 'none
 
       <CoreThesis />
       <GalleryScroll />
-      <OpenTo />
     </div>
 
-    <ParallaxVideo lite={lite} />
+    <!-- Duck-stack: the "Let's Build" section pins (sticky), then the parallax
+         video rises up the viewport and slides OVER it — the section ducks
+         behind the video. OpenTo keeps its own full-width .czap-vp so the
+         czap-grid-3 @container context still resolves (the fixed video is a
+         separate subtree, so it stays viewport-fixed). -->
+    <div class="relative">
+      <div class="duck-pin sticky top-0 z-0">
+        <div class="czap-vp"><OpenTo /></div>
+      </div>
+      <div class="relative z-10">
+        <ParallaxVideo lite={lite} />
+      </div>
+    </div>
 
     <ContactDecompile />
   </main>

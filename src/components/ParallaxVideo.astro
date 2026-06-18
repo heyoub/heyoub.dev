@@ -18,7 +18,14 @@ const { lite = false } = Astro.props
     ></video>
   )}
 
-  <div class="absolute inset-0 pointer-events-none" style="box-shadow: inset 0 0 150px 60px var(--bg-primary)"></div>
+  <!-- Side + bottom vignette (no top, so the entry fade owns the top edge). -->
+  <div class="absolute inset-0 pointer-events-none"
+    style="box-shadow: inset 0 -150px 120px -20px var(--bg-primary), inset 150px 0 130px -60px var(--bg-primary), inset -150px 0 130px -60px var(--bg-primary)"></div>
+
+  <!-- Top entry fade — anchored INSIDE this wrapper, so it scrolls with the clip
+       window and always covers the leading edge (kills the hard line; a mask on
+       the viewport-fixed video can't track the clip window). -->
+  <div class="absolute top-0 inset-x-0 h-40 pointer-events-none bg-gradient-to-b from-bg-primary to-transparent"></div>
 
   <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none pv-text">
     <h3 class="font-serif text-[clamp(2rem,5vw,3.5rem)] text-center leading-tight"
@@ -35,9 +42,11 @@ const { lite = false } = Astro.props
       .pv-text {
         animation: pv-peak linear both;
         animation-timeline: view();
-        animation-range: cover 20% cover 80%;
+        animation-range: cover 0% cover 100%;
       }
     }
   }
-  @keyframes pv-peak { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+  /* Hold full opacity across the middle ~40% of the pass so it lingers instead
+     of fading in and straight back out. */
+  @keyframes pv-peak { 0% { opacity: 0; } 28% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
 </style>
