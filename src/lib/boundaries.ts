@@ -27,6 +27,20 @@ export const cardGrid = Boundary.make({
   hysteresis: 32,
 })
 
+// The two-column split regime (the gallery's path / principle layout): one
+// column on phones, two from 1024 up — the same threshold as the hero's
+// `split`. Authored as a boundary (compiled to @container CSS via LayoutStyles)
+// rather than a hand-written `lg:` media query, so the gallery's layout is
+// sourced from LiteShip like every other regime on the page.
+export const splitLayout = Boundary.make({
+  input: 'viewport.width',
+  at: [
+    [0, 'one'],
+    [1024, 'two'],
+  ] as const,
+  hysteresis: 40,
+})
+
 // The scene-mood regime — quantizes scroll progress (0–100%) into the named
 // moods the WebGL background moves through as you read the page. Fed through
 // Q.from(sceneMood).outputs({ glsl, css }) + AnimatedQuantizer (scene-mood.ts),

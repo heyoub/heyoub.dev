@@ -4,7 +4,7 @@
 //                           requests at the same tier skip recompilation
 import { Style } from '@czap/core'
 import { StyleCSSCompiler } from '@czap/compiler'
-import { heroLayout, cardGrid } from './boundaries'
+import { heroLayout, cardGrid, splitLayout } from './boundaries'
 
 // Layout driven by LiteShip boundaries, compiled to real @container queries
 // (resolved against the `viewport-width` container on .czap-vp). Pure CSS, no
@@ -36,6 +36,14 @@ const cardGrid3 = Style.make({
   },
 })
 
+const splitGrid = Style.make({
+  boundary: splitLayout,
+  base: { properties: { 'grid-template-columns': 'minmax(0, 1fr)' } },
+  states: {
+    two: { properties: { 'grid-template-columns': 'minmax(0, 1fr) minmax(0, 1fr)' } },
+  },
+})
+
 // The query container lives on a full-width wrapper (.czap-vp) that excludes
 // the fixed background/nav/parallax — container-type would otherwise become
 // their containing block and break `position: fixed` (the orbs vanished).
@@ -46,5 +54,6 @@ export function compileLayoutCss(): string {
     '.czap-vp { container-name: viewport-width; container-type: inline-size; }',
     layout(heroGrid, 'hero-grid', 'grid-template-columns: minmax(0, 1fr);'),
     layout(cardGrid3, 'grid-3', 'grid-template-columns: minmax(0, 1fr);'),
+    layout(splitGrid, 'split-2', 'grid-template-columns: minmax(0, 1fr);'),
   ].join('\n')
 }
