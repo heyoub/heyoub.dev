@@ -42,7 +42,14 @@ function fnv1a(s: string): string {
   return (h >>> 0).toString(16).padStart(8, '0')
 }
 
-export const onRequest = cloudflareMiddleware({
+const SECURITY_HEADERS: Record<string, string> = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+}
+
+const czapHandler = cloudflareMiddleware({
   manifest: boundaries,
   boundary: 'heroLayout',
   prefix: `layout-${fnv1a(layoutCss)}-`,
@@ -55,3 +62,20 @@ export const onRequest = cloudflareMiddleware({
   detect: true,
   workers: { enabled: true },
 })
+
+// Wrap czap middleware to inject security headers on the response.
+// czapHandler calls next() internally and returns a Response with its own headers;
+// we clone the response with additional headers (Workers response.headers can be
+// read-only depending on how the underlying Response was constructed).
+export const onRequest = async (context: any, next: () => Promise<Response>): Promise<Response> => {
+  const response: Response = await czapHandler(context, next)
+  const headers = new Headers(response.headers)
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) {
+    headers.set(k, v)
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  })
+}

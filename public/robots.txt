@@ -42,7 +42,7 @@ Allow: /profile.json
 Allow: /llms.txt
 
 # Sitemap
-Sitemap: https://heyoub.dev/sitemap.xml
+Sitemap: https://heyoub.dev/sitemap-index.xml
 
 # Crawl-delay for politeness
 Crawl-delay: 1
