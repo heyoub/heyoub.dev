@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import sitemap from '@astrojs/sitemap'
 import cloudflare from '@astrojs/cloudflare'
 import { integration as czap } from '@czap/astro'
+import { cloudflareCacheProvider } from '@czap/cloudflare/cache-provider'
 
 // Your real site, on Astro + LiteShip. No React. SSR on Cloudflare Workers so
 // cloudflareMiddleware can resolve the device tier per-request (with the
@@ -13,6 +14,10 @@ export default defineConfig({
   site: 'https://heyoub.dev',
   output: 'server',
   adapter: cloudflare(),
+  // #9 — Astro 7's cache API, backed by CZAP's Cloudflare KV boundary cache with
+  // tag-based active invalidation (BoundaryCache.invalidateByTag/Path). Distinct
+  // `czap` key prefix from the middleware's `layout-<hash>-`, so no collision.
+  cache: { provider: cloudflareCacheProvider({ binding: 'CZAP_BOUNDARY_CACHE' }) },
   integrations: [
     czap({
       // detect / gpu default-on; 0.2.0 auto-registers directives (no rename
