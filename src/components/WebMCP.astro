@@ -1,0 +1,61 @@
+---
+// WebMCP — expose real, read-only portfolio actions to in-browser AI agents via
+// navigator.modelContext.provideContext(). Every tool reads from the same
+// src/data the visible site renders, so nothing here is fabricated. Experimental
+// API (Chrome EPP); feature-detected and try/caught so it can never break the page.
+import { projectManifest } from '@/data/manifest'
+import { contactConfig } from '@/data/footer'
+import { openToContent } from '@/data/content'
+
+const webmcp = {
+  projects: projectManifest.map((p) => ({
+    name: p.name,
+    tagline: p.pitch.tagline,
+    blurb: p.pitch.blurb,
+    stack: p.pitch.stack,
+    repo: p.gitUrl,
+    live: p.siteUrl,
+  })),
+  contact: contactConfig.links.map((l) => ({ key: l.key, label: l.label, href: l.href })),
+  open_to: {
+    summary: openToContent.description,
+    services: openToContent.services.map((s) => ({ title: s.title, description: s.description })),
+    roles: openToContent.roles,
+  },
+}
+---
+
+<script is:inline define:vars={{ webmcp }}>
+  (function () {
+    const mc = navigator.modelContext
+    if (!mc || typeof mc.provideContext !== 'function') return
+    const text = (value) => ({ content: [{ type: 'text', text: JSON.stringify(value, null, 2) }] })
+    const noArgs = { type: 'object', properties: {}, additionalProperties: false }
+    try {
+      mc.provideContext({
+        tools: [
+          {
+            name: 'list_projects',
+            description: "List Eassa Ayoub's public software projects — name, tagline, stack, repo and live links.",
+            inputSchema: noArgs,
+            execute: async () => text(webmcp.projects),
+          },
+          {
+            name: 'get_contact',
+            description: 'Get how to reach or book time with Eassa Ayoub (email, calendar, LinkedIn, GitHub).',
+            inputSchema: noArgs,
+            execute: async () => text(webmcp.contact),
+          },
+          {
+            name: 'get_open_to',
+            description: 'What Eassa Ayoub is open to: services offered and the role types he takes on.',
+            inputSchema: noArgs,
+            execute: async () => text(webmcp.open_to),
+          },
+        ],
+      })
+    } catch {
+      /* WebMCP is experimental — never let it break the page */
+    }
+  })()
+</script>
