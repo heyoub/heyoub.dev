@@ -1,0 +1,62 @@
+---
+// #8 — client:svg last-mile cast. A small corner beacon whose SVG presentation
+// attributes (fill/opacity) are written live by @czap/scene's applySvgAttrs on
+// every sceneMood crossing — the SVG arm of the same boundary that drives the
+// GPU orbs and the CSS mood vars. Self-contained: the svg directive parses the
+// serialized boundary off data-czap-boundary and self-evaluates scroll.progress
+// (no scene runtime, no graph dependency). Completes the cast family:
+// CSS + GPU(GLSL/WGSL) + SVG + ARIA, all from one boundary.
+import { satelliteAttrs } from '@czap/astro'
+import { sceneMood } from '@/lib/boundaries'
+
+// satelliteAttrs serializes the boundary into data-czap-boundary (the signal
+// clock the svg directive reads to decide which state is live).
+const boundaryAttr = satelliteAttrs({ boundary: sceneMood })['data-czap-boundary']
+
+// Per-state SVG presentation attrs (the same mood palette the scroll rail uses).
+const moodSvg = JSON.stringify({
+  arrival: { fill: 'rgb(34,211,238)', 'fill-opacity': '0.45' },
+  thesis: { fill: 'rgb(94,179,240)', 'fill-opacity': '0.6' },
+  work: { fill: 'rgb(168,85,247)', 'fill-opacity': '0.9' },
+  sendoff: { fill: 'rgb(240,168,104)', 'fill-opacity': '0.7' },
+})
+---
+
+<div class="mood-svg" data-czap-directive="svg" aria-hidden="true">
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle
+      cx="13"
+      cy="13"
+      r="8"
+      data-czap-entity="mood-beacon"
+      data-czap-svg={moodSvg}
+      data-czap-boundary={boundaryAttr}
+      fill="rgb(34,211,238)"
+      fill-opacity="0.45"
+    />
+    <circle cx="13" cy="13" r="11.5" stroke="currentColor" stroke-opacity="0.12" />
+  </svg>
+</div>
+
+<style>
+  .mood-svg {
+    position: fixed;
+    bottom: 1.1rem;
+    right: 1.1rem;
+    z-index: 50;
+    pointer-events: none;
+    color: var(--text-muted, #888);
+    opacity: 0.8;
+  }
+  /* smooth the SVG fill crossings (applySvgAttrs sets the attribute; CSS eases it) */
+  .mood-svg circle[data-czap-entity] {
+    transition:
+      fill 0.9s ease,
+      fill-opacity 0.9s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mood-svg {
+      display: none;
+    }
+  }
+</style>
