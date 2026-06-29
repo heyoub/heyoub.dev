@@ -25,11 +25,11 @@ const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png
 // attrs on settle. cap + motion + design: 0.2.3 split the reduced-motion
 // PREFERENCE onto data-czap-reduced-motion (our finding F1), so data-czap-motion
 // is now purely the motion tier and no longer collides with the head script.
-const czapTier = Astro.locals.czap?.tier
+const czapTier = Astro.locals.czap?.tiers
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-czap-cap={czapTier?.cap} data-czap-motion={czapTier?.motion} data-czap-design={czapTier?.design}>
+<html lang="en" data-czap-tier={czapTier?.tier} data-czap-motion={czapTier?.motion} data-czap-design={czapTier?.design}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />

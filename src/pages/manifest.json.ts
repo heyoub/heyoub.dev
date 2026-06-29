@@ -30,7 +30,7 @@ export const GET: APIRoute = ({ locals }) => {
     projects: projectManifest.map((p) => ({ name: p.name, tagline: p.pitch.tagline, blurb: p.pitch.blurb, stack: p.pitch.stack, repo: p.gitUrl, live: p.siteUrl })),
     open_to: { pitch: openToContent.description, services: openToContent.services.map((s) => ({ title: s.title, description: s.description })), roles: openToContent.roles },
     contact: { heading: contactConfig.heading, links: contactConfig.links.map((l) => ({ key: l.key, href: l.href })), building: contactConfig.status.building },
-    your_session: czap ? { tier: czap.tier, viewportHint: czap.capabilities.viewportWidth, saveData: czap.capabilities.connection?.saveData ?? false } : null,
+    your_session: czap ? { tier: czap.tiers, viewportHint: czap.capabilities.viewportWidth, saveData: czap.capabilities.connection?.saveData ?? false } : null,
   }
   return new Response(JSON.stringify(manifest, null, 2), {
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=300', 'x-czap-surface': 'ai-manifest' },

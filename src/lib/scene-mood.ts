@@ -129,7 +129,7 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
       pending = false
       const max = root.scrollHeight - window.innerHeight
       lastScroll = max > 0 ? window.scrollY / max : 0
-      evaluate?.(lastScroll * 100) // boundary input is scroll.progress 0..100
+      evaluate?.(lastScroll) // boundary input is scroll.progress 0..1 (0.3.0+)
       dispatch({ u_scroll: lastScroll }, { scroll: lastScroll })
     })
   }

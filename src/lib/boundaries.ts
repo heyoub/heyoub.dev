@@ -51,9 +51,9 @@ export const sceneMood = Boundary.make({
   input: 'scroll.progress',
   at: [
     [0, 'arrival'], // hero — calm, luminous, grid barely there
-    [18, 'thesis'], // the argument — orbs recede, grid sharpens
-    [55, 'work'], // the proof — most kinetic the scene gets
-    [85, 'sendoff'], // contact — settle back down, warmest glow
+    [0.18, 'thesis'], // the argument — orbs recede, grid sharpens
+    [0.55, 'work'], // the proof — most kinetic the scene gets
+    [0.85, 'sendoff'], // contact — settle back down, warmest glow
   ] as const,
-  hysteresis: 5,
+  hysteresis: 0.05, // 0.3.0+: scroll.progress is 0..1 (was 0..100)
 })

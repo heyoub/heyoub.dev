@@ -4,15 +4,15 @@
 // actually live. The cap/motion/design tiers come from Astro.locals.czap
 // (resolved server-side by the LiteShip edge middleware → correct on first
 // paint); gamut + the real shader path are filled in client-side.
-const { tier } = Astro.locals.czap
+const { tiers } = Astro.locals.czap!
 ---
 
 <button class="render-badge" type="button" aria-label="Rendering capability tier" data-collapsed>
   <span class="rb-dot"></span>
   <span class="rb-text">
-    <span class="rb-tier">{tier.cap}</span>
+    <span class="rb-tier">{tiers.tier}</span>
     <span class="rb-rest"
-      >· {tier.motion} · <span data-rb="design">{tier.design}</span> · <span data-rb="gamut">srgb</span> ·
+      >· {tiers.motion} · <span data-rb="design">{tiers.design}</span> · <span data-rb="gamut">srgb</span> ·
       casts: <span data-rb="casts">css</span> · wasm: <span data-rb="wasm">js</span></span
     >
   </span>

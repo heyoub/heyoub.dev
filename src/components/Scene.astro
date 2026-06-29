@@ -12,8 +12,8 @@ import { satelliteAttrs } from '@czap/astro'
 import { sceneMood } from '@/lib/boundaries'
 import { MOOD_GLSL, MOOD_STATES } from '@/data/scene-moods'
 
-const { tier } = Astro.locals.czap
-const show = tier.motion !== 'none'
+const { tiers } = Astro.locals.czap!
+const show = tiers.motion !== 'none'
 
 // Per-state GLSL uniform payload — u_-prefixed to match scene.frag's uniforms.
 // Carried on the satellite so the inspector shows the active glsl cast; the
@@ -36,12 +36,12 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
 </div>
 
 {show && (
-  <!-- The net-new WGSL/WebGPU cast is opt-in via ?cast=wgsl. GLSL is the default
-       everywhere: WGSL's uniform buffer is 4 slots with no room for resolution,
-       so it can't run the aspect-correct raymarch the GLSL cast does — GLSL is
-       the richer visual; WGSL stays a demonstrable artifact on WebGPU devices.
-       Runs at parse time (is:inline) so attributes flip before the gpu directive
-       boots. (preferWebGPU integration config is an upstream no-op.) -->
+  /* The net-new WGSL/WebGPU cast is opt-in via ?cast=wgsl. GLSL is the default
+     everywhere: WGSL's uniform buffer is 4 slots with no room for resolution,
+     so it can't run the aspect-correct raymarch the GLSL cast does — GLSL is
+     the richer visual; WGSL stays a demonstrable artifact on WebGPU devices.
+     Runs at parse time (is:inline) so attributes flip before the gpu directive
+     boots. (preferWebGPU integration config is an upstream no-op.) */
   <script is:inline>
     (function () {
       var search = location.search

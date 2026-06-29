@@ -38,7 +38,7 @@ const DOTS = [
   // the point is to USE it, and the numbers are equal by construction).
   // arrival → thesis → work → sendoff : calm cyan, cooler blue, kinetic violet, warm sendoff.
   const MOOD_COLORS = ['34,211,238', '94,179,240', '168,85,247', '240,168,104']
-  const positions = dots.map((d) => parseFloat(d.dataset.pos || '0') * 100) // scroll.progress 0–100
+  const positions = dots.map((d) => parseFloat(d.dataset.pos || '0')) // scroll.progress 0..1 (0.3.0+)
   let moodRGB: string[] = dots.map(() => MOOD_COLORS[0])
   const computeMoods = (): void => {
     const idx = Boundary.evaluateBatch(sceneMood, positions) // Uint32Array of mood indices
