@@ -1,0 +1,45 @@
+---
+// #1 — boot the site's DocumentGraph onto the LIVE page (0.4.0 live-runtime cut).
+//
+// The exact `siteGraph` that /graph.json serializes and the video cast renders
+// is loaded into the runtime via `loadGraphRuntime`, observing its boundary
+// signals and casting from the content-addressed IR. We hand-boot (rather than
+// the `client:graph` directive) so we keep the GraphRuntimeHandle and expose it
+// for the AI-apply seam (#3, the WebMCP write tool).
+//
+// SCOPE: the resolver resolves ONLY the scene entity to its canvas. The layout
+// entities (hero/cards) are deliberately left unresolved so they stay on the
+// zero-first-paint @container CSS — the runtime's inline stateCss would regress
+// them. So "the graph drives the page" is literally true for the scene, while
+// layout keeps its pure-CSS delivery.
+import { siteGraph, sceneEntityId } from '@/lib/graph'
+const serialized = JSON.stringify(siteGraph)
+---
+
+<script type="application/json" id="czap-site-graph" is:inline set:html={serialized}></script>
+<script is:inline define:vars={{ sceneEntityId }}>
+  window.__CZAP_SCENE_ENTITY__ = sceneEntityId
+</script>
+<script>
+  import { loadGraphRuntime } from '@czap/astro/runtime'
+
+  const node = document.getElementById('czap-site-graph')
+  const sceneId = (window as unknown as { __CZAP_SCENE_ENTITY__?: string }).__CZAP_SCENE_ENTITY__
+  if (node?.textContent && sceneId) {
+    const resolve = (id: string): HTMLElement | null =>
+      id === sceneId ? document.querySelector<HTMLElement>(`[data-czap-entity="${CSS.escape(id)}"]`) : null
+
+    const boot = (): void => {
+      try {
+        const handle = loadGraphRuntime(node.textContent!, resolve)
+        // Expose the live handle so the AI-apply tool (#3) can cast context out and
+        // admit validated patches back in against the same running graph.
+        if (handle) (window as unknown as { __CZAP_GRAPH__?: unknown }).__CZAP_GRAPH__ = handle
+      } catch {
+        /* live-graph boot is additive — never let it disturb the orbs/layout */
+      }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true })
+    else boot()
+  }
+</script>

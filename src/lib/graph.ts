@@ -141,6 +141,12 @@ export const scenePolicy: PolicyNode = sealNode<PolicyNode>({
   sites: ['browser', 'edge'],
 })
 
+// The scene entity id — the one entity we resolve to a live DOM node
+// (`data-czap-entity`) when booting the runtime DocumentGraph (0.4.0 #1). Only
+// the scene is resolved; the layout entities stay on @container CSS (the
+// runtime's inline stateCss would regress their zero-first-paint layout).
+export const sceneEntityId = (scene.nodes.find((n) => n.family === 'entity') as EntityNode).id
+
 const parts = [hero, cards, { nodes: [scenePolicy], edges: [] }, scene]
 
 // Content-addressing means identical nodes collapse to one id (e.g. the
