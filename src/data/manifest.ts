@@ -36,7 +36,7 @@ export const projectManifest: ProjectLink[] = [
   },
   {
     name: 'BatPAK',
-    gitUrl: 'https://github.com/heyoub/batpak',
+    gitUrl: 'https://github.com/freebatteryfactory/batpak',
     siteUrl: 'https://crates.io/crates/batpak',
     pitch: {
       filename: 'batpak.rs',
@@ -46,7 +46,7 @@ export const projectManifest: ProjectLink[] = [
       stack: ['Rust', 'Cargo', 'CI/CD'],
       links: [
         { label: 'crate', url: 'https://crates.io/crates/batpak', display: 'crates.io/crates/batpak' },
-        { label: 'repo', url: 'https://github.com/heyoub/batpak', display: 'github.com/heyoub/batpak' },
+        { label: 'repo', url: 'https://github.com/freebatteryfactory/batpak', display: 'github.com/freebatteryfactory/batpak' },
       ],
     },
   },
