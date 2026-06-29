@@ -1,9 +1,12 @@
 #version 300 es
-// The scene background — LiteShip GPU cast (GLSL), lava-lamp style. Smooth
-// metaball "blobs" rise and merge over a perspective floor grid. Tuned for low
-// GPU cost: no per-step 3D noise, ~44 march steps, cheap 4-tap normal — so it
-// doesn't starve the rest of the page's compositing. Driven by the sceneMood
-// boundary via the AnimatedQuantizer (eased, tier-gated) on czap:uniform-update.
+// The scene background — LiteShip GPU cast (GLSL). A reimagining of the v2
+// three.js ParallaxOrbs: THREE soft, translucent, glossy spheres that gently
+// float, wobble with an organic surface "distort" (the old MeshDistortMaterial
+// DNA, done analytically — no per-step 3D noise), and parallax to the pointer.
+// Laid out yellow LEFT · cyan CENTER · purple RIGHT over a faint perspective
+// grid. Tuned for low GPU cost (~48 march steps, cheap 4-tap normal). Driven by
+// the sceneMood boundary via the AnimatedQuantizer (eased, tier-gated) on
+// czap:uniform-update; pointer parallax streamed on the same channel.
 precision highp float;
 
 in vec2 v_uv;
@@ -13,72 +16,84 @@ uniform float u_time;        // seconds since mount
 uniform vec2 u_resolution;   // canvas px
 uniform float u_state;       // mood index, normalized 0..1
 
-uniform float u_distortAmp;  // blob pulse amplitude (lava wobble)
-uniform float u_rotSpeed;    // lava flow speed
-uniform float u_orbOpacity;  // blob presence
+uniform float u_distortAmp;  // surface wobble amplitude (MeshDistort DNA)
+uniform float u_rotSpeed;    // float/flow speed
+uniform float u_orbOpacity;  // blob presence (translucency)
 uniform float u_emissive;    // glow strength
 uniform float u_gridOpacity; // floor grid presence
 uniform float u_scroll;      // scroll progress 0..1
+uniform float u_pointx;      // pointer parallax x, -1..1 (0 until first move)
+uniform float u_pointy;      // pointer parallax y, -1..1
 
-const vec3 CYAN = vec3(0.024, 0.714, 0.831);   // #06b6d4
+// The three hero hues — matched to the v2 orbs.
+const vec3 YELLOW = vec3(0.984, 0.749, 0.141); // #fbbf24
+const vec3 CYAN   = vec3(0.024, 0.714, 0.831); // #06b6d4
 const vec3 VIOLET = vec3(0.545, 0.361, 0.965); // #8b5cf6
-const vec3 WARM = vec3(0.98, 0.62, 0.25);
-const vec3 BASE = vec3(0.027, 0.031, 0.043);    // ~--bg-primary
+const vec3 BASE   = vec3(0.027, 0.031, 0.043); // ~--bg-primary
 
 float smin(float a, float b, float k) {
   float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
   return mix(b, a, h) - k * h * (1.0 - h);
 }
 
-// Three big blobs that slowly rise / fall / drift through the frame — the lava
-// lamp. Pure analytic (no noise), cheap to evaluate many times per pixel. Kept
-// large and central so they read as solid bodies, not a distant haze.
-vec3 blobCenter(float i, float t) {
-  float ph = i * 2.39996; // golden-angle phase offset per blob
-  // Hand-placed homes spread across the frame (left-high, center-low, right-high,
-  // far-back-right) so the orbs read as a distributed constellation — distinct
-  // bodies occupying space, like the old three.js orbs, not a central pile. A
-  // small, slow drift layered on top gives a gentle bob, not swimming.
-  vec3 homes[4] = vec3[4](
-    vec3(-1.9,  0.5, -0.2),
-    vec3(-0.4, -0.7,  0.15),
-    vec3( 1.5,  0.6, -0.5),
-    vec3( 2.0, -0.3, -1.0));
-  vec3 home = homes[int(i)];
+// Per-orb animated center: hand-placed home + a gentle float (sin/cos on a
+// per-orb speed, like the v2 useFrame drift) + pointer parallax (nearer orbs
+// move more — the old parallaxStrength, depth-scaled). i: 0 yellow-left,
+// 1 cyan-center (biggest, nearest), 2 purple-right.
+vec3 orbCenter(int i, float t) {
+  vec3 home; float spd;
+  if (i == 0)      { home = vec3(-1.95,  0.25, -0.35); spd = 0.30; } // yellow LEFT
+  else if (i == 1) { home = vec3( 0.05, -0.05,  0.30); spd = 0.50; } // cyan CENTER
+  else             { home = vec3( 1.95,  0.35, -0.55); spd = 0.70; } // purple RIGHT
+  float ph = float(i) * 2.39996; // golden-angle phase per orb
   vec3 drift = vec3(
-    sin(t * 0.17 + ph) * 0.18 + sin(t * 0.071 + ph * 2.3) * 0.1,
-    sin(t * 0.23 + ph) * 0.22 + sin(t * 0.089 + ph * 1.3) * 0.13,
-    cos(t * 0.13 + ph) * 0.12);
-  return home + drift;
+    sin(t * spd + ph) * 0.30,        // v2: sin(time*speed)*0.3 in x
+    cos(t * spd * 0.8 + ph) * 0.20,  // v2: cos(time*speed*0.8)*0.2 in y
+    sin(t * spd * 0.5 + ph) * 0.10);
+  float depth = 0.5 + 0.5 * (home.z + 1.0);          // ~0.5 (back) .. 1.0 (front)
+  vec2 par = vec2(u_pointx, u_pointy) * 0.28 * depth; // pointer parallax
+  return home + drift + vec3(par, 0.0);
 }
 
-// Scene SDF; writes the dominant blob color into `col`.
+// Sphere SDF with an organic surface wobble — the MeshDistortMaterial look,
+// analytic and cheap. Small amplitude so the orbs still read as solid bodies.
+float orbDist(vec3 p, vec3 c, float r, float t, float ph) {
+  vec3 q = p - c;
+  float w = sin(q.x * 2.6 + t * 1.1 + ph) *
+            sin(q.y * 2.4 - t * 0.9 + ph) *
+            sin(q.z * 2.8 + t * 0.7);
+  return (length(q) - r) + u_distortAmp * 0.10 * w;
+}
+
+// Scene SDF; writes the dominant orb color into `col`. Colors are kept mostly
+// distinct (small smin k, sharpened inverse-distance weighting) so yellow / cyan
+// / purple stay legible and only kiss where two orbs pass close.
 float map(vec3 p, out vec3 col) {
-  float t = u_time * 0.17 * (0.4 + u_rotSpeed); // slow, stable drift
-  float pulse = 1.0 + 0.06 * u_distortAmp * sin(t * 0.7); // gentler throb
-  vec3 cols[4] = vec3[4](CYAN, VIOLET, WARM, CYAN);
+  float t = u_time * 0.17 * (0.5 + u_rotSpeed);
+  float lift = (0.4 - u_scroll * 0.35); // mood/scroll lifts the field a touch
+  vec3 cs[3] = vec3[3](YELLOW, CYAN, VIOLET);
+  float rs[3] = float[3](1.20, 1.55, 1.30); // cyan center is the largest body
 
   float d = 1e9;
   vec3 acc = vec3(0.0);
   float wsum = 0.0;
-  // Four orbs, kept mostly distinct (small smin k) so they read as separate
-  // glowing spheres — the three.js look — that only gently kiss when they pass,
-  // rather than melting into one lava body.
-  for (float i = 0.0; i < 4.0; i += 1.0) {
-    vec3 c = blobCenter(i, t);
-    c.y += (0.5 - u_scroll * 0.4); // mood/scroll lifts the field a touch
-    float r = (1.1 - i * 0.15) * pulse;   // clearly varied sizes — breaks the pair read
-    float di = length(p - c) - r;
-    d = (i == 0.0) ? di : smin(d, di, 0.12); // distinct orbs — only blend at very close range
-    float w = 1.0 / (0.1 + max(di, 0.0));
-    acc += cols[int(i)] * w;
+  for (int i = 0; i < 3; i++) {
+    float ph = float(i) * 2.39996;
+    vec3 c = orbCenter(i, t);
+    c.y += lift;
+    float pulse = 1.0 + 0.05 * u_distortAmp * sin(t * 0.7 + ph);
+    float di = orbDist(p, c, rs[i] * pulse, t, ph);
+    d = (i == 0) ? di : smin(d, di, 0.08); // mostly distinct
+    float w = 1.0 / (0.06 + max(di, 0.0));
+    w *= w;                                 // sharpen → nearest hue dominates
+    acc += cs[i] * w;
     wsum += w;
   }
-  col = acc / max(wsum, 0.001);
+  col = acc / max(wsum, 1e-3);
   return d;
 }
 
-// Cheap tetrahedron normal (4 taps vs 6).
+// Cheap tetrahedron normal (4 taps).
 vec3 calcNormal(vec3 p) {
   const vec2 e = vec2(1.0, -1.0) * 0.0025;
   vec3 d;
@@ -91,12 +106,11 @@ void main() {
   vec2 uv = (v_uv * 2.0 - 1.0);
   uv.x *= u_resolution.x / max(u_resolution.y, 1.0);
 
-  // Close + wide so the blobs dominate the frame (read as bodies, not haze).
   vec3 ro = vec3(0.0, 0.1, 4.0);
   vec3 rd = normalize(vec3(uv * 1.15, -1.35));
   vec3 col = BASE;
 
-  // --- perspective floor grid ---
+  // --- faint perspective floor grid ---
   if (rd.y < -0.0015) {
     float tf = (-2.3 - ro.y) / rd.y;
     if (tf > 0.0) {
@@ -108,32 +122,36 @@ void main() {
     }
   }
 
-  // --- raymarch the blobs (track closest approach for a tight rim halo) ---
+  // --- raymarch the orbs (track closest approach for a tight rim halo) ---
+  // step factor 0.75 (under 0.9) keeps the march safe against the surface
+  // displacement, which softens the SDF's Lipschitz bound.
   float t = 0.0;
   vec3 bc = CYAN;
   float minD = 1e9;
   bool hit = false;
-  for (int i = 0; i < 48; i++) {
+  for (int i = 0; i < 56; i++) {
     vec3 p = ro + rd * t;
     float d = map(p, bc);
     minD = min(minD, d);
     if (d < 0.004) { hit = true; break; }
-    t += d * 0.9;
+    t += d * 0.75;
     if (t > 12.0) break;
   }
   if (hit) {
     vec3 p = ro + rd * t;
     vec3 n = calcNormal(p);
-    vec3 L = normalize(vec3(0.5, 0.8, 0.6));
-    float lit = 0.45 + 0.55 * max(dot(n, L), 0.0);
-    float rim = pow(1.0 - max(dot(n, -rd), 0.0), 2.0);     // fresnel edge glow
-    float spec = pow(max(dot(reflect(-L, n), -rd), 0.0), 28.0); // glassy hotspot
-    vec3 blob = bc * (0.48 + u_emissive * 0.8) * lit + bc * rim * 0.9 + vec3(1.0) * spec * 0.45;
-    // Quieter presence — lower floor + scale so the orbs sit back behind content.
-    col = mix(col, blob, clamp(0.14 + u_orbOpacity * 1.3, 0.0, 1.0));
+    vec3 L = normalize(vec3(0.4, 0.8, 0.6));
+    float lit = 0.40 + 0.60 * max(dot(n, L), 0.0);
+    float fres = pow(1.0 - max(dot(n, -rd), 0.0), 2.0);          // glass edge glow
+    float spec = pow(max(dot(reflect(-L, n), -rd), 0.0), 32.0);  // glossy hotspot (roughness ~0.2)
+    vec3 body = bc * (0.42 + u_emissive * 0.85) * lit;
+    vec3 glass = body + bc * fres * 1.35 + vec3(1.0) * spec * 0.55;
+    // Translucent presence (the v2 opacity ~0.25 read) — orbs sit BEHIND content,
+    // so keep the body see-through and let the bright fresnel rim carry the form.
+    col = mix(col, glass, clamp(0.06 + u_orbOpacity * 0.7, 0.0, 1.0));
   } else {
     // Tight halo hugging the silhouette only — NOT a full-screen fog.
-    float halo = smoothstep(0.45, 0.0, minD);
+    float halo = smoothstep(0.5, 0.0, minD);
     col += bc * halo * halo * u_orbOpacity * (0.6 + u_emissive) * 0.5;
   }
 
