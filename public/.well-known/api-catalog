@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://heyoub.dev/",
+      "service-doc": [
+        { "href": "https://heyoub.dev/llms.txt", "type": "text/plain", "title": "AI-readable site summary (llms.txt)" }
+      ],
+      "service-desc": [
+        { "href": "https://heyoub.dev/manifest.json", "type": "application/json", "title": "Machine-readable site manifest" }
+      ],
+      "describedby": [
+        { "href": "https://heyoub.dev/profile.json", "type": "application/json", "title": "Structured profile / who this is" }
+      ],
+      "sitemap": [
+        { "href": "https://heyoub.dev/sitemap-index.xml", "type": "application/xml", "title": "Sitemap index" }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,9 @@
 import { cloudflareMiddleware } from '@czap/cloudflare'
 import { boundaries } from 'virtual:czap/boundaries'
 import { compileLayoutCss } from './lib/layout-css'
+// The same llms.txt served statically at /llms.txt, inlined at build time so
+// markdown content-negotiation needs no runtime ASSETS binding (one source).
+import llmsMarkdown from '../public/llms.txt?raw'
 
 // LiteShip on Cloudflare Workers: per-request tier detection from Client
 // Hints + UA into Astro.locals.czap, with the compiled boundary CSS memoized
@@ -49,6 +52,33 @@ const SECURITY_HEADERS: Record<string, string> = {
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
 }
 
+// RFC 8288 Link headers for agent discovery — point crawlers/agents at the
+// real agent-facing surfaces this site already serves (no fabricated endpoints).
+// rels are IANA-registered: api-catalog (RFC 9727), service-doc/service-desc
+// (RFC 8631), describedby, sitemap.
+const LINK_HEADER = [
+  '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
+  '</llms.txt>; rel="service-doc"; type="text/plain"',
+  '</manifest.json>; rel="service-desc"; type="application/json"',
+  '</profile.json>; rel="describedby"; type="application/json"',
+  '</sitemap-index.xml>; rel="sitemap"; type="application/xml"',
+].join(', ')
+
+// Markdown content negotiation (RFC-ish "Markdown for Agents"): an agent that
+// sends `Accept: text/markdown` for the homepage gets the maintained llms.txt
+// (a true markdown summary of the site) instead of the visual HTML. Browsers,
+// which don't ask for markdown, still get the HTML default.
+function markdownForAgents(context: any, url: URL): Response | null {
+  const accept = context.request.headers.get('accept') ?? ''
+  if (context.request.method !== 'GET' || url.pathname !== '/' || !/text\/markdown/i.test(accept)) return null
+  const headers = new Headers()
+  headers.set('Content-Type', 'text/markdown; charset=utf-8')
+  headers.set('Link', LINK_HEADER)
+  headers.set('Vary', 'Accept')
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) headers.set(k, v)
+  return new Response(llmsMarkdown, { status: 200, headers })
+}
+
 const czapHandler = cloudflareMiddleware({
   manifest: boundaries,
   boundary: 'heroLayout',
@@ -68,11 +98,17 @@ const czapHandler = cloudflareMiddleware({
 // we clone the response with additional headers (Workers response.headers can be
 // read-only depending on how the underlying Response was constructed).
 export const onRequest = async (context: any, next: () => Promise<Response>): Promise<Response> => {
+  // Agent content negotiation short-circuits the HTML render entirely.
+  const md = markdownForAgents(context, new URL(context.request.url))
+  if (md) return md
+
   const response: Response = await czapHandler(context, next)
   const headers = new Headers(response.headers)
   for (const [k, v] of Object.entries(SECURITY_HEADERS)) {
     headers.set(k, v)
   }
+  headers.set('Link', LINK_HEADER)
+  headers.append('Vary', 'Accept') // we content-negotiate on Accept (markdown)
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
