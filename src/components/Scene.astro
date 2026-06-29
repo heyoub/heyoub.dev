@@ -11,9 +11,15 @@
 import { satelliteAttrs } from '@czap/astro'
 import { sceneMood } from '@/lib/boundaries'
 import { MOOD_GLSL, MOOD_STATES } from '@/data/scene-moods'
+import { sceneFragIntegrity, sceneWgslIntegrity } from '@/lib/shader-integrity'
 
 const { tiers } = Astro.locals.czap!
 const show = tiers.motion !== 'none'
+
+// 0.4.0 secure-by-default: external shaders must pin their content (SRI) or the
+// gpu directive refuses to compile them (the "orbs vanished" regression).
+const fragIntegrity = await sceneFragIntegrity()
+const wgslIntegrity = await sceneWgslIntegrity()
 
 // Per-state GLSL uniform payload — u_-prefixed to match scene.frag's uniforms.
 // Carried on the satellite so the inspector shows the active glsl cast; the
@@ -30,6 +36,7 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
       class:list={['scene-canvas', satClass]}
       data-czap-shader-type="glsl"
       data-czap-shader-src="/shaders/scene.frag"
+      data-czap-shader-integrity={fragIntegrity}
       {...satData}
     ></canvas>
   )}
@@ -42,15 +49,17 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
      the richer visual; WGSL stays a demonstrable artifact on WebGPU devices.
      Runs at parse time (is:inline) so attributes flip before the gpu directive
      boots. (preferWebGPU integration config is an upstream no-op.) */
-  <script is:inline>
+  <script is:inline define:vars={{ wgslIntegrity }}>
     (function () {
       var search = location.search
       var canvas = document.querySelector('.scene-canvas')
       if (!canvas) return
-      // ?cast=wgsl — opt into the net-new WGSL/WebGPU path.
+      // ?cast=wgsl — opt into the net-new WGSL/WebGPU path. Swap the SRI pin too,
+      // or the gpu directive refuses the wgsl shader (0.4.0 secure-by-default).
       if (('gpu' in navigator) && /[?&]cast=wgsl/.test(search)) {
         canvas.setAttribute('data-czap-shader-type', 'wgsl')
         canvas.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
+        canvas.setAttribute('data-czap-shader-integrity', wgslIntegrity)
       }
       // The default boots idiomatically (the gpu directive defers on a low tier
       // and re-boots itself on czap:detect-ready — 0.2.3, finding F2). ?gl=force
