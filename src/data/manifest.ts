@@ -20,7 +20,7 @@ export interface ProjectLink {
 export const projectManifest: ProjectLink[] = [
   {
     name: 'LiteShip',
-    gitUrl: 'https://github.com/heyoub/LiteShip',
+    gitUrl: 'https://github.com/freebatteryfactory/LiteShip',
     siteUrl: 'https://www.npmjs.com/package/@czap/core',
     pitch: {
       filename: 'liteship.ts',
@@ -30,7 +30,7 @@ export const projectManifest: ProjectLink[] = [
       stack: ['TypeScript', 'Astro', 'Effect', 'Vitest'],
       links: [
         { label: 'npm', url: 'https://www.npmjs.com/package/@czap/core', display: 'npmjs.com/@czap/core' },
-        { label: 'repo', url: 'https://github.com/heyoub/LiteShip', display: 'github.com/heyoub/LiteShip' },
+        { label: 'repo', url: 'https://github.com/freebatteryfactory/LiteShip', display: 'github.com/freebatteryfactory/LiteShip' },
       ],
     },
   },

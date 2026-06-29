@@ -1,7 +1,7 @@
 # heyoub.dev — v3
 
 Personal site of **Eassa Ayoub** — cognitive-first systems. Rebuilt as a
-**dogfood and showcase of [LiteShip](https://github.com/heyoub/LiteShip)**
+**dogfood and showcase of [LiteShip](https://github.com/freebatteryfactory/LiteShip)**
 (the CZAP engine, `@czap/*`).
 
 > The site doesn't just *describe* how I think about software — it's built
@@ -51,4 +51,4 @@ docs/LITESHIP-REBUILD.md                 # the full plan + phases
 
 `@czap/core@0.1.4` shipped a leaked `workspace:*` spec; until a patch lands,
 `package.json` pins it via `pnpm.overrides` (`@czap/_spine: 0.1.4`). Upstream
-fix: [LiteShip#9](https://github.com/heyoub/LiteShip/pull/9).
+fix: [LiteShip#9](https://github.com/freebatteryfactory/LiteShip/pull/9).
