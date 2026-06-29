@@ -1,8 +1,11 @@
 ---
-// WebMCP — expose real, read-only portfolio actions to in-browser AI agents via
-// navigator.modelContext.provideContext(). Every tool reads from the same
-// src/data the visible site renders, so nothing here is fabricated. Experimental
-// API (Chrome EPP); feature-detected and try/caught so it can never break the page.
+// WebMCP — expose in-browser AI agent tools via navigator.modelContext.
+// Read tools mirror the same src/data the visible site renders (nothing fabricated).
+// The two graph tools (#3, the AI-apply seam) ride the LIVE DocumentGraph handle
+// (window.__CZAP_GRAPH__, booted by GraphRuntime): an agent can cast the editable
+// page context OUT and propose a patch IN, which LiteShip's token-witness
+// validation chain admits (re-casting live) or rejects — no mutation unless admitted.
+// Experimental API (Chrome EPP); feature-detected + try/caught so it never breaks the page.
 import { projectManifest } from '@/data/manifest'
 import { contactConfig } from '@/data/footer'
 import { openToContent } from '@/data/content'
@@ -26,10 +29,17 @@ const webmcp = {
 ---
 
 <script is:inline define:vars={{ webmcp }}>
-  (function () {
-    const mc = navigator.modelContext
-    if (!mc || typeof mc.provideContext !== 'function') return
-    const text = (value) => ({ content: [{ type: 'text', text: JSON.stringify(value, null, 2) }] })
+  window.__WEBMCP_DATA__ = webmcp
+</script>
+<script>
+  import { castGraphContext, admitGraphPatchProposal } from '@czap/astro/runtime'
+
+  const mc = (navigator as Navigator & { modelContext?: { provideContext?: (c: unknown) => void } }).modelContext
+  const data = (window as unknown as { __WEBMCP_DATA__?: Record<string, unknown> }).__WEBMCP_DATA__
+  const liveGraph = (): any => (window as unknown as { __CZAP_GRAPH__?: unknown }).__CZAP_GRAPH__
+
+  if (mc && typeof mc.provideContext === 'function' && data) {
+    const text = (value: unknown) => ({ content: [{ type: 'text', text: JSON.stringify(value, null, 2) }] })
     const noArgs = { type: 'object', properties: {}, additionalProperties: false }
     try {
       mc.provideContext({
@@ -38,24 +48,51 @@ const webmcp = {
             name: 'list_projects',
             description: "List Eassa Ayoub's public software projects — name, tagline, stack, repo and live links.",
             inputSchema: noArgs,
-            execute: async () => text(webmcp.projects),
+            execute: async () => text(data.projects),
           },
           {
             name: 'get_contact',
             description: 'Get how to reach or book time with Eassa Ayoub (email, calendar, LinkedIn, GitHub).',
             inputSchema: noArgs,
-            execute: async () => text(webmcp.contact),
+            execute: async () => text(data.contact),
           },
           {
             name: 'get_open_to',
             description: 'What Eassa Ayoub is open to: services offered and the role types he takes on.',
             inputSchema: noArgs,
-            execute: async () => text(webmcp.open_to),
+            execute: async () => text(data.open_to),
+          },
+          {
+            name: 'get_page_context',
+            description:
+              'Cast the LIVE page DocumentGraph out as an editable AI context — the entities, components and poses an agent may propose patches against. This is the same content-addressed graph served at /graph.json, running on the page.',
+            inputSchema: noArgs,
+            execute: async () => {
+              const h = liveGraph()
+              return h ? text(castGraphContext(h)) : text({ error: 'live graph runtime not loaded' })
+            },
+          },
+          {
+            name: 'propose_page_patch',
+            description:
+              "Propose a GraphPatch against the live page graph (see get_page_context for the editable surface). LiteShip's token-witness validation chain admits it — re-casting the changed cells live — or rejects it with reasons. No mutation happens unless the patch is admitted. Honest, validated agent→live-page editing.",
+            inputSchema: {
+              type: 'object',
+              properties: { patch: { type: 'object', description: 'A candidate GraphPatch (shape per get_page_context).' } },
+              required: ['patch'],
+              additionalProperties: false,
+            },
+            execute: async (args: { patch?: unknown }) => {
+              const h = liveGraph()
+              if (!h) return text({ error: 'live graph runtime not loaded' })
+              const result = admitGraphPatchProposal(h, args?.patch)
+              return text({ admitted: !!result.ok, errors: result.errors ?? null })
+            },
           },
         ],
       })
     } catch {
       /* WebMCP is experimental — never let it break the page */
     }
-  })()
+  }
 </script>
