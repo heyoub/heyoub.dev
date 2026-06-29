@@ -140,36 +140,9 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
   canvas.addEventListener('czap:gpu-ready', onScroll)
   onScroll()
 
-  // Pointer parallax — the v2 ParallaxOrbs trait, reinterpreted: feed the orbs'
-  // u_pointx/u_pointy on the SAME czap:uniform-update channel (rAF-throttled).
-  // The shader depth-scales it so nearer orbs drift more. Pointer-capable +
-  // fine pointers only (skip touch/coarse so it never fights scrolling), and
-  // never under reduced-motion. Eased toward the target so it glides, not snaps.
-  let px = 0
-  let py = 0
-  let tx = 0
-  let ty = 0
-  let raf = 0
-  const finePointer = window.matchMedia('(pointer: fine)').matches
-  const tick = (): void => {
-    px += (tx - px) * 0.08
-    py += (ty - py) * 0.08
-    dispatch({ u_pointx: px, u_pointy: py }, { pointx: px, pointy: py })
-    if (Math.abs(tx - px) > 0.001 || Math.abs(ty - py) > 0.001) raf = requestAnimationFrame(tick)
-    else raf = 0
-  }
-  const onPointer = (e: PointerEvent): void => {
-    tx = (e.clientX / window.innerWidth) * 2 - 1
-    ty = -((e.clientY / window.innerHeight) * 2 - 1)
-    if (!raf) raf = requestAnimationFrame(tick)
-  }
-  if (finePointer) window.addEventListener('pointermove', onPointer, { passive: true })
-
   return {
     dispose() {
       window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('pointermove', onPointer)
-      if (raf) cancelAnimationFrame(raf)
       canvas.removeEventListener('czap:gpu-ready', onScroll)
       canvas.removeEventListener('czap:gpu-ready', seed)
       seedTimers.forEach(clearTimeout)
