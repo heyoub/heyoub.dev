@@ -26,7 +26,7 @@ export const GET: APIRoute = async () => {
 
   const body = {
     $surface: 'document-graph',
-    generatedBy: 'astro + LiteShip (CZAP engine) 0.2.0',
+    generatedBy: 'astro + LiteShip (CZAP engine) 0.4.0',
     id: siteGraph.id,
     digest: siteGraph.digest,
     nodes: siteGraph.nodes.length,

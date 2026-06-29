@@ -12,7 +12,7 @@
 //   • u_scroll → a light continuous parallax input, fed on scroll (disjoint
 //     uniform, so it never fights the eased mood values)
 import { Q, AnimatedQuantizer } from '@czap/quantizer'
-import { Millis, Easing, type MotionTier } from '@czap/core'
+import { Millis, Easing, Scheduler, type MotionTier } from '@czap/core'
 import { Effect, Stream, Fiber } from 'effect'
 import { sceneMood } from './boundaries'
 import { MOOD_GLSL, MOOD_CSS, MOOD_STATES, type MoodState } from '@/data/scene-moods'
@@ -76,6 +76,9 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
       live,
       { '*': { duration: Millis(900), easing: Easing.spring({ stiffness: 160, damping: 20, mass: 1 }) } },
       GLSL_U,
+      // 0.4.0: align the eased mood crossings to the display refresh (the GPU
+      // directive already owns a RAF loop) instead of the internal 16ms sleep.
+      { scheduler: Scheduler.raf() },
     )
 
     // Eased mood uniforms → shader (the quantizer, mixed in).
