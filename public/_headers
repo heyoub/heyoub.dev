@@ -9,3 +9,6 @@
 /.well-known/api-catalog
   Content-Type: application/linkset+json
   Cache-Control: public, max-age=3600
+/.well-known/security.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400

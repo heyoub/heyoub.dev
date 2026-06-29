@@ -98,8 +98,19 @@ const czapHandler = cloudflareMiddleware({
 // we clone the response with additional headers (Workers response.headers can be
 // read-only depending on how the underlying Response was constructed).
 export const onRequest = async (context: any, next: () => Promise<Response>): Promise<Response> => {
+  const url = new URL(context.request.url)
+
+  // Always Use HTTPS: 301 any http:// hit to its https:// equivalent (skip local
+  // dev so astro/wrangler dev on http://localhost don't redirect-loop). The edge
+  // "Always Use HTTPS" zone toggle does this before the Worker too — this is the
+  // in-app guarantee so it holds regardless of zone config.
+  if (url.protocol === 'http:' && !/^(localhost|127\.|0\.0\.0\.0|\[)/.test(url.hostname)) {
+    url.protocol = 'https:'
+    return new Response(null, { status: 301, headers: { Location: url.href, ...SECURITY_HEADERS } })
+  }
+
   // Agent content negotiation short-circuits the HTML render entirely.
-  const md = markdownForAgents(context, new URL(context.request.url))
+  const md = markdownForAgents(context, url)
   if (md) return md
 
   const response: Response = await czapHandler(context, next)
