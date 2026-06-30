@@ -676,16 +676,21 @@
   .cta-glow::before {
     content: '';
     position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, var(--accent), var(--purple));
+    inset: -10px;
+    /* Soft two-tone halo WITHOUT a blur filter — the radial falloff feathers the
+       edge natively, so there's no per-frame re-rasterization of a blur over the
+       live orb canvas (that was the lag). Pure opacity fades are GPU-cheap. */
+    background: radial-gradient(ellipse at center, var(--accent), var(--purple) 55%, transparent 72%);
     opacity: 0;
-    filter: blur(12px);
-    transition: opacity 0.4s ease;
     z-index: -1;
+    /* ease-OUT: the glow jumps in the instant you hover and decelerates to rest,
+       so it starts right away and eases in — never the slow-start "lag → pop". */
+    transition: opacity 0.45s ease-out;
+    will-change: opacity;
   }
 
   .cta-glow:hover::before {
-    opacity: 0.4;
+    opacity: 0.45;
   }
 
   /* Focus ring for keyboard nav */
@@ -703,6 +708,19 @@
 
   .press-effect:active {
     transform: scale(0.98);
+  }
+
+  /* The CTA squares' one transition — colors fade, press is quick. Defined here
+     (after .press-effect, same layer) so its `transition` shorthand wins cleanly
+     instead of the old transition-all ↔ press-effect cascade fight that left the
+     hover colors snapping instantly. Replaces transition-all (which transitioned
+     every property, including the expensive blur glow). */
+  .cta-btn {
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease,
+      transform 0.12s ease;
   }
 
   /* Mobile: disable hover animations, keep tap feedback */

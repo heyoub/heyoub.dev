@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@czap/_spine': 0.4.0
+  '@czap/_spine': 0.4.1
 
 importers:
 
@@ -21,41 +21,41 @@ importers:
         specifier: ^3.7.3
         version: 3.7.3
       '@czap/assets':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/astro':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/cloudflare':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/compiler':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/core':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/detect':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/edge':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/quantizer':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/scene':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/stage':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/vite':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@czap/web':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       astro:
         specifier: ^7.0.0
         version: 7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0)
@@ -76,11 +76,11 @@ importers:
         specifier: ^0.9.4
         version: 0.9.9(prettier@3.8.3)(typescript@5.9.3)
       '@czap/audit':
-        specifier: 0.4.0
-        version: 0.4.0
+        specifier: 0.4.1
+        version: 0.4.1
       '@czap/cli':
-        specifier: 0.4.0
-        version: 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+        specifier: 0.4.1
+        version: 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       '@playwright/test':
         specifier: ^1.61.0
         version: 1.61.0
@@ -363,9 +363,9 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@czap/_spine@0.4.0':
-    resolution: {integrity: sha512-gi6PF6K1TKpV5sHeMqyPEs+4jN/D/orWkC0PFAnYFDfedvCFxm4XywDbpKFGfx+kVApVkfMXADAY4DLAVCQ80A==}
-    engines: {node: '>=22.0.0'}
+  '@czap/_spine@0.4.1':
+    resolution: {integrity: sha512-SKy60ovBHO8maxfnk9KhT+UQJqsOKzfi0ElXSTSaRXaoiQSUKY7CVuNqnpdmdaUsTfqHKAuC3SURP0yzi7FbwQ==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       astro: '>=7.0.0 <8'
       effect: '>=4.0.0-beta.0'
@@ -376,111 +376,111 @@ packages:
       vite:
         optional: true
 
-  '@czap/assets@0.4.0':
-    resolution: {integrity: sha512-WYfTiUyD0ulcxYyjxOZEUT5I7Mqfd8wiu//QGsOdhepHdD3BvN1QW3I4vS4BYs4gUtW54P15Va4L20h2mhemUA==}
-    engines: {node: '>=22.0.0'}
+  '@czap/assets@0.4.1':
+    resolution: {integrity: sha512-LVTt7HGXOcQpBAw/z3mBXqcztn/xFPouYI4sOoRzRDSV4U4ls1yeslrqL0bdPHyfPp5GM/njqtrp95e83sXxoQ==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/astro@0.4.0':
-    resolution: {integrity: sha512-25YvBsGYD+4eEVJpXqTecwkIai/vXDck8BeQ2MG9Z7AWgS0nkkfVCZK5MlYkdIiZe/+tPyof7iZoEGdQNbBVRQ==}
-    engines: {node: '>=22.0.0'}
+  '@czap/astro@0.4.1':
+    resolution: {integrity: sha512-kP6NpQheARaB284zUPJAJWmH/2qHkC/J4vL+Q7GWOSA7CJHMRPlJclHshGzvFidyVNGzua+b7djfBjs5rI+mJg==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       astro: '>=7.0.0 <8'
       effect: '>=4.0.0-beta.0'
 
-  '@czap/audit@0.4.0':
-    resolution: {integrity: sha512-YPzdCFOLzFgPz8mRQHQJlupWh6MlPUG8DG3QVrELoidXvuPzUbFAsK8goh14fPlNRw1l3PEGQBHtZ3FRn+CRQw==}
-    engines: {node: '>=22.0.0'}
+  '@czap/audit@0.4.1':
+    resolution: {integrity: sha512-iVDSPjPnWNQJTnswiQFfi6qN68jgiMHsJ7w0Yp+OAMzdiGQIE4p+K809JJQjjabcIw/2YXS3GV4SsAgakpkykQ==}
+    engines: {node: '>=22.13.0'}
 
-  '@czap/canonical@0.4.0':
-    resolution: {integrity: sha512-IHpmpWLr/XqtZHDotIyLXxAFy4UxGlDaePzn0JNcubUT+1vcD8+nTHl8KgS/OiB0fEM8O9aqwiibhgKw3m7tnQ==}
-    engines: {node: '>=22.0.0'}
+  '@czap/canonical@0.4.1':
+    resolution: {integrity: sha512-Uu1MbG09af09Z/Ih0Im383Oc9zittY21jmrJPYJviTkx/DzWarjBtE/yIAGWKggL9oCXh00iS9F01g+CHu0Shw==}
+    engines: {node: '>=22.13.0'}
 
-  '@czap/cli@0.4.0':
-    resolution: {integrity: sha512-J6I39PjbYJScs0Enk6quo6+cypfMjjMy7B0fhY8TRIOvcYuHMPgznF5RH8ByTKrgnTSAe2rzq+Le786MQeGQ8g==}
-    engines: {node: '>=22.0.0'}
+  '@czap/cli@0.4.1':
+    resolution: {integrity: sha512-sFMAL76u4l056X1D9Zg+NEMA3va8l/QIxM3KVVA2PEF8QLefvrazv/fdvtlAv3ifC1C+++uqZ/bePMWX/zgNBA==}
+    engines: {node: '>=22.13.0'}
     hasBin: true
 
-  '@czap/cloudflare@0.4.0':
-    resolution: {integrity: sha512-iBsaL33oETp0SwmyaPTfE4yVJ/KyqPcOFlbOxW+0nt4O6FUejTrjio9W78LWL0UpxURcIZseSastPXW0Xytyhg==}
-    engines: {node: '>=22.0.0'}
+  '@czap/cloudflare@0.4.1':
+    resolution: {integrity: sha512-uT5oZ0dsTTsVKQrjHsezPc4YxXxg2RDExV24TeLwloG/ruSvfmiKWpDG2RCAU40QbtV0QcPx87AT7hkPA5VKsw==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/command@0.4.0':
-    resolution: {integrity: sha512-DVi8IOkuHuYUTIQTk6ViIc+X/WBSGHG8JnkYp7SJ+k4Cl/TbGZNC9HE+SliqnPUNi6aVSuDxx5Qip16CEjqpfg==}
-    engines: {node: '>=22.0.0'}
+  '@czap/command@0.4.1':
+    resolution: {integrity: sha512-R1LeQD9OXfVW4NE9JtUzko/BFT478S+9D+/XAPa7AiezUGJWNXpa9WpqpuUmb27n4rHDQzUGTBOZApoxkVC7uQ==}
+    engines: {node: '>=22.13.0'}
 
-  '@czap/compiler@0.4.0':
-    resolution: {integrity: sha512-ErKjCbLgfxC5LmKdvvlGqnIkXGQmn3RlbWz7OKmuVixLjXErfyAvJjSJm0wO+BU0u8JsPRQ3qFwCuTQUfswfvA==}
-    engines: {node: '>=22.0.0'}
+  '@czap/compiler@0.4.1':
+    resolution: {integrity: sha512-jA2pZgtD6gCX7ByLsf61n5zr4clWxjmoMTZQQ7DtrQMMb/xOKYeaG4rhHa9RQ2b4C2Od4i0aUaQop6mtc9Oirg==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/core@0.4.0':
-    resolution: {integrity: sha512-I55fzGo+pm77vrIgefkH/kZnXTtTEFIXx9s2PfoixnNyFtzSiRHE6YOA1YHCxdJKCBBnMEjB7W3Ikq4FGFhggw==}
-    engines: {node: '>=22.0.0'}
+  '@czap/core@0.4.1':
+    resolution: {integrity: sha512-e0mra89ZMrXj+jq9V6bXPboCiGz/CNtS4JnAG+O0Ht876daV8toXN3gWMIXKBdq6SXrQdKPCU++oZE5RBxjOPw==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/detect@0.4.0':
-    resolution: {integrity: sha512-gc41LNhu3WdUuIx3oChG01lqx2gF23QO2a6w2CSDHf8birJBxozjH1a4Qt2VoBakODe9P/d6H9d4wB7MyItgTg==}
-    engines: {node: '>=22.0.0'}
+  '@czap/detect@0.4.1':
+    resolution: {integrity: sha512-LTE4YuMA6/l9BcLWqY0zWlhryXFYzMnVjM5ssXGCTezTz+YwC2bz32aG8HtIwNVBt7ZyYM1LRTMHG7c2Ks21BA==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/edge@0.4.0':
-    resolution: {integrity: sha512-Oy6IobcjAnY10aNT5+zOj8S7ewwNL546Frsl1ixlryzwVu5gOPCLeicCkawXnEwwnjuLbVpESdTDuRhXvboBSA==}
-    engines: {node: '>=22.0.0'}
+  '@czap/edge@0.4.1':
+    resolution: {integrity: sha512-w+8LKik7lsHztJ4yMOj0D9n/LvFNh08i//AgNL1Z/ok3xlsqA2DigQopRR+FXs/wyEf2hfM6pmp+GMhawSWYiw==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/error@0.4.0':
-    resolution: {integrity: sha512-0zYjOhbOtQCMuhfuiWNeS2jgRVvf+StiAM5cYFxZGRLaJm3laEy+3xvWC5/reCQIPd1uyRRNm3/fTdQ+2pFoUQ==}
-    engines: {node: '>=22.0.0'}
+  '@czap/error@0.4.1':
+    resolution: {integrity: sha512-ePrMcA2Gqofor2//DCjWz1uuUvaInhEDKNGlD4dGDt6w9RJ0mE7GfWt8+crE0j4kYHoKeoYWM3XZH9c0gvRUkw==}
+    engines: {node: '>=22.13.0'}
 
-  '@czap/gauntlet@0.4.0':
-    resolution: {integrity: sha512-mpRbfjBS7Ceho/tHPKIEVmoglxTCNAkBIFx/aILH0TyqUBFmrpCZ2a0nkjFAN3QjSqPO2emHqwlqyEpltdKmSg==}
-    engines: {node: '>=22.0.0'}
+  '@czap/gauntlet@0.4.1':
+    resolution: {integrity: sha512-EnrgdADBb8AKvRydkspTjcpsGhgm+OSXV3ZqBStkMPY38gvbpd0Nde7ZjBQlixCdz2/u7ROk4iJU4YMojG/zUA==}
+    engines: {node: '>=22.13.0'}
 
-  '@czap/genui@0.4.0':
-    resolution: {integrity: sha512-D/2qagfKPecuaAXtNkgROxnC1ykwYllE7uIFbZmGTY/vvtZxjpEFfcJ6Yx38B7/48rTtjB+D3JksRMYlNnLzMg==}
-    engines: {node: '>=22.0.0'}
+  '@czap/genui@0.4.1':
+    resolution: {integrity: sha512-+XFUMegR+QUNyYDH3qdKNiN1EBJhmXrBzGJ3Y3VcOdCGb0GFAPJA729ozSrYXwaPUapIsxKJ9/3NqeBkE2VUcA==}
+    engines: {node: '>=22.13.0'}
 
-  '@czap/quantizer@0.4.0':
-    resolution: {integrity: sha512-zgkLemVP9EHAL1+EDNqMp8P47vKYXmu9kVxLPhQ4oofMLXQkbPP+Rr6cUb+q3CFb+vDL1LKFXR46Q6sg4WsiiQ==}
-    engines: {node: '>=22.0.0'}
+  '@czap/quantizer@0.4.1':
+    resolution: {integrity: sha512-cW74PR3q7qvR+BdCW1Yx/KHpq/6AHg8rIdxBjsl183KzHq2PY9T5OrCoXOn/Ln7fSVYvY/dDaYujc5lSe99IXg==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/scene@0.4.0':
-    resolution: {integrity: sha512-yOfBwgHiT7JVWwccaA7E/qxAI3WZ3x5Q6au4UyL3Cd6BSDHSGVOrbIsi+N6tPnyjsoFiX5j2Cc6EKcAFxWoaxQ==}
-    engines: {node: '>=22.0.0'}
+  '@czap/scene@0.4.1':
+    resolution: {integrity: sha512-G7tkW9AtvzYPgIoFuEgpPnzPDFPRX1SrMT2zqRc/F2QTAYd2lVC8+4lBpj3Z38Iw9EIJOfO2Vrschmm1ehYKSA==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/stage@0.4.0':
-    resolution: {integrity: sha512-inWcMSEOpe4nl5RSIy9DKm6tWmwNLonKkQA4G8kYUlTPyAS4+FrUGsUdo5+YPHxS+AKKngqb+pUKQiX5ydyYXg==}
-    engines: {node: '>=22.0.0'}
+  '@czap/stage@0.4.1':
+    resolution: {integrity: sha512-s4QwDuZ4VaegDo66EoJZgVrV3eBDSSLdUsiklPrDfVpzFQZztWng41keZWeCcyEFoEhHsDIIagBop6WrhF5/sw==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/vite@0.4.0':
-    resolution: {integrity: sha512-vSwWJyZEgxX727NGCL2aPrvc262XAtF7KuTO3+ka8fvm7+3y2PmI1gWdFizClSbaRh0BKd5nBIGMbQYTC68oIg==}
-    engines: {node: '>=22.0.0'}
+  '@czap/vite@0.4.1':
+    resolution: {integrity: sha512-aNoJ+Iq5m0Zpe2RgsJ0OPndLkUt1SDqkqoxMLivy35rsOGJ6sLg1P9NmYCchZT46zSUB46xuplSTtz9z/BqLJQ==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       vite: '>=8.0.0'
 
-  '@czap/web@0.4.0':
-    resolution: {integrity: sha512-sDwFzhzF5qr88X01u+W2Sy9TupHjvE+RWBCdaVtPX0idEwjNhtzury4jHet4ZUzvJXteQvTuymWMdejWGnpK3w==}
-    engines: {node: '>=22.0.0'}
+  '@czap/web@0.4.1':
+    resolution: {integrity: sha512-UjjUN0CSFUolAItDUIBUfiioFc5DIZXsfdPpT8G/W5Ltb9QbS84FRtRojqhxAE5NK37LasS1SlJCLH5WA0VwWg==}
+    engines: {node: '>=22.13.0'}
     peerDependencies:
       effect: '>=4.0.0-beta.0'
 
-  '@czap/worker@0.4.0':
-    resolution: {integrity: sha512-egFbhoUNy07PF7PPlAVSAe0EnbBgYyufENMPU9KT0f8l3maAyWRgPwIxvM6j9r0+koghPhzTd+bQOfxR2i8v9g==}
-    engines: {node: '>=22.0.0'}
+  '@czap/worker@0.4.1':
+    resolution: {integrity: sha512-EXsUnwJdDaAhitsUSSWPHAcx53FZ0wjcAZwurwifG+HBNwKcEVw/vvS+zxHC2XSijPc0/9UJVZEg9MwvMo7bkA==}
+    engines: {node: '>=22.13.0'}
 
   '@emmetio/abbreviation@2.3.3':
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
@@ -3408,101 +3408,101 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@czap/_spine@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/_spine@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
       effect: 4.0.0-beta.32
     optionalDependencies:
       astro: 7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0)
       vite: 8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0)
 
-  '@czap/assets@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/assets@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/_spine': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/_spine': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/astro@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/astro@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/detect': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/edge': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/genui': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/scene': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/vite': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/web': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/worker': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/detect': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/edge': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/genui': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/scene': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/vite': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/web': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/worker': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       astro: 7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0)
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - vite
 
-  '@czap/audit@0.4.0':
+  '@czap/audit@0.4.1':
     dependencies:
-      '@czap/canonical': 0.4.0
-      '@czap/error': 0.4.0
-      '@czap/gauntlet': 0.4.0
+      '@czap/canonical': 0.4.1
+      '@czap/error': 0.4.1
+      '@czap/gauntlet': 0.4.1
       fast-glob: 3.3.3
       typescript: 5.9.3
 
-  '@czap/canonical@0.4.0':
+  '@czap/canonical@0.4.1':
     dependencies:
-      '@czap/error': 0.4.0
+      '@czap/error': 0.4.1
       '@noble/hashes': 1.8.0
 
-  '@czap/cli@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/cli@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/assets': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/audit': 0.4.0
-      '@czap/command': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
-      '@czap/gauntlet': 0.4.0
-      '@czap/scene': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/assets': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/audit': 0.4.1
+      '@czap/command': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
+      '@czap/gauntlet': 0.4.1
+      '@czap/scene': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/cloudflare@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/cloudflare@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/astro': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/edge': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/astro': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/edge': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/command@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/command@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/assets': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
-      '@czap/gauntlet': 0.4.0
+      '@czap/assets': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
+      '@czap/gauntlet': 0.4.1
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/compiler@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/compiler@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/core@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/core@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/_spine': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/canonical': 0.4.0
-      '@czap/error': 0.4.0
+      '@czap/_spine': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/canonical': 0.4.1
+      '@czap/error': 0.4.1
       '@noble/hashes': 1.8.0
       cborg: 4.5.8
       effect: 4.0.0-beta.32
@@ -3510,98 +3510,98 @@ snapshots:
       - astro
       - vite
 
-  '@czap/detect@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/detect@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/edge@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/edge@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/detect': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/detect': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/error@0.4.0': {}
+  '@czap/error@0.4.1': {}
 
-  '@czap/gauntlet@0.4.0':
+  '@czap/gauntlet@0.4.1':
     dependencies:
-      '@czap/error': 0.4.0
+      '@czap/error': 0.4.1
       fast-glob: 3.3.3
 
-  '@czap/genui@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/genui@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/_spine': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/canonical': 0.4.0
-      '@czap/error': 0.4.0
+      '@czap/_spine': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/canonical': 0.4.1
+      '@czap/error': 0.4.1
     transitivePeerDependencies:
       - astro
       - effect
       - vite
 
-  '@czap/quantizer@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/quantizer@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/scene@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/scene@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/_spine': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/_spine': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/stage@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/stage@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/astro': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/compiler': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
-      '@czap/web': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/astro': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/compiler': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
+      '@czap/web': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       effect: 4.0.0-beta.32
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/vite@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/vite@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/compiler': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/edge': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/compiler': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/edge': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
       vite: 8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0)
     transitivePeerDependencies:
       - astro
       - effect
 
-  '@czap/web@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/web@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
-      '@czap/genui': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
+      '@czap/genui': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
       effect: 4.0.0-beta.32
       mediabunny: 1.46.0
     transitivePeerDependencies:
       - astro
       - vite
 
-  '@czap/worker@0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
+  '@czap/worker@0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))':
     dependencies:
-      '@czap/core': 0.4.0(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
-      '@czap/error': 0.4.0
+      '@czap/core': 0.4.1(astro@7.0.3(@astrojs/markdown-remark@7.2.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.13.1)(jiti@1.21.7)(rollup@4.61.1)(yaml@2.9.0))(effect@4.0.0-beta.32)(vite@8.0.16(@types/node@24.13.1)(esbuild@0.28.1)(jiti@1.21.7)(yaml@2.9.0))
+      '@czap/error': 0.4.1
     transitivePeerDependencies:
       - astro
       - effect

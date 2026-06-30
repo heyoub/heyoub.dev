@@ -45,7 +45,7 @@ const { class: satClass, ...satData } = satelliteAttrs({
 
       <!-- Book a Call square -->
       <div class="flex items-center justify-center p-2">
-        <a href={h.cta.href} target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary transition-all duration-300 flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight">
+        <a href={h.cta.href} target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight">
           <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">{h.cta.label}</span>
           <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">{h.cta.action}</span>
         </a>
@@ -53,7 +53,7 @@ const { class: satClass, ...satData } = satelliteAttrs({
 
       <!-- FBF square -->
       <div class="flex items-center justify-center p-2">
-        <a href="https://freebatteryfactory.com" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary transition-all duration-300 flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
+        <a href="https://freebatteryfactory.com" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
           <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">the</span>
           <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-purple group-hover:text-bg-primary transition-colors">FBF</span>
         </a>
@@ -73,25 +73,27 @@ const { class: satClass, ...satData } = satelliteAttrs({
   <div class="hero-hint absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 md:left-[8vw] md:translate-x-0 font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-widest text-text-muted" aria-hidden="true">
     <div class="hint-inner flex flex-col md:flex-row items-center gap-2 md:gap-4">
       <div class="w-px md:w-12 h-8 md:h-px bg-gradient-to-b md:bg-gradient-to-r from-accent/50 via-accent to-transparent hint-line"></div>
-      <span class="hidden md:inline">{h.scrollHint}</span>
+      <span class="hint-text hidden md:inline">{h.scrollHint}</span>
     </div>
   </div>
 </section>
 
 <style>
-  /* hero content tucks down + scales as you scroll away (v2 feel) */
   @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
+    @supports (animation-timeline: scroll()) {
+      /* Hero content tucks DOWN + fades + scales from the FIRST pixel of scroll —
+         the pre-LiteShip framer-motion parallax (useScroll offset start-start:
+         contentY 0→250, opacity 1→0, scale 1→0.95 over one viewport). Driven off
+         scroll(root block) — the real scroller, proven live with Lenis below — so
+         it responds immediately, instead of the old view()/exit range that only
+         fired once the hero was already leaving (read as static while reading). */
       .hero-content {
         animation: hero-tuck linear both;
-        animation-timeline: view();
-        animation-range: exit 0% exit 95%;
+        animation-timeline: scroll(root block);
+        animation-range: 0 100vh;
       }
-      /* Scroll-linked parallax: the cue drifts up + fades as you scroll, tracking
-         the root scroller (not a timed loop). Mapped over the first ~70vh of
-         scroll so it tracks from the first pixel and is gone by the time the
-         hero's left. On the inner wrapper so it doesn't clobber the hint's
-         translate-x centering. */
+      /* The scroll cue drifts up + fades in concert (over the first ~70vh). On the
+         inner wrapper so it doesn't clobber the hint's translate-x centering. */
       .hint-inner {
         animation: hint-drift linear both;
         animation-timeline: scroll(root block);
@@ -99,10 +101,34 @@ const { class: satClass, ...satData } = satelliteAttrs({
       }
     }
   }
-  @keyframes hero-tuck { to { transform: translateY(120px) scale(0.95); opacity: 0; } }
+  /* Keyframe %s map to scroll progress (0→100vh). Mirrors the framer curve:
+     contentY [0,.5,1]→[0,100,250], opacity [0,.4,.7,1]→[1,.8,.3,0], scale 1→0.95. */
+  @keyframes hero-tuck {
+    0%   { transform: translateY(0)     scale(1);     opacity: 1; }
+    40%  { transform: translateY(80px)  scale(0.98);  opacity: 0.8; }
+    70%  { transform: translateY(160px) scale(0.965); opacity: 0.3; }
+    100% { transform: translateY(250px) scale(0.95);  opacity: 0; }
+  }
   @keyframes hint-drift { to { transform: translateY(-70px); opacity: 0; } }
-  .hint-line { animation: hint-pulse 1.5s ease-in-out infinite; }
-  @keyframes hint-pulse { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.2); } }
+
+  /* The cue breathes as ONE pulse — line + text on the same 2.4s curve — and
+     nudges DOWN in sync (the universal "scroll here" signal) so someone hunting
+     for where to go catches it. The feathered accent halo fades in/out around
+     the glyphs (a soft outline that breathes, never a flash). The drift on
+     .hint-inner fades the whole cue out once scrolling starts, so this idle
+     beacon only plays at the top where the wayfinding question is asked. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hint-line { animation: hint-pulse 2.4s ease-in-out infinite; }
+    .hint-text { animation: hint-breathe 2.4s ease-in-out infinite; }
+  }
+  @keyframes hint-pulse {
+    0%, 100% { transform: translateY(0);   opacity: 0.5; }
+    50%      { transform: translateY(4px); opacity: 1; }
+  }
+  @keyframes hint-breathe {
+    0%, 100% { transform: translateY(0);   text-shadow: 0 0 5px rgba(34, 211, 238, 0); opacity: 0.62; }
+    50%      { transform: translateY(4px); text-shadow: 0 0 10px rgba(34, 211, 238, 0.5), 0 0 20px rgba(34, 211, 238, 0.22); opacity: 1; }
+  }
   @media (prefers-reduced-motion: reduce) { .animate-fadeInUp { animation: none !important; } }
 </style>
 
