@@ -1,6 +1,6 @@
 import { cloudflareMiddleware } from '@czap/cloudflare'
 import { boundaries } from 'virtual:czap/boundaries'
-import { compileLayoutCss } from './lib/layout-css'
+import { layoutCssFor } from './lib/layout-css'
 // The same llms.txt served statically at /llms.txt, inlined at build time so
 // markdown content-negotiation needs no runtime ASSETS binding (one source).
 import llmsMarkdown from '../public/llms.txt?raw'
@@ -15,36 +15,14 @@ import llmsMarkdown from '../public/llms.txt?raw'
 // (`virtual:czap/boundaries`, keyed by export name) instead of hand-typed —
 // `binding` defaults to CZAP_BOUNDARY_CACHE so it's dropped too.
 //
-// We keep our own `.czap-vp`-scoped compile as the CSS source rather than
-// adopting `@quantize` precompiled outputs: @czap/vite's @quantize auto-emits
-// a `:root` container-type for viewport.width boundaries with no opt-out
-// (css-quantize.ts viewportContainmentRule), and :root containment makes
-// <html> the containing block for our viewport-fixed background/nav/parallax
-// (the "orbs vanished" bug). Scoping the container to .czap-vp is the whole
-// point — so the manifest gives us identity + KV keying, our compile gives the
-// scoped CSS. [Upstream finding: @quantize needs a container-target option.]
-//
-// CACHE IDENTITY: the middleware keys KV by the single `boundary` content
-// address (heroLayout → fnv1a:xxxx), but our compile() emits CSS for ALL the
-// layout boundaries together (hero + grid-3 + split-2). So changing or adding
-// ANY OTHER boundary leaves heroLayout's address — and the KV key — unchanged,
-// and the edge keeps serving stale CSS (the "never-stale" invariant assumes the
-// keyed boundary's content covers the whole compiled output; with a bundled
-// multi-boundary compile() it doesn't). We restore the invariant by folding a
-// hash of the FULL compiled CSS into the KV `prefix`: any boundary change mints
-// a fresh keyspace, orphaning the old keys (reclaimed by `ttl`).
-// [Upstream finding: content-address should cover the entire compile() output,
-//  not just the one keyed boundary — or expose a `cacheKey`/content-salt knob.]
-const layoutCss = compileLayoutCss()
-function fnv1a(s: string): string {
-  let h = 0x811c9dc5
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i)
-    h = Math.imul(h, 0x01000193)
-  }
-  return (h >>> 0).toString(16).padStart(8, '0')
-}
-
+// Layout CSS is authored per boundary (src/lib/layout-css.ts) and cached with
+// the MULTI-BOUNDARY form: each boundary is keyed by its own content address ×
+// tier, so a change to any one invalidates only its key — no cross-boundary
+// staleness, and the fnv1a content-salt `prefix` workaround is retired. The
+// shared compile() callback branches on `context.boundaryName` to return that
+// boundary's slice. (.czap-vp containment stays hand-authored + emitted once by
+// LayoutStyles — @quantize's auto-emit still targets :root with no opt-out
+// until `quantize.container` is adopted; tracked as its own pass.)
 const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
@@ -81,10 +59,9 @@ function markdownForAgents(context: any, url: URL): Response | null {
 
 const czapHandler = cloudflareMiddleware({
   manifest: boundaries,
-  boundary: 'heroLayout',
-  prefix: `layout-${fnv1a(layoutCss)}-`,
-  compile: () => ({
-    css: layoutCss,
+  boundary: ['heroLayout', 'cardGrid', 'splitLayout'],
+  compile: (context) => ({
+    css: layoutCssFor(context.boundaryName ?? ''),
     propertyRegistrations: '',
     containerQueries: '',
   }),

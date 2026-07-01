@@ -44,16 +44,31 @@ const splitGrid = Style.make({
   },
 })
 
-// The query container lives on a full-width wrapper (.czap-vp) that excludes
-// the fixed background/nav/parallax — container-type would otherwise become
-// their containing block and break `position: fixed` (the orbs vanished).
-// Full-width + no padding ⇒ container width == viewport width, so the
-// @container thresholds match the v2 viewport breakpoints exactly.
+// Per-boundary layout CSS, keyed by manifest export name. The edge cache keys
+// each boundary by its OWN content address (src/middleware.ts, multi-boundary
+// form), so a change to any one boundary invalidates only its key — no shared
+// content-salt needed (this retires the fnv1a `prefix` workaround).
+const BOUNDARY_LAYOUT: Record<string, () => string> = {
+  heroLayout: () => layout(heroGrid, 'hero-grid', 'grid-template-columns: minmax(0, 1fr);'),
+  cardGrid: () => layout(cardGrid3, 'grid-3', 'grid-template-columns: minmax(0, 1fr);'),
+  splitLayout: () => layout(splitGrid, 'split-2', 'grid-template-columns: minmax(0, 1fr);'),
+}
+
+// The query container lives on a full-width wrapper (.czap-vp) that excludes the
+// fixed background/nav/parallax — container-type on :root would make <html>
+// their containing block and break `position: fixed` (the orbs vanished). It's
+// static + boundary-invariant, so it lives OUTSIDE the per-boundary cache
+// (LayoutStyles emits it once). Full-width + no padding ⇒ container width ==
+// viewport width, so the @container thresholds match the viewport breakpoints.
+export const CONTAINER_RULE = '.czap-vp { container-name: viewport-width; container-type: inline-size; }'
+
+// One boundary's slice — the edge compile() callback, keyed by boundary name.
+export function layoutCssFor(boundaryName: string): string {
+  return BOUNDARY_LAYOUT[boundaryName]?.() ?? ''
+}
+
+// All layout boundaries concatenated — the inline fallback (dev / cache miss /
+// non-edge). Excludes CONTAINER_RULE (LayoutStyles emits that once, always).
 export function compileLayoutCss(): string {
-  return [
-    '.czap-vp { container-name: viewport-width; container-type: inline-size; }',
-    layout(heroGrid, 'hero-grid', 'grid-template-columns: minmax(0, 1fr);'),
-    layout(cardGrid3, 'grid-3', 'grid-template-columns: minmax(0, 1fr);'),
-    layout(splitGrid, 'split-2', 'grid-template-columns: minmax(0, 1fr);'),
-  ].join('\n')
+  return Object.values(BOUNDARY_LAYOUT).map((f) => f()).join('\n')
 }
