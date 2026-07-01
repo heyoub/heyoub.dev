@@ -1,6 +1,5 @@
 import { cloudflareMiddleware } from '@czap/cloudflare'
 import { boundaries } from 'virtual:czap/boundaries'
-import { layoutCssFor } from './lib/layout-css'
 // The same llms.txt served statically at /llms.txt, inlined at build time so
 // markdown content-negotiation needs no runtime ASSETS binding (one source).
 import llmsMarkdown from '../public/llms.txt?raw'
@@ -15,14 +14,15 @@ import llmsMarkdown from '../public/llms.txt?raw'
 // (`virtual:czap/boundaries`, keyed by export name) instead of hand-typed —
 // `binding` defaults to CZAP_BOUNDARY_CACHE so it's dropped too.
 //
-// Layout CSS is authored per boundary (src/lib/layout-css.ts) and cached with
-// the MULTI-BOUNDARY form: each boundary is keyed by its own content address ×
-// tier, so a change to any one invalidates only its key — no cross-boundary
-// staleness, and the fnv1a content-salt `prefix` workaround is retired. The
-// shared compile() callback branches on `context.boundaryName` to return that
-// boundary's slice. (.czap-vp containment stays hand-authored + emitted once by
-// LayoutStyles — @quantize's auto-emit still targets :root with no opt-out
-// until `quantize.container` is adopted; tracked as its own pass.)
+// Layout is authored as @quantize convention CSS (src/styles/layout.quantize.css):
+// the @czap/vite plugin compiles it to static @container queries in the page
+// bundle (driving layout client-side against .czap-vp) AND per-tier precompiled
+// outputs in virtual:czap/boundaries. The middleware serves those precompiled
+// outputs per boundary — NO compile() callback (the worker bundle stays
+// compiler-free), retiring the hand-compiled Style.make + regex-scrape + fnv1a
+// salt of the old layout-css.ts. `quantize.container: '.czap-vp'` (astro.config)
+// keeps containment off :root, so it never makes <html> the containing block for
+// the fixed orb bg/nav (finding #7) — framework-native now, not hand-authored.
 const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
@@ -60,11 +60,6 @@ function markdownForAgents(context: any, url: URL): Response | null {
 const czapHandler = cloudflareMiddleware({
   manifest: boundaries,
   boundary: ['heroLayout', 'cardGrid', 'splitLayout'],
-  compile: (context) => ({
-    css: layoutCssFor(context.boundaryName ?? ''),
-    propertyRegistrations: '',
-    containerQueries: '',
-  }),
   ttl: 60 * 60 * 24 * 30, // 30 days — orphaned keyspaces from old builds get reclaimed
   detect: true,
   workers: { enabled: true },

@@ -10,7 +10,7 @@ const {
 } = Astro.props
 
 import TokenStyles from '@components/TokenStyles.astro'
-import LayoutStyles from '@components/LayoutStyles.astro'
+import '../styles/layout.quantize.css' // @quantize layout regimes → static @container queries (.czap-vp)
 import DisplayFidelity from '@components/DisplayFidelity.astro'
 import RenderBadge from '@components/RenderBadge.astro'
 import WebMCP from '@components/WebMCP.astro'
@@ -212,8 +212,8 @@ const czapTier = Astro.locals.czap?.tiers
 
     <!-- Brand palette, cast from LiteShip Tokens (one definition → CSS vars) -->
     <TokenStyles />
-    <!-- Responsive layout, driven by LiteShip boundaries → @container CSS -->
-    <LayoutStyles />
+    <!-- Responsive layout: @quantize convention CSS (src/styles/layout.quantize.css)
+         → static @container queries in the bundle; no runtime injection. -->
     <!-- Wide-gamut (P3/rec2020) + HDR palette, gated by display capability -->
     <DisplayFidelity />
 

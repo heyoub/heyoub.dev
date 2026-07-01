@@ -4,7 +4,7 @@ import { Boundary } from '@czap/core'
 // shader's u_state from one definition.
 // `split` at 1024 matches the v2 `lg:` two-column switch exactly; `cinematic`
 // at 1440 is room to enhance on very wide screens. Compiled to @container CSS
-// (HeroGridStyle.astro) so it drives layout with zero first-paint shift, and
+// (src/styles/layout.quantize.css) so it drives layout with zero first-paint shift, and
 // also feeds the shader's u_state.
 export const heroLayout = Boundary.make({
   input: 'viewport.width',
@@ -17,7 +17,7 @@ export const heroLayout = Boundary.make({
 })
 
 // The card-grid regime (thesis stats, services): one column on phones, three
-// from the `md` breakpoint up. Compiled to @container CSS (LayoutStyles).
+// from the `md` breakpoint up. Compiled to @container CSS (src/styles/layout.quantize.css).
 export const cardGrid = Boundary.make({
   input: 'viewport.width',
   at: [
@@ -29,7 +29,7 @@ export const cardGrid = Boundary.make({
 
 // The two-column split regime (the gallery's path / principle layout): one
 // column on phones, two from 1024 up — the same threshold as the hero's
-// `split`. Authored as a boundary (compiled to @container CSS via LayoutStyles)
+// `split`. Authored as a boundary (compiled to @container CSS via layout.quantize.css)
 // rather than a hand-written `lg:` media query, so the gallery's layout is
 // sourced from LiteShip like every other regime on the page.
 export const splitLayout = Boundary.make({

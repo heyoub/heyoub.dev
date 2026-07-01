@@ -1,0 +1,38 @@
+/* Layout regimes as @quantize convention CSS — compiled at build to native
+   @container queries against .czap-vp (via quantize.container in astro.config)
+   PLUS per-tier precompiled outputs in virtual:czap/boundaries that the edge
+   serves from Workers KV. Replaces the hand-compiled Style.make + regex-scrape
+   of the old src/lib/layout-css.ts. State names match src/lib/boundaries.ts.
+
+   Base rule FIRST so the @quantize @container overrides (emitted after) win
+   when their viewport threshold matches. Nested per-selector form targets the
+   grid element directly — no var-inheritance / DOM-nesting dependency. */
+.czap-hero-grid,
+.czap-grid-3,
+.czap-split-2 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* stylelint-disable -- @quantize is czap's custom at-rule; @czap/vite compiles
+   it away at build, so linters never see it in the emitted CSS. */
+@quantize heroLayout {
+  split {
+    .czap-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  }
+  cinematic {
+    .czap-hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
+  }
+}
+
+@quantize cardGrid {
+  triple {
+    .czap-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+}
+
+@quantize splitLayout {
+  two {
+    .czap-split-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  }
+}
+/* stylelint-enable */

@@ -35,6 +35,15 @@ export default defineConfig({
       // Rust kernels to window.__CZAP_WASM__ — Boundary.evaluateBatch routes
       // through them. Falls back to the (bit-identical) JS kernels if absent.
       wasm: { enabled: true },
+      // @quantize convention CSS (src/styles/layout.quantize.css): retarget the
+      // auto-emitted viewport @container containment off :root onto .czap-vp —
+      // :root can't be size-contained here (it'd make <html> the containing block
+      // for the fixed orb bg/nav/parallax = the "orbs vanished" bug). The plugin
+      // now owns the .czap-vp container rule; finding-#7 guard, framework-native.
+      vite: {
+        quantize: { container: '.czap-vp' },
+        dirs: { boundary: 'src/lib', style: 'src/styles' },
+      },
     }),
     sitemap(),
   ],
