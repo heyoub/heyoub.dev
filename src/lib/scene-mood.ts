@@ -13,7 +13,6 @@
 //     uniform, so it never fights the eased mood values)
 import { Q, AnimatedQuantizer } from '@czap/quantizer'
 import { Millis, Easing, Scheduler, type MotionTier } from '@czap/core'
-import { driveUniformFromSignal } from '@czap/astro/runtime'
 import { Effect, Stream, Fiber } from 'effect'
 import { sceneMood } from './boundaries'
 import { MOOD_GLSL, MOOD_CSS, MOOD_STATES, type MoodState } from '@/data/scene-moods'
@@ -125,20 +124,6 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
   const seedTimers = [setTimeout(seed, 300), setTimeout(seed, 900)]
   canvas.addEventListener('czap:gpu-ready', seed)
 
-  // Continuous scroll → shader uniform is now the framework's own
-  // driveUniformFromSignal (0.4.0): it observes the canonical scroll.progress
-  // signal — served live by the boundary runtime since 0.5.0 — and writes the
-  // uniform each frame, retiring the hand-rolled scrollY math + manual
-  // czap:uniform-update dispatch (and its 0..1-vs-0..100 footgun). One driver
-  // per cast: u_scroll (GLSL) and scroll (WGSL); each is a silent no-op on the
-  // shader that lacks that uniform.
-  const stopUniform = [
-    driveUniformFromSignal(canvas, 'scroll.progress', 'u_scroll'),
-    driveUniformFromSignal(canvas, 'scroll.progress', 'scroll'),
-  ]
-
-  // onScroll now only feeds the sceneMood quantizer (the eased mood rail); the
-  // continuous uniform is owned by the drivers above.
   let pending = false
   const onScroll = (): void => {
     if (pending) return
@@ -147,7 +132,8 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
       pending = false
       const max = root.scrollHeight - window.innerHeight
       lastScroll = max > 0 ? window.scrollY / max : 0
-      evaluate?.(lastScroll) // scroll.progress 0..1 → mood crossings
+      evaluate?.(lastScroll) // boundary input is scroll.progress 0..1 (0.3.0+)
+      dispatch({ u_scroll: lastScroll }, { scroll: lastScroll })
     })
   }
   window.addEventListener('scroll', onScroll, { passive: true })
@@ -160,7 +146,6 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
       canvas.removeEventListener('czap:gpu-ready', onScroll)
       canvas.removeEventListener('czap:gpu-ready', seed)
       seedTimers.forEach(clearTimeout)
-      stopUniform.forEach((stop) => stop())
       Effect.runFork(Fiber.interrupt(fiber))
     },
   }
