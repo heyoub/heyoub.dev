@@ -50,12 +50,12 @@ import { coreThesisContent as t, stackPyramid } from '@/data/content'
           {stackPyramid.map((layer, i) => (
             <div class="absolute w-full" style={`top:${(i / stackPyramid.length) * 100}%`}>
               <div class="absolute right-full mr-4 flex items-center gap-2" style={`left:${i * 8}%; transform: translateX(-100%)`}>
-                <span class="font-mono text-[10px] tracking-[0.2em] text-accent/50">{layer.label}</span>
+                <span class="font-mono text-[0.625rem] tracking-[0.2em] text-accent/50">{layer.label}</span>
                 <span class="w-4 h-px bg-accent/20"></span>
               </div>
               <div class="absolute left-full ml-4 flex items-center gap-2" style={`right:${i * 8}%`}>
                 <span class="w-4 h-px bg-white/10"></span>
-                <span class="font-mono text-[9px] tracking-[0.1em] text-text-muted/40 whitespace-nowrap">{layer.hint}</span>
+                <span class="font-mono text-[0.5625rem] tracking-[0.1em] text-text-muted/40 whitespace-nowrap">{layer.hint}</span>
               </div>
             </div>
           ))}
@@ -71,12 +71,12 @@ import { coreThesisContent as t, stackPyramid } from '@/data/content'
               ))}
             </div>
           ))}
-          <div class="mt-1"><span class="font-mono text-[10px] text-accent/30">▼</span></div>
+          <div class="mt-1"><span class="font-mono text-[0.625rem] text-accent/30">▼</span></div>
         </div>
 
         <div class="lg:hidden flex justify-center gap-4 mt-6 flex-wrap">
           {stackPyramid.map((layer) => (
-            <span class="font-mono text-[8px] tracking-[0.15em] text-accent/30">{layer.label}</span>
+            <span class="font-mono text-[0.5rem] tracking-[0.15em] text-accent/30">{layer.label}</span>
           ))}
         </div>
       </div>
