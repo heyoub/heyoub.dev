@@ -45,8 +45,10 @@ export const splitLayout = Boundary.make({
 // moods the WebGL background moves through as you read the page. Fed through
 // Q.from(sceneMood).outputs({ glsl, css }) + AnimatedQuantizer (scene-mood.ts),
 // so one boundary drives shader uniforms AND CSS vars with eased crossings.
-// The directive runtime can't read scroll signals itself (viewport.* only),
-// so the scene chunk feeds live.evaluate() — quantizer is signal-agnostic.
+// The runtime serves scroll.progress live (0.5.0) and the continuous shader
+// uniform rides it via driveUniformFromSignal; the scene chunk still feeds
+// live.evaluate() only to drive the AnimatedQuantizer's eased MOOD crossings
+// (the animated quantizer samples a curve, not a signal — so it's hand-fed).
 export const sceneMood = Boundary.make({
   input: 'scroll.progress',
   at: [
