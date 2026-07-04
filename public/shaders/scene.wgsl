@@ -3,15 +3,20 @@
 // in place); GLSL is the universal fallback so non-WebGPU devices never see the
 // black-canvas WGSL fallback.
 //
-// The runtime parses this struct at @group(0) @binding(0), one vec4f / 4 slots:
-// state_index (slot 0) + three authored scalars. No auto u_time/u_resolution on
-// the WGSL path, so the RAF bridge streams `time` + `scroll` through the struct
-// each frame (scene-mood.ts). Entry points must be vs_main / fs_main.
+// The runtime parses this struct at @group(0) @binding(0) and lays it out by WGSL
+// alignment rules (0.6.0 vector uniforms): the four scalars pack into one vec4f,
+// then `u_resolution` (vec2, 8-byte aligned) lands at offset 16. Two fields carry
+// the framework's STANDARD auto-feed — a field literally named `u_time` /
+// `u_resolution` is written every frame by the runtime (monotonic seconds /
+// canvas [w,h]), at GLSL parity. `state_index` / `emissive` / `scroll` are the
+// signal fields, hand-fed on boundary crossings via detail.wgsl (scene-mood.ts).
+// Entry points must be vs_main / fs_main.
 struct SceneState {
-  state_index: u32,  // mood index 0..3
-  emissive: f32,     // glow strength (mood-blended)
-  scroll: f32,       // scroll progress 0..1
-  time: f32,         // seconds since mount (RAF-fed)
+  state_index: u32,          // mood index 0..3        (signal — detail.wgsl)
+  emissive: f32,             // glow strength, blended  (signal — detail.wgsl)
+  scroll: f32,               // scroll progress 0..1    (signal — detail.wgsl)
+  u_time: f32,               // seconds since mount     (auto-fed every frame)
+  u_resolution: vec2<f32>,   // canvas [w, h] in px     (auto-fed every frame)
 }
 @group(0) @binding(0) var<uniform> scene: SceneState;
 
@@ -26,10 +31,16 @@ fn vs_main(@builtin(vertex_index) i: u32) -> @builtin(position) vec4<f32> {
 
 @fragment
 fn fs_main(@builtin(position) frag: vec4<f32>) -> @location(0) vec4<f32> {
-  // No resolution uniform on the WGSL path; a fixed scale keeps the flow field
-  // device-independent enough for a background.
-  let uv = frag.xy * vec2<f32>(0.0016, 0.0016);
-  let t = scene.time * 0.1;
+  // Aspect-correct UV: normalize the fragment position by the canvas HEIGHT
+  // (guarded against a 0 before the first resolution feed) so the flow field is
+  // isotropic — glows stay round on any viewport instead of stretching with the
+  // canvas aspect. FIELD_SCALE reproduces the density of the old fixed 0.0016
+  // px-scale at a ~1080px-tall canvas, now resolution-aware. This is the GLSL
+  // parity the WGSL path lacked while u_resolution was unavailable.
+  let res = max(scene.u_resolution, vec2<f32>(1.0, 1.0));
+  let FIELD_SCALE = 1.73;
+  let uv = frag.xy / res.y * FIELD_SCALE;
+  let t = scene.u_time * 0.1;
 
   let cyan = vec3<f32>(0.024, 0.714, 0.831);
   let violet = vec3<f32>(0.545, 0.361, 0.965);
