@@ -46,28 +46,51 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
 
 {show && (
   /* The net-new WGSL/WebGPU cast is opt-in via ?cast=wgsl. GLSL is the default
-     everywhere: WGSL's uniform buffer is 4 slots with no room for resolution,
-     so it can't run the aspect-correct raymarch the GLSL cast does — GLSL is
-     the richer visual; WGSL stays a demonstrable artifact on WebGPU devices.
-     Runs at parse time (is:inline) so attributes flip before the gpu directive
-     boots. (preferWebGPU integration config is an upstream no-op.) */
+     everywhere; WGSL now carries a real vec2 u_resolution (0.6.0 vector uniforms)
+     so it runs the same aspect-correct field the GLSL cast does — but it's still
+     the demo path: it only engages where WebGPU can ACTUALLY boot a device.
+     Runs at parse time (is:inline) so attributes settle before the gpu directive
+     (which boots behind a dynamic import) reads them. (preferWebGPU integration
+     config is an upstream no-op.) */
   <script is:inline define:vars={{ wgslIntegrity }}>
     (function () {
       var search = location.search
       var canvas = document.querySelector('.scene-canvas')
       if (!canvas) return
-      // ?cast=wgsl — opt into the net-new WGSL/WebGPU path. Swap the SRI pin too,
-      // or the gpu directive refuses the wgsl shader (0.4.0 secure-by-default).
-      if (('gpu' in navigator) && /[?&]cast=wgsl/.test(search)) {
+
+      // ?gl=force — flip the documented data-czap-gpu-force hatch so the shader
+      // also renders on sub-reactive devices (e.g. demoing on a weak GPU that
+      // tiers 'styled'). Synchronous; the gpu directive itself otherwise defers
+      // on a low provisional tier and re-boots on czap:detect-ready (0.2.3, F2).
+      if (/[?&]gl=force/.test(search)) canvas.setAttribute('data-czap-gpu-force', '')
+
+      // ?cast=wgsl — opt into the WGSL/WebGPU cast, but PROBE first. `'gpu' in
+      // navigator` only means the API is EXPOSED, not that a device exists: on
+      // Linux Chromium especially, navigator.gpu is present while requestAdapter()
+      // returns null (no working backend). Swapping optimistically there forces
+      // the WGSL shader with no device → a black canvas, because we'd have swapped
+      // AWAY from the GLSL fallback. So request a real adapter+device and only
+      // pin WGSL when one actually boots; otherwise keep the GLSL cast (the richer
+      // visual anyway), so the link degrades to the orbs instead of going black.
+      // The probe (a local call started at parse) resolves before the gpu chunk
+      // finishes importing, so the swap wins the boot race on capable devices.
+      if (!/[?&]cast=wgsl/.test(search) || !('gpu' in navigator)) return
+      ;(async function () {
+        try {
+          var adapter = await navigator.gpu.requestAdapter()
+          if (!adapter) return
+          var device = await adapter.requestDevice()
+          if (!device) return
+          device.destroy() // throwaway capability probe; the directive makes its own
+        } catch (e) {
+          return // no working WebGPU — keep GLSL, never black
+        }
         canvas.setAttribute('data-czap-shader-type', 'wgsl')
         canvas.setAttribute('data-czap-shader-src', '/shaders/scene.wgsl')
+        // Swap the SRI pin too, or the gpu directive refuses the wgsl shader
+        // (0.4.0 secure-by-default).
         canvas.setAttribute('data-czap-shader-integrity', wgslIntegrity)
-      }
-      // The default boots idiomatically (the gpu directive defers on a low tier
-      // and re-boots itself on czap:detect-ready — 0.2.3, finding F2). ?gl=force
-      // flips the documented data-czap-gpu-force hatch to also render on
-      // sub-reactive devices (e.g. demoing on a weak GPU that tiers 'styled').
-      if (/[?&]gl=force/.test(search)) canvas.setAttribute('data-czap-gpu-force', '')
+      })()
     })()
   </script>
 )}
