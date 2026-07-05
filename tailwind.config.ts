@@ -1,5 +1,10 @@
 import type { Config } from 'tailwindcss'
 import { paletteDark } from './src/lib/palette'
+// md/lg screens from the SINGLE breakpoint source (src/lib/breakpoints.js) — the
+// same file src/lib/boundaries.ts reads — so Tailwind's md:/lg: @media and the
+// @quantize @container queries can't drift. theme.extend.screens MERGES with
+// Tailwind's default scale (sm/xl/2xl survive).
+import { screens } from './src/lib/breakpoints.js'
 
 // Design tokens for the utility layer. The brand palette is NOT restated here —
 // it derives from the one source (src/lib/palette.ts, the same map that feeds the
@@ -9,6 +14,7 @@ export default {
   content: ['./src/**/*.{astro,js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      screens,
       colors: {
         'bg-primary': paletteDark['bg-primary'],
         'bg-secondary': paletteDark['bg-secondary'],

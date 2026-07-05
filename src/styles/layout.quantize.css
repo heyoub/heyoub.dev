@@ -21,26 +21,113 @@
 .czap-grid-3 { gap: 0.75rem; }
 .czap-split-2 { gap: 2rem; }
 
+/* Hero — every responsive utility folded off Tailwind so the hero switches
+   through LiteShip @container in lockstep like the grids (retires all 17 md:/lg:
+   on Hero). Column geometry rides heroLayout.split (1024); tablet chrome rides
+   heroChrome.expanded (768). Base values = the unprefixed Tailwind classes. */
+.czap-hero-grid { gap: 2rem; padding-block: 6rem; }                    /* gap-8, py-24 */
+.hero-copy { max-width: 36rem; }                                       /* max-w-xl */
+.hero-figure { order: -9999; margin-top: 4rem; }                       /* order-first, mt-16 */
+.hero-copy h1 { margin-bottom: 0.75rem; }                             /* mb-3 */
+.hero-eyebrow { margin-bottom: 1.5rem; }                              /* mb-6 */
+.hero-copy > p { margin-bottom: 1.5rem; }                             /* mb-6 (direct child; the deeper quote <p> is untouched) */
+.hero-hint { bottom: 1.5rem; left: 50%; transform: translateX(-50%); } /* bottom-6, left-1/2, -translate-x-1/2 */
+.hint-inner { flex-direction: column; gap: 0.5rem; }                  /* flex-col, gap-2 */
+/* w-px, h-8, bg-gradient-to-b — gradient STOPS stay on Tailwind (from-accent/50
+   via-accent to-transparent → --tw-gradient-stops); only width/height/direction move. */
+.hint-line { width: 1px; height: 2rem; background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); }
+.hint-text { display: none; }                                        /* hidden */
+
+/* CoreThesis + OpenTo card-grid chrome, folded off `md:` → cardGrid.triple (768). */
+.thesis-hook { margin-bottom: 3rem; }        /* mb-12 */
+.czap-grid-3 > * { padding: 1rem; }          /* p-4 stat/service cards (both grids are card-only) */
+.thesis-truth { margin-block: 2rem; }        /* my-8 */
+.thesis-stack { padding-top: 1.5rem; }       /* pt-6 */
+.pyramid-row { gap: 0.375rem; }              /* gap-1.5 */
+.opento-stack { gap: 2rem; }                 /* gap-8 */
+.opento-roles { gap: 0.5rem; }               /* gap-2 */
+.opento-role { padding: 0.625rem 1rem; }     /* py-2.5 px-4 */
+/* Display swaps folded off `lg:` → splitLayout.two (1024, unbounded above — the
+   pyramid labels' `lg:` was @media ≥1024, so splitLayout.two is the right home,
+   NOT heroLayout.split which ends at 1440). */
+.pyramid-labels { display: none; }           /* hidden */
+.pyramid-labels-mobile { display: flex; }    /* flex */
+.gallery-card { padding: 1.5rem; }           /* p-6 */
+/* ContactDecompile editor gutter (folded off md:) → editorGutter.gutter (768). */
+.czap-editor-gutter { display: none; }       /* hidden */
+.code-block { padding: 1rem; }               /* py-4 px-4 (the pl-20 indent rides editorGutter) */
+.czap-editor-indent { padding-left: 2rem; padding-right: 2rem; } /* px-8 base (pl rides editorGutter; moved off Tailwind so the @container override wins the specificity tie) */
+/* VideoInterlude glass card (folded off md:) → cardGrid.triple (768). */
+.vi-glass-card { padding: 2.5rem 2rem; }     /* py-10 px-8 */
+
 /* stylelint-disable -- @quantize is czap's custom at-rule; @czap/vite compiles
    it away at build, so linters never see it in the emitted CSS. */
 @quantize heroLayout {
   split {
     .czap-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .hero-copy { max-width: none; }                /* lg:max-w-none */
+    .hero-figure { order: 9999; margin-top: 0; }   /* lg:order-last, lg:mt-0 */
   }
+  /* cinematic (≥1440) must REPEAT the split column rules: heroLayout's `split`
+     state compiles to `1024 ≤ w < 1440`, so without this the hero's `lg:`
+     column layout (which was `@media ≥1024`, unbounded) would revert to the
+     stacked base above 1440. Same reason P3 routed the grids' `lg:` to
+     splitLayout.two (unbounded) instead of heroLayout.split. */
   cinematic {
     .czap-hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
+    .hero-copy { max-width: none; }
+    .hero-figure { order: 9999; margin-top: 0; }
+  }
+}
+
+/* The hero's tablet-chrome regime (768) — section gap/padding + the whole
+   scroll-cue cluster. Separate from heroLayout so heroLayout's state enum stays
+   stacked/split/cinematic (shader u_state contract). */
+@quantize heroChrome {
+  expanded {
+    .czap-hero-grid { gap: 4rem; padding-block: 0; }         /* md:gap-16, md:py-0 */
+    .hero-copy h1 { margin-bottom: 1rem; }                   /* md:mb-4 */
+    .hero-eyebrow { margin-bottom: 2rem; }                   /* md:mb-8 */
+    .hero-copy > p { margin-bottom: 2rem; }                  /* md:mb-8 */
+    .hero-hint { bottom: 3rem; left: 8vw; transform: translateX(0); } /* md:bottom-12, md:left-[8vw], md:translate-x-0 */
+    .hint-inner { flex-direction: row; gap: 1rem; }          /* md:flex-row, md:gap-4 */
+    .hint-line { width: 3rem; height: 1px; background-image: linear-gradient(to right, var(--tw-gradient-stops)); } /* md:w-12, md:h-px, md:bg-gradient-to-r */
+    .hint-text { display: inline; }                          /* md:inline */
   }
 }
 
 @quantize cardGrid {
   triple {
     .czap-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+    .thesis-hook { margin-bottom: 4rem; }        /* md:mb-16 */
+    .czap-grid-3 > * { padding: 1.25rem; }       /* md:p-5 */
+    .thesis-truth { margin-block: 2.5rem; }      /* md:my-10 */
+    .thesis-stack { padding-top: 2rem; }         /* md:pt-8 */
+    .pyramid-row { gap: 0.5rem; }                /* md:gap-2 */
+    .opento-stack { gap: 3rem; }                 /* md:gap-12 */
+    .opento-roles { gap: 0.75rem; }              /* md:gap-3 */
+    .opento-role { padding: 0.75rem 1.25rem; }   /* md:py-3 md:px-5 */
+    .vi-glass-card { padding: 3.5rem 3rem; }     /* md:py-14 md:px-12 */
   }
 }
 
 @quantize splitLayout {
   two {
     .czap-split-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; }
+    .pyramid-labels { display: block; }          /* lg:block */
+    .pyramid-labels-mobile { display: none; }    /* lg:hidden */
+    .gallery-card { padding: 2.5rem; }           /* lg:p-10 */
+  }
+}
+
+/* The editor-footer gutter regime — the <footer> carries `czap-vp` so these
+   @container rules resolve against it. All three switch atomically at 768: the
+   line-number gutter appears and the code + status bar indent 5rem to clear it. */
+@quantize editorGutter {
+  gutter {
+    .czap-editor-gutter { display: block; }               /* md:block */
+    .code-block { padding: 1.5rem 2rem 1.5rem 5rem; }     /* md:py-6, md:px-8 (right), md:pl-20 (left) */
+    .czap-editor-indent { padding-left: 5rem; }           /* md:pl-20 (overrides Tailwind px-8's 2rem) */
   }
 }
 /* stylelint-enable */

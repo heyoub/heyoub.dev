@@ -3,8 +3,10 @@ import { satelliteAttrs, resolveInitialStateFallback } from '@czap/astro'
 import { heroLayout } from '@/lib/boundaries'
 import { heroContent as h } from '@/data/content'
 
-// Same responsive layout as v2 (lg: grid), with the heroLayout boundary
-// carried on the section so LiteShip drives the named state underneath.
+// The hero's ENTIRE responsive layer is LiteShip @quantize now — heroLayout
+// drives the columns (split/cinematic), heroChrome the tablet chrome (768) — so
+// there is zero Tailwind md:/lg: on the hero (src/styles/layout.quantize.css).
+// The heroLayout boundary is still carried on the section so it also feeds u_state.
 // Merge the satellite class into ours; spread only the data-czap-* attrs so
 // the explicit class (with all the layout utilities) isn't clobbered.
 // directive: 'worker' → since 0.1.5 the boot scanner activates the worker
@@ -18,18 +20,18 @@ const { class: satClass, ...satData } = satelliteAttrs({
 })
 ---
 
-<section id="hero-satellite" class={`${satClass} czap-hero-grid relative min-h-svh grid items-center px-[8vw] gap-8 md:gap-16 py-24 md:py-0 overflow-hidden`} {...satData}>
+<section id="hero-satellite" class={`${satClass} czap-hero-grid relative min-h-svh grid items-center px-[8vw] overflow-hidden`} {...satData}>
   <!-- Content -->
-  <div class="hero-content max-w-xl lg:max-w-none">
-    <h1 class="font-serif text-[clamp(2.5rem,8vw,7rem)] font-normal leading-[0.95] tracking-tight mb-3 md:mb-4 animate-fadeInUp" style="animation-delay:0.4s">
+  <div class="hero-content hero-copy">
+    <h1 class="font-serif text-[clamp(2.5rem,8vw,7rem)] font-normal leading-[0.95] tracking-tight animate-fadeInUp" style="animation-delay:0.4s">
       {h.name.first} <span class="italic text-text-secondary">{h.name.last}</span>
     </h1>
 
-    <div class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-[0.3em] uppercase text-accent mb-6 md:mb-8 animate-fadeInUp" style="animation-delay:0.2s">
+    <div class="hero-eyebrow font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-[0.3em] uppercase text-accent animate-fadeInUp" style="animation-delay:0.2s">
       {h.label}
     </div>
 
-    <p class="text-[clamp(1rem,2.5vw,1.25rem)] font-light text-text-secondary leading-relaxed mb-6 md:mb-8 animate-fadeInUp" style="animation-delay:0.6s">
+    <p class="text-[clamp(1rem,2.5vw,1.25rem)] font-light text-text-secondary leading-relaxed animate-fadeInUp" style="animation-delay:0.6s">
       {h.tagline.before}{' '}
       <strong class="text-text-primary font-medium">{h.tagline.emphasis}</strong>
       {h.tagline.after}
@@ -62,7 +64,7 @@ const { class: satClass, ...satData } = satelliteAttrs({
   </div>
 
   <!-- Photo -->
-  <div class="hero-content flex justify-center items-center order-first lg:order-last mt-16 lg:mt-0 animate-fadeInUp" style="animation-delay:0.5s">
+  <div class="hero-content hero-figure flex justify-center items-center animate-fadeInUp" style="animation-delay:0.5s">
     <div class="w-full max-w-[380px] aspect-[380/480] bg-gradient-to-br from-bg-tertiary to-bg-secondary border border-white/[0.08] relative overflow-hidden">
       <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-500 to-purple-500"></div>
       <picture class="contents">
@@ -74,10 +76,10 @@ const { class: satClass, ...satData } = satelliteAttrs({
   </div>
 
   <!-- Scroll indicator -->
-  <div class="hero-hint absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 md:left-[8vw] md:translate-x-0 font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-widest text-text-muted" aria-hidden="true">
-    <div class="hint-inner flex flex-col md:flex-row items-center gap-2 md:gap-4">
-      <div class="w-px md:w-12 h-8 md:h-px bg-gradient-to-b md:bg-gradient-to-r from-accent/50 via-accent to-transparent hint-line"></div>
-      <span class="hint-text hidden md:inline">{h.scrollHint}</span>
+  <div class="hero-hint absolute font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-widest text-text-muted" aria-hidden="true">
+    <div class="hint-inner flex items-center">
+      <div class="from-accent/50 via-accent to-transparent hint-line"></div>
+      <span class="hint-text">{h.scrollHint}</span>
     </div>
   </div>
 </section>

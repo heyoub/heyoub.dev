@@ -9,7 +9,7 @@ const tabs = [
 ]
 ---
 
-<footer id="footer" class="bg-editor-bg border-t border-editor-border flex flex-col" data-reveal>
+<footer id="footer" class="czap-vp bg-editor-bg border-t border-editor-border flex flex-col" data-reveal>
   <!-- Tab bar -->
   <div role="presentation" class="flex justify-between items-center px-4 py-3 bg-editor-chrome border-b border-editor-border">
     <div class="flex gap-0 overflow-x-auto scrollbar-hide">
@@ -28,11 +28,11 @@ const tabs = [
 
   <!-- Code content -->
   <div class="flex-1 relative overflow-auto">
-    <div aria-hidden="true" class="hidden md:block absolute left-0 top-0 bottom-0 w-12 bg-editor-bg border-r border-editor-border py-6 pr-4">
+    <div aria-hidden="true" class="czap-editor-gutter absolute left-0 top-0 bottom-0 w-12 bg-editor-bg border-r border-editor-border py-6 pr-4">
       <div class="flex flex-col items-end font-mono text-xs text-editor-gray leading-relaxed" data-linenums></div>
     </div>
 
-    <div class="code-block py-4 md:py-6 px-4 md:px-8 md:pl-20 font-mono text-[clamp(0.7rem,1.5vw,0.875rem)] leading-relaxed">
+    <div class="code-block font-mono text-[clamp(0.7rem,1.5vw,0.875rem)] leading-relaxed">
       <!-- contact -->
       <div data-panel="contact">
         <p class="code-line"><span class="code-comment code-comment--with-slashes">{code.filename}</span></p>
@@ -107,7 +107,7 @@ const tabs = [
   </div>
 
   <!-- Status bar -->
-  <div role="status" class="flex justify-between items-center px-8 md:pl-20 py-3 bg-editor-chrome border-t border-editor-border">
+  <div role="status" class="czap-editor-indent flex justify-between items-center py-3 bg-editor-chrome border-t border-editor-border">
     <div class="flex items-center gap-3 text-editor-gray-light">
       <span class="w-2 h-2 rounded-full bg-green animate-pulse" aria-hidden="true"></span>
       <span class="font-mono text-xs">building</span>

@@ -1,4 +1,10 @@
 import { Boundary } from '@czap/core'
+// Single-sourced breakpoint thresholds (src/lib/breakpoints.js), shared with
+// tailwind.config.ts so the md/lg pixels live in exactly one place. The `.js`
+// extension is REQUIRED: the @czap/vite manifest collector imports this file via
+// raw Node ESM (boundary-manifest.js), which can't resolve an extensionless
+// relative import.
+import { breakpoints as bp } from './breakpoints.js'
 
 // The hero composition regime — drives the satellite layout AND the GPU
 // shader's u_state from one definition.
@@ -10,8 +16,8 @@ export const heroLayout = Boundary.make({
   input: 'viewport.width',
   at: [
     [0, 'stacked'],
-    [1024, 'split'],
-    [1440, 'cinematic'],
+    [bp.lg, 'split'],
+    [bp.xl, 'cinematic'],
   ] as const,
   hysteresis: 40,
 })
@@ -22,7 +28,7 @@ export const cardGrid = Boundary.make({
   input: 'viewport.width',
   at: [
     [0, 'one'],
-    [768, 'triple'],
+    [bp.md, 'triple'],
   ] as const,
   hysteresis: 32,
 })
@@ -36,9 +42,38 @@ export const splitLayout = Boundary.make({
   input: 'viewport.width',
   at: [
     [0, 'one'],
-    [1024, 'two'],
+    [bp.lg, 'two'],
   ] as const,
   hysteresis: 40,
+})
+
+// The hero's tablet-chrome regime — everything in the hero that flips at the `md`
+// (768) tablet threshold (section gap/padding + the whole scroll-cue cluster),
+// held SEPARATE from heroLayout so heroLayout's state enum stays stacked/split/
+// cinematic (it feeds the shader u_state contract). Same 768 as cardGrid, its own
+// boundary so the hero chrome is sourced from LiteShip and switches in lockstep
+// with @container width (not viewport). Compiled to @container CSS.
+export const heroChrome = Boundary.make({
+  input: 'viewport.width',
+  at: [
+    [0, 'compact'],
+    [bp.md, 'expanded'],
+  ] as const,
+  hysteresis: 32,
+})
+
+// The editor-footer gutter regime (ContactDecompile) — below `md` the line-number
+// gutter is hidden and the code sits flush; from 768 up the gutter appears and the
+// code + status bar indent to clear it. The three declarations must switch
+// ATOMICALLY on one crossing, so they live in a boundary (not three independent
+// utilities that could flip a scrollbar-width apart). Compiled to @container CSS.
+export const editorGutter = Boundary.make({
+  input: 'viewport.width',
+  at: [
+    [0, 'flush'],
+    [bp.md, 'gutter'],
+  ] as const,
+  hysteresis: 32,
 })
 
 // The scene-mood regime — quantizes scroll progress (0–100%) into the named
