@@ -12,6 +12,13 @@
     "location": "Philadelphia, PA",
     "timezone": "America/New_York",
     "availability": "accepting-projects",
+    "wikidata": "https://www.wikidata.org/wiki/Q140440561",
+    "organization": {
+      "name": "The Free Battery Factory",
+      "role": "Founder",
+      "url": "https://freebatteryfactory.com",
+      "wikidata": "https://www.wikidata.org/wiki/Q140440449"
+    },
     "contact": {
       "email": "hello@heyoub.dev",
       "calendar": "https://cal.com/eassa-ayoub-hf9yfh",

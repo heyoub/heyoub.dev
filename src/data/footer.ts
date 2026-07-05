@@ -65,7 +65,14 @@ export const contactConfig: ContactConfig = {
     building: true,
     available: true, // open for work as of 2026 (understated — not a banner)
     location: 'Philadelphia, PA',
-    year: new Date().getFullYear(),
+    // Lazy getter, NOT a plain `new Date().getFullYear()` value: on Cloudflare
+    // Workers the clock is frozen at epoch (1970) until the first request I/O,
+    // and this module is evaluated at isolate init — BEFORE any I/O — so a plain
+    // value renders "© 1970". A getter defers the read to render time (in-request),
+    // when the clock reflects the real date. See the SEO/AEO audit, 2026-07-05.
+    get year() {
+      return new Date().getFullYear()
+    },
   },
   code: {
     filename: 'contact.tsx',

@@ -147,10 +147,31 @@ const tierAttrs = Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), 
         "addressCountry": "US"
       },
       "sameAs": [
+        "https://www.wikidata.org/wiki/Q140440561",
         "https://linkedin.com/in/eassageorge",
         "https://github.com/heyoub",
         "https://cal.com/eassa-ayoub-hf9yfh"
-      ]
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "The Free Battery Factory",
+        "url": "https://freebatteryfactory.com",
+        "sameAs": "https://www.wikidata.org/wiki/Q140440449"
+      }
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data - ProfilePage (Google's type for a page about a person) -->
+    <script is:inline type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "@id": "https://heyoub.dev/#profilepage",
+      "url": "https://heyoub.dev",
+      "name": "Eassa Ayoub — Cognitive-First Systems",
+      "mainEntity": { "@id": "https://heyoub.dev/#person" },
+      "about": { "@id": "https://heyoub.dev/#person" },
+      "inLanguage": "en-US"
     }
     </script>
 
