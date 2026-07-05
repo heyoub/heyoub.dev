@@ -13,7 +13,7 @@
 //     uniform, so it never fights the eased mood values)
 import { Q, AnimatedQuantizer } from '@czap/quantizer'
 import { Millis, Easing, Scheduler, type MotionTier } from '@czap/core'
-import { driveUniformFromSignal } from '@czap/astro/runtime'
+import { driveUniformFromSignal, readSignalValue, attachSignalObserver } from '@czap/astro/runtime'
 import { Effect, Stream, Fiber } from 'effect'
 import { sceneMood } from './boundaries'
 import { MOOD_GLSL, MOOD_CSS, MOOD_STATES, type MoodState } from '@/data/scene-moods'
@@ -137,27 +137,24 @@ export function initSceneMood(canvas: HTMLElement): SceneMoodHandle {
     driveUniformFromSignal(canvas, 'scroll.progress', 'scroll'),
   ]
 
-  // onScroll now only feeds the sceneMood quantizer (the eased mood rail); the
-  // continuous uniform is owned by the drivers above.
-  let pending = false
-  const onScroll = (): void => {
-    if (pending) return
-    pending = true
-    requestAnimationFrame(() => {
-      pending = false
-      const max = root.scrollHeight - window.innerHeight
-      lastScroll = max > 0 ? window.scrollY / max : 0
-      evaluate?.(lastScroll) // scroll.progress 0..1 → mood crossings
-    })
+  // Feed the eased mood rail from the CANONICAL scroll.progress signal — the SAME
+  // value driveUniformFromSignal rides for the uniform — via the runtime's own
+  // rAF-throttled observer. Retires the hand-rolled scrollY/(scrollHeight -
+  // innerHeight) math and the second window scroll listener, and (crucially) makes
+  // the mood crossings and the u_scroll uniform read ONE source, so they can't
+  // drift apart (they were computed independently before).
+  const pumpMood = (): void => {
+    lastScroll = readSignalValue('scroll.progress') ?? 0
+    evaluate?.(lastScroll) // scroll.progress 0..1 → mood crossings
   }
-  window.addEventListener('scroll', onScroll, { passive: true })
-  canvas.addEventListener('czap:gpu-ready', onScroll)
-  onScroll()
+  const stopMoodObserver = attachSignalObserver('scroll.progress', pumpMood)
+  canvas.addEventListener('czap:gpu-ready', pumpMood)
+  pumpMood()
 
   return {
     dispose() {
-      window.removeEventListener('scroll', onScroll)
-      canvas.removeEventListener('czap:gpu-ready', onScroll)
+      stopMoodObserver?.()
+      canvas.removeEventListener('czap:gpu-ready', pumpMood)
       canvas.removeEventListener('czap:gpu-ready', seed)
       seedTimers.forEach(clearTimeout)
       stopUniform.forEach((stop) => stop())

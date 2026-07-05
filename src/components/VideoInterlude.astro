@@ -9,6 +9,8 @@ interface Props {
   lite?: boolean
 }
 const { src, height = '60vh', overlay = 'gradient', class: className = '', lite = false } = Astro.props
+// AV1/WebM primary (modern browsers), the .mp4 prop is the H.264 fallback.
+const webm = src.replace(/\.mp4$/, '.webm')
 
 // Precompute each narrative line's treatment (avoids `<`/`<=` inside JSX,
 // which Astro's compiler misparses).
@@ -31,8 +33,11 @@ const lineItems = momentContent.lines.map((line, i) => {
     {lite ? (
       <div class="w-full h-full" style="background: radial-gradient(70% 70% at 50% 45%, color-mix(in srgb, var(--accent) 16%, transparent), var(--bg-primary))"></div>
     ) : (
-      <video class="w-full h-full object-cover" src={src} muted loop playsinline autoplay preload="metadata"
-        poster="/assets/fs/interlude-poster.webp" disablepictureinpicture></video>
+      <video class="w-full h-full object-cover" muted loop playsinline autoplay preload="metadata"
+        poster="/assets/fs/interlude-poster.webp" disablepictureinpicture>
+        <source src={webm} type="video/webm" />
+        <source src={src} type="video/mp4" />
+      </video>
     )}
   </div>
 

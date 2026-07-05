@@ -6,6 +6,10 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+/assets/*
+  # Stable (non-hashed) media — headshot, icons, videos, poster. Long cache for
+  # repeat-visit LCP; not `immutable` since filenames can be re-optimized in place.
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 /.well-known/api-catalog
   Content-Type: application/linkset+json
   Cache-Control: public, max-age=3600

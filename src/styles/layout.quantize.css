@@ -13,6 +13,14 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* Regime GAP folded off the Tailwind md:/lg: utilities (were `gap-3 md:gap-4`
+   on .czap-grid-3, `gap-8 lg:gap-16` on .czap-split-2) so gap switches in
+   lockstep with grid-template-columns on the SAME @container threshold — the
+   viewport-based md:/lg: could otherwise flip ~15px (scrollbar width) off the
+   container crossing. */
+.czap-grid-3 { gap: 0.75rem; }
+.czap-split-2 { gap: 2rem; }
+
 /* stylelint-disable -- @quantize is czap's custom at-rule; @czap/vite compiles
    it away at build, so linters never see it in the emitted CSS. */
 @quantize heroLayout {
@@ -26,13 +34,13 @@
 
 @quantize cardGrid {
   triple {
-    .czap-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .czap-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
   }
 }
 
 @quantize splitLayout {
   two {
-    .czap-split-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .czap-split-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; }
   }
 }
 /* stylelint-enable */

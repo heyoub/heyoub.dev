@@ -1,34 +1,37 @@
 import type { Config } from 'tailwindcss'
+import { paletteDark } from './src/lib/palette'
 
-// Standalone copy of the frontend-hq design tokens the real site used
-// (packages/shared tailwind-preset + design-tokens), inlined so heyoub.dev
-// stands on its own. Values are byte-for-byte the originals.
+// Design tokens for the utility layer. The brand palette is NOT restated here —
+// it derives from the one source (src/lib/palette.ts, the same map that feeds the
+// LiteShip --czap-* token cast), so Tailwind and the token vars can't drift. Only
+// the non-token extras (editor chrome, the accent glow tint) stay literal.
 export default {
   content: ['./src/**/*.{astro,js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        'bg-primary': '#0a0a0b',
-        'bg-secondary': '#111113',
-        'bg-tertiary': '#18181b',
-        'text-primary': '#fafafa',
-        'text-secondary': '#a1a1aa',
-        'text-muted': '#52525b',
-        accent: { DEFAULT: '#22d3ee', glow: 'rgba(34,211,238,0.15)' },
-        purple: { DEFAULT: '#a78bfa', '500': '#a78bfa' },
-        green: '#22c55e',
-        orange: '#fb923c',
-        warm: '#fbbf24',
-        pink: '#f472b6',
+        'bg-primary': paletteDark['bg-primary'],
+        'bg-secondary': paletteDark['bg-secondary'],
+        'bg-tertiary': paletteDark['bg-tertiary'],
+        'text-primary': paletteDark['text-primary'],
+        'text-secondary': paletteDark['text-secondary'],
+        'text-muted': paletteDark['text-muted'],
+        accent: { DEFAULT: paletteDark.accent, glow: 'rgba(34,211,238,0.15)' },
+        purple: { DEFAULT: paletteDark.purple, '500': paletteDark.purple },
+        green: paletteDark.green,
+        orange: paletteDark.orange,
+        warm: paletteDark.warm,
+        pink: paletteDark.pink,
+        'heyoub-accent': paletteDark.accent,
+        'heyoub-purple': paletteDark.purple,
+        'heyoub-green': paletteDark.green,
+        'heyoub-orange': paletteDark.orange,
+        'heyoub-warm': paletteDark.warm,
+        'heyoub-pink': paletteDark.pink,
+        // non-token extras (editor chrome) — literal, not part of the brand palette
         'editor-bg': '#0d1117',
         'editor-chrome': '#161b22',
         'editor-border': '#30363d',
-        'heyoub-accent': '#22d3ee',
-        'heyoub-purple': '#a78bfa',
-        'heyoub-green': '#22c55e',
-        'heyoub-orange': '#fb923c',
-        'heyoub-warm': '#fbbf24',
-        'heyoub-pink': '#f472b6',
         'editor-red': '#ff5f56',
         'editor-yellow': '#ffbd2e',
         'editor-green': '#27c93f',

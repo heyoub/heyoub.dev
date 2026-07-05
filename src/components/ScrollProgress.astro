@@ -23,6 +23,7 @@ const DOTS = [
 
 <script>
   import { Boundary } from '@czap/core'
+  import { readSignalValue, attachSignalObserver } from '@czap/astro/runtime'
   import { sceneMood } from '@/lib/boundaries'
 
   const root = document.querySelector<HTMLElement>('[data-scroll-progress]')
@@ -48,11 +49,12 @@ const DOTS = [
   computeMoods()
   document.addEventListener('czap:wasm-ready', computeMoods) // re-run on the Rust kernel
 
-  let ticking = false
   const paint = () => {
-    ticking = false
-    const max = document.documentElement.scrollHeight - window.innerHeight
-    const v = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0
+    // Canonical served scroll.progress (0..1, already clamped by the runtime) —
+    // the same signal the scene shader rides — replacing the hand-rolled
+    // scrollY/max. The rAF throttle is gone too: attachSignalObserver is already
+    // rAF-throttled.
+    const v = readSignalValue('scroll.progress') ?? 0
     if (root) root.style.opacity = v > 0.02 && v < 0.99 ? '1' : '0'
     if (pct) pct.textContent = Math.round(v * 100).toString().padStart(3, '0')
     for (let i = 0; i < dots.length; i++) {
@@ -64,7 +66,6 @@ const DOTS = [
       d.style.boxShadow = dist < 0.08 ? `0 0 8px rgba(${moodRGB[i]},0.6)` : 'none'
     }
   }
-  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(paint) } }
-  window.addEventListener('scroll', onScroll, { passive: true })
+  attachSignalObserver('scroll.progress', paint)
   paint()
 </script>

@@ -65,7 +65,11 @@ const { class: satClass, ...satData } = satelliteAttrs({
   <div class="hero-content flex justify-center items-center order-first lg:order-last mt-16 lg:mt-0 animate-fadeInUp" style="animation-delay:0.5s">
     <div class="w-full max-w-[380px] aspect-[380/480] bg-gradient-to-br from-bg-tertiary to-bg-secondary border border-white/[0.08] relative overflow-hidden">
       <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-500 to-purple-500"></div>
-      <img src={h.photo.src} alt={h.photo.alt} class="w-full h-full object-cover object-top" loading="eager" decoding="async" width={380} height={480} />
+      <picture class="contents">
+        <source srcset="/assets/headshot.avif" type="image/avif" />
+        <source srcset="/assets/headshot.webp" type="image/webp" />
+        <img src={h.photo.src} alt={h.photo.alt} class="w-full h-full object-cover object-top" loading="eager" fetchpriority="high" decoding="async" width={380} height={480} />
+      </picture>
     </div>
   </div>
 

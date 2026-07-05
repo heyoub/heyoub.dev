@@ -16,6 +16,7 @@ import RenderBadge from '@components/RenderBadge.astro'
 import WebMCP from '@components/WebMCP.astro'
 import GraphRuntime from '@components/GraphRuntime.astro'
 import MoodSvg from '@components/MoodSvg.astro'
+import { CAP_AXES, capAxisAttr } from '@czap/detect'
 
 const siteUrl = 'https://heyoub.dev'
 const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`
@@ -29,10 +30,14 @@ const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png
 // PREFERENCE onto data-czap-reduced-motion (our finding F1), so data-czap-motion
 // is now purely the motion tier and no longer collides with the head script.
 const czapTier = Astro.locals.czap?.tiers
+// Spread the tier triple from the CAP_AXES registry (0.6.0) instead of hand-
+// enumerating each axis on <html> — a future 4th cap axis auto-appears instead of
+// silently missing. Emits the identical data-czap-tier/motion/design today.
+const tierAttrs = Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), czapTier?.[axis]]))
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-czap-tier={czapTier?.tier} data-czap-motion={czapTier?.motion} data-czap-design={czapTier?.design}>
+<html lang="en" {...tierAttrs}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -44,13 +49,15 @@ const czapTier = Astro.locals.czap?.tiers
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
-    <!-- Preload Critical Assets -->
-    <link rel="preload" href="/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png" as="image" />
+    <!-- Preload Critical Assets — the LCP headshot as AVIF (the format modern
+         browsers use); non-AVIF browsers ignore this and load the eager PNG
+         fallback in the hero <picture>. -->
+    <link rel="preload" as="image" href="/assets/headshot.avif" type="image/avif" fetchpriority="high" />
 
     <!-- Favicons & App Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/AXLG.png" />
-    <link rel="apple-touch-icon" href="/assets/logo/AXLG.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png" />
     <meta name="theme-color" content="#0a0a0b" />
     <meta name="color-scheme" content="dark" />
 
@@ -219,9 +226,6 @@ const czapTier = Astro.locals.czap?.tiers
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-
-    <!-- Prefetch below-fold assets -->
-    <link rel="prefetch" href="/assets/fs/3130182-hd_1280_720_30fps.mp4" as="video" />
   </head>
   <body>
     <slot />
