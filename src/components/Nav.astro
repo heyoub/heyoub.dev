@@ -26,7 +26,7 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
       <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true">Projects</button>
       <div class="nav-menu absolute top-full right-0 mt-2 min-w-[200px] bg-bg-tertiary border border-white/10 py-2 backdrop-blur-xl">
         {projectManifest.map((p) => (
-          <button data-tab={p.pitch.filename} class="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">{p.name}</button>
+          <button data-scroll="#work" class="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">{p.name}</button>
         ))}
       </div>
     </div>
@@ -34,7 +34,7 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
     <div class="nav-drop relative">
       <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true">Contact</button>
       <div class="nav-menu absolute top-full right-0 mt-2 min-w-[200px] bg-bg-tertiary border border-white/10 py-2 backdrop-blur-xl">
-        <button data-tab="contact" class="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">View Contact Info</button>
+        <button data-scroll="#footer" class="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">View Contact Info</button>
         <div class="border-t border-white/5 mt-1 pt-1"></div>
         {contactConfig.links.map((link) => (
           <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined} class="block px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">{link.label}</a>
@@ -58,9 +58,9 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
   </div>
   <div class="flex flex-col gap-6 mt-8 font-mono">
     {projectManifest.map((p) => (
-      <button data-tab={p.pitch.filename} class="text-left text-lg text-text-secondary hover:text-accent transition-colors">{p.name}</button>
+      <button data-scroll="#work" class="text-left text-lg text-text-secondary hover:text-accent transition-colors">{p.name}</button>
     ))}
-    <button data-tab="contact" class="text-left text-lg text-text-secondary hover:text-accent transition-colors">Contact</button>
+    <button data-scroll="#footer" class="text-left text-lg text-text-secondary hover:text-accent transition-colors">Contact</button>
     {contactConfig.links.map((link) => (
       <a href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined} class="text-lg text-text-secondary hover:text-accent transition-colors">{link.label}</a>
     ))}
@@ -81,17 +81,12 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
     const top = el.getBoundingClientRect().top + window.scrollY + offset
     window.scrollTo({ top, behavior: 'smooth' })
   }
-  document.querySelectorAll<HTMLElement>('[data-scroll]').forEach((a) =>
-    a.addEventListener('click', (e) => { e.preventDefault(); scrollTo(a.dataset.scroll!, 0) }),
-  )
-  // tab dispatch → ContactDecompile, then scroll to footer
   const menu = document.querySelector<HTMLElement>('[data-menu]')
-  document.querySelectorAll<HTMLElement>('[data-tab]').forEach((b) =>
-    b.addEventListener('click', () => {
-      window.dispatchEvent(new CustomEvent('editor-tab', { detail: { tab: b.dataset.tab } }))
-      menu?.classList.add('hidden'); menu?.classList.remove('flex')
-      scrollTo('#footer', -20)
-    }),
+  const closeMenu = () => { menu?.classList.add('hidden'); menu?.classList.remove('flex') }
+  // Nav links scroll to their section (top gets 0 offset, sections a small one) and
+  // close the mobile menu. The footer has no tabs to dispatch anymore.
+  document.querySelectorAll<HTMLElement>('[data-scroll]').forEach((a) =>
+    a.addEventListener('click', (e) => { e.preventDefault(); scrollTo(a.dataset.scroll!, a.dataset.scroll === '#' ? 0 : -20); closeMenu() }),
   )
   // mobile menu
   document.querySelector('[data-menu-open]')?.addEventListener('click', () => { menu?.classList.remove('hidden'); menu?.classList.add('flex') })

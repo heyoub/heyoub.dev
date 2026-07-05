@@ -28,7 +28,7 @@ export const GET: APIRoute = ({ locals }) => {
     proof: proofPoints.map((p) => ({ principle: p.principle, evidence: p.proof })),
     stack: stackPyramid.map((l) => ({ layer: l.label, hint: l.hint, tech: l.techs.map((x) => x.name) })),
     projects: projectManifest.map((p) => ({ name: p.name, tagline: p.pitch.tagline, blurb: p.pitch.blurb, stack: p.pitch.stack, repo: p.gitUrl, live: p.siteUrl })),
-    open_to: { pitch: openToContent.description, services: openToContent.services.map((s) => ({ title: s.title, description: s.description })), roles: openToContent.roles },
+    open_to: { pitch: openToContent.description, services: openToContent.services.map((s) => ({ title: s.title, description: s.description })), lens: openToContent.hook.close },
     contact: { heading: contactConfig.heading, links: contactConfig.links.map((l) => ({ key: l.key, href: l.href })), building: contactConfig.status.building },
     your_session: czap ? { tier: czap.tiers, viewportHint: czap.capabilities.viewportWidth, saveData: czap.capabilities.connection?.saveData ?? false } : null,
   }

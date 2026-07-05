@@ -45,8 +45,6 @@
 .thesis-stack { padding-top: 1.5rem; }       /* pt-6 */
 .pyramid-row { gap: 0.375rem; }              /* gap-1.5 */
 .opento-stack { gap: 2rem; }                 /* gap-8 */
-.opento-roles { gap: 0.5rem; }               /* gap-2 */
-.opento-role { padding: 0.625rem 1rem; }     /* py-2.5 px-4 */
 /* Display swaps folded off `lg:` → splitLayout.two (1024, unbounded above — the
    pyramid labels' `lg:` was @media ≥1024, so splitLayout.two is the right home,
    NOT heroLayout.split which ends at 1440). */
@@ -105,8 +103,6 @@
     .thesis-stack { padding-top: 2rem; }         /* md:pt-8 */
     .pyramid-row { gap: 0.5rem; }                /* md:gap-2 */
     .opento-stack { gap: 3rem; }                 /* md:gap-12 */
-    .opento-roles { gap: 0.75rem; }              /* md:gap-3 */
-    .opento-role { padding: 0.75rem 1.25rem; }   /* md:py-3 md:px-5 */
     .vi-glass-card { padding: 3.5rem 3rem; }     /* md:py-14 md:px-12 */
   }
 }

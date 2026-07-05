@@ -18,10 +18,12 @@ import { openToContent as o } from '@/data/content'
       ))}
     </div>
 
-    <div class="opento-roles flex flex-wrap justify-center" data-reveal-stagger>
-      {o.roles.map((role, index) => (
-        <span class={`opento-role font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider border transition-colors ${index === o.roles.length - 1 ? 'border-accent/10 text-accent/40' : 'border-accent/30 text-accent'}`}>{role}</span>
+    <div class="max-w-2xl mx-auto text-center border-t border-white/10 pt-8" data-reveal>
+      <div class="font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-[0.2em] uppercase text-accent/70 mb-4">{o.hook.label}</div>
+      {o.hook.lines.map((line) => (
+        <p class="font-light text-[clamp(0.95rem,2vw,1.1rem)] text-text-secondary leading-relaxed mb-3">{line}</p>
       ))}
+      <p class="font-serif italic text-[clamp(1.05rem,2.2vw,1.35rem)] text-text-primary leading-snug mt-6">{o.hook.close}</p>
     </div>
   </div>
 </section>

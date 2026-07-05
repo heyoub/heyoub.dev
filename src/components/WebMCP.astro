@@ -23,7 +23,7 @@ const webmcp = {
   open_to: {
     summary: openToContent.description,
     services: openToContent.services.map((s) => ({ title: s.title, description: s.description })),
-    roles: openToContent.roles,
+    lens: openToContent.hook.close,
   },
 }
 ---
