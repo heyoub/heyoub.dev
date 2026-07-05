@@ -1,6 +1,10 @@
 # robots.txt for heyoub.dev
 
 User-agent: *
+# Content Signals Policy (cloudflare.com/content-signals-policy) — machine-readable
+# opt-IN. We WANT to be searched, cited by AI answers, and trained on, so all three
+# are `yes`. A preference signal (intent), not an enforcement/anti-scraping mechanism.
+Content-Signal: search=yes, ai-train=yes, ai-input=yes
 Allow: /
 Allow: /profile.json
 Allow: /llms.txt

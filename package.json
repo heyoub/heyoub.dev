@@ -12,8 +12,9 @@
     "check": "astro check",
     "test": "playwright test",
     "audit:czap": "czap audit --consumer --pretty",
+    "indexnow": "node scripts/indexnow-ping.mjs",
     "predeploy": "czap doctor --target cloudflare && czap audit --consumer",
-    "deploy": "pnpm build && wrangler deploy --config dist/server/wrangler.json"
+    "deploy": "pnpm build && wrangler deploy --config dist/server/wrangler.json && node scripts/indexnow-ping.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.0.1",
