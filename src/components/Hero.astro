@@ -37,28 +37,43 @@ const { class: satClass, ...satData } = satelliteAttrs({
       {h.tagline.after}
     </p>
 
-    <div class="grid grid-cols-[1fr_auto_auto] gap-6 max-w-2xl animate-fadeInUp" style="animation-delay:0.8s">
+    <!-- Quote full-width, squares on their own wrapping row: three same-size
+         squares + the quote can't share one grid row (copy column is ~600px at
+         1440, three 160px squares + gaps leave ~50px for the quote — and the old
+         rigid grid already clipped the FBF square under overflow-hidden at 375). -->
+    <div class="max-w-2xl animate-fadeInUp" style="animation-delay:0.8s">
       <!-- Quote -->
-      <div class="flex items-center gap-4 border-l-2 border-accent/30 pl-4">
+      <div class="flex items-center gap-4 border-l-2 border-accent/30 pl-4 mb-6">
         <p class="text-[clamp(0.95rem,2vw,1.125rem)] font-light text-text-secondary">
           {h.quote.regular}{' '}<span class="text-text-primary italic">{h.quote.emphasis}</span>
         </p>
       </div>
 
-      <!-- Book a Call square -->
-      <div class="flex items-center justify-center p-2">
-        <a href={h.cta.href} target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight">
-          <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">{h.cta.label}</span>
-          <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">{h.cta.action}</span>
-        </a>
-      </div>
+      <div class="flex flex-wrap justify-end gap-6">
+        <!-- Book a Call square -->
+        <div class="flex items-center justify-center p-2">
+          <a href={h.cta.href} target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight">
+            <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">{h.cta.label}</span>
+            <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">{h.cta.action}</span>
+          </a>
+        </div>
 
-      <!-- FBF square -->
-      <div class="flex items-center justify-center p-2">
-        <a href="https://freebatteryfactory.com" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
-          <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">the</span>
-          <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-purple group-hover:text-bg-primary transition-colors">FBF</span>
-        </a>
+        <!-- FBF square -->
+        <div class="flex items-center justify-center p-2">
+          <a href="https://freebatteryfactory.com" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
+            <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">the</span>
+            <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-purple group-hover:text-bg-primary transition-colors">FBF</span>
+          </a>
+        </div>
+
+        <!-- Résumé square — warm gold, the same #fbbf24 as the scene orbs' amber;
+             same PDF the footer links, kept there too -->
+        <div class="flex items-center justify-center p-2">
+          <a href="/Eassa_Ayoub_Resume.pdf" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-warm/10 border border-warm/30 hover:bg-warm hover:border-warm hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
+            <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">my</span>
+            <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-warm group-hover:text-bg-primary transition-colors">Résumé</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
