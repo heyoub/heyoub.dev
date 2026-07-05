@@ -17,6 +17,7 @@ import WebMCP from '@components/WebMCP.astro'
 import GraphRuntime from '@components/GraphRuntime.astro'
 import MoodSvg from '@components/MoodSvg.astro'
 import { CAP_AXES, capAxisAttr } from '@czap/detect'
+import { Font } from 'astro:assets'
 
 const siteUrl = 'https://heyoub.dev'
 const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`
@@ -43,11 +44,13 @@ const tierAttrs = Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>{title}</title>
 
-    <!-- Critical Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <!-- Self-hosted fonts (Astro Fonts API) — preload the LCP-critical faces
+         (Instrument Serif = hero h1, DM Sans = body); Space Mono loads with a
+         metric-matched fallback. Replaces the render-blocking cross-origin Google
+         Fonts request + its preconnect hints. -->
+    <Font cssVariable="--font-instrument-serif" preload />
+    <Font cssVariable="--font-dm-sans" />
+    <Font cssVariable="--font-space-mono" />
 
     <!-- Preload Critical Assets — the LCP headshot as AVIF (the format modern
          browsers use); non-AVIF browsers ignore this and load the eager PNG
@@ -224,8 +227,6 @@ const tierAttrs = Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), 
     <!-- Wide-gamut (P3/rec2020) + HDR palette, gated by display capability -->
     <DisplayFidelity />
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <slot />

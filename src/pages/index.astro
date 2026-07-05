@@ -76,17 +76,14 @@ const lite = capabilities.connection?.saveData === true || tiers.motion === 'non
     infinite: false,
   })
 
-  let rafId: number
   function raf(time: number) {
     lenis.raf(time)
-    rafId = requestAnimationFrame(raf)
+    requestAnimationFrame(raf)
   }
-  rafId = requestAnimationFrame(raf)
+  requestAnimationFrame(raf)
 
   initReveal()
 
-  document.addEventListener('astro:before-swap', () => {
-    cancelAnimationFrame(rafId)
-    lenis.destroy()
-  }, { once: true })
+  // No astro:before-swap cleanup — no ClientRouter on this site, so the event
+  // never fires; full-page nav tears down Lenis + the rAF loop anyway (was dead).
 </script>

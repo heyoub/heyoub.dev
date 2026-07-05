@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config'
+import { defineConfig, fontProviders } from 'astro/config'
 import { fileURLToPath } from 'node:url'
 import sitemap from '@astrojs/sitemap'
 import cloudflare from '@astrojs/cloudflare'
@@ -18,6 +18,33 @@ export default defineConfig({
   // tag-based active invalidation (BoundaryCache.invalidateByTag/Path). Distinct
   // `czap` key prefix from the middleware's `layout-<hash>-`, so no collision.
   cache: { provider: cloudflareCacheProvider({ binding: 'CZAP_BOUNDARY_CACHE' }) },
+  // Astro Fonts API (stable, Astro 7): self-host at BUILD time (Cloudflare-safe,
+  // no runtime), preload the LCP-critical faces, and auto-generate size-adjust /
+  // ascent-override metric-matched fallbacks (zero-CLS swap). Retires the render-
+  // blocking cross-origin Google Fonts <link> + its preconnect hints. Dropped Fira
+  // Code (0 uses). Same typefaces → pixel-identical once loaded, faster to first
+  // paint. cssVariable resolves to `"<Font>", <metric-matched fallback>, <generic>`.
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'DM Sans',
+      cssVariable: '--font-dm-sans',
+      weights: [300, 400, 500, 600],
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'Instrument Serif',
+      cssVariable: '--font-instrument-serif',
+      weights: [400],
+      styles: ['normal', 'italic'],
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'Space Mono',
+      cssVariable: '--font-space-mono',
+      weights: [400, 700],
+    },
+  ],
   integrations: [
     czap({
       // detect / gpu default-on; 0.2.0 auto-registers directives (no rename

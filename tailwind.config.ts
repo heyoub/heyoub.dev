@@ -44,11 +44,12 @@ export default {
         'editor-gray': '#484f58',
         'editor-gray-light': '#8b949e',
       },
+      // Point at the Astro Fonts API cssVariables (each resolves to the self-hosted
+      // face + its metric-matched fallback + generic). Fira Code dropped (unused).
       fontFamily: {
-        serif: ['Instrument Serif', 'serif'],
-        mono: ['Space Mono', 'monospace'],
-        code: ['Fira Code', 'monospace'],
-        sans: ['DM Sans', 'sans-serif'],
+        serif: ['var(--font-instrument-serif)'],
+        mono: ['var(--font-space-mono)'],
+        sans: ['var(--font-dm-sans)'],
       },
       fontSize: {
         'fluid-xs': 'clamp(0.75rem, 1.5vw, 0.875rem)',

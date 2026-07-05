@@ -108,8 +108,9 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
       // with zero consumer polling; genuinely sub-reactive devices keep the CSS
       // .scene gradient. (?gl=force flips data-czap-gpu-force to render anyway.)
       // We own only the scroll → uniform bridge.
-      const mood = initSceneMood(canvas)
-      document.addEventListener('astro:before-swap', () => mood.dispose(), { once: true })
+      // No astro:before-swap cleanup — this site has no ClientRouter, so the swap
+      // event never fires (was dead code); full-page nav discards the scene anyway.
+      initSceneMood(canvas)
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true })
