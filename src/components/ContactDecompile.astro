@@ -42,6 +42,7 @@ const { links, status, code } = contactConfig
         <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">status</span> <span class="code-punctuation">=</span> <span class="code-punctuation">{'{'}</span></p>
         <address class="code-object-body not-italic">
           <div class="code-line code-property"><span class="code-key">building</span><span class="code-boolean">{String(status.building)}</span><span class="code-punctuation" aria-hidden="true">,</span></div>
+          <div class="code-line code-property"><span class="code-key">available</span><span class="code-boolean">{String(status.available)}</span><span class="code-punctuation" aria-hidden="true">,</span></div>
           <div class="code-line code-property"><span class="code-key">location</span><span class="code-string">{status.location}</span><span class="code-punctuation" aria-hidden="true">,</span></div>
           <div class="code-line code-property"><span class="code-key">year</span><span class="code-number">{status.year}</span></div>
         </address>
@@ -56,7 +57,7 @@ const { links, status, code } = contactConfig
   <div role="status" class="czap-editor-indent flex justify-between items-center py-3 bg-editor-chrome border-t border-editor-border">
     <div class="flex items-center gap-3 text-editor-gray-light">
       <span class="w-2 h-2 rounded-full bg-green animate-pulse" aria-hidden="true"></span>
-      <span class="font-mono text-xs">building</span>
+      <span class="font-mono text-xs">open to work</span>
     </div>
     <small class="font-mono text-[0.65rem] tracking-wider text-editor-gray">© {status.year} Eassa Ayoub · {status.location}</small>
   </div>

@@ -14,6 +14,7 @@ export interface ContactConfig {
   links: ContactLink[]
   status: {
     building: boolean
+    available: boolean
     location: string
     year: number
   }
@@ -53,9 +54,16 @@ export const contactConfig: ContactConfig = {
       href: 'https://github.com/heyoub',
       external: true,
     },
+    {
+      key: 'resume',
+      label: 'Résumé',
+      href: '/Eassa_Ayoub_Resume.pdf',
+      external: true,
+    },
   ],
   status: {
     building: true,
+    available: true, // open for work as of 2026 (understated — not a banner)
     location: 'Philadelphia, PA',
     year: new Date().getFullYear(),
   },
@@ -74,6 +82,9 @@ export function getLinkDisplayValue(link: ContactLink): string {
   if (link.key === 'calendar') {
     // Display as cal.com/eassa-ayoub (without hash)
     return 'cal.com/eassa-ayoub'
+  }
+  if (link.key === 'resume') {
+    return 'resume.pdf'
   }
   return link.href.replace('https://', '')
 }
