@@ -319,8 +319,10 @@ export const openToContent: OpenToContent = {
       accent: 'green',
     },
   ],
-  // ⚠️ Eassa: this hook is grounded in your REAL "former operator" background
-  // (mortgage + accounting). Validate/edit the specifics — keep every word true.
+  // Grounded in Eassa's REAL "former operator" background (mortgage + accounting
+  // + sales). Validated & deliberately ABSTRACT: he worked relationship-basis and
+  // won't discuss client financials in public — so no names, numbers, or war-story
+  // specifics, ever. Keep it at the "who carries the complexity" lens. Every word true.
   hook: {
     label: 'Before I built systems, I ran them',
     lines: [
