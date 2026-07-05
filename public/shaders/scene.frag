@@ -38,10 +38,18 @@ float smin(float a, float b, float k) {
 // per-orb speed, like the v2 useFrame drift). i: 0 yellow-left, 1 cyan-center,
 // 2 purple-right. Pushed back in z so the field sits behind the content.
 vec3 orbCenter(int i, float t) {
+  // Phones (portrait, aspect < ~0.62) stack the three orbs VERTICALLY so all three
+  // fit the narrow screen. The horizontal layout pushes yellow/purple past the
+  // left/right edges once the aspect-correction (main()) squeezes x on a tall
+  // viewport — so on portrait we rotate the spread onto Y (yellow top · cyan mid ·
+  // purple bottom). Tablets & landscape (wider) keep the horizontal spread; the
+  // smoothstep blends across ~0.58–0.66 so a resize eases instead of popping.
+  float aspect = u_resolution.x / max(u_resolution.y, 1.0);
+  float portrait = smoothstep(0.66, 0.58, aspect);
   vec3 home; float spd;
-  if (i == 0)      { home = vec3(-1.95,  0.20, -0.7); spd = 0.30; } // yellow LEFT
-  else if (i == 1) { home = vec3( 0.00, -0.10, -0.5); spd = 0.45; } // cyan CENTER
-  else             { home = vec3( 1.95,  0.30, -0.8); spd = 0.65; } // purple RIGHT
+  if (i == 0)      { home = mix(vec3(-1.95,  0.20, -0.7), vec3( 0.14,  1.72, -0.7), portrait); spd = 0.30; } // yellow  L → TOP
+  else if (i == 1) { home = mix(vec3( 0.00, -0.10, -0.5), vec3( 0.00,  0.00, -0.5), portrait); spd = 0.45; } // cyan    C → MID
+  else             { home = mix(vec3( 1.95,  0.30, -0.8), vec3(-0.14, -1.72, -0.8), portrait); spd = 0.65; } // purple  R → BOT
   float ph = float(i) * 2.39996; // golden-angle phase per orb
   vec3 drift = vec3(
     sin(t * spd + ph) * 0.26,        // v2: sin(time*speed)*0.3 in x

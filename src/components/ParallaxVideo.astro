@@ -16,7 +16,12 @@ const { lite = false } = Astro.props
       muted loop playsinline autoplay preload="metadata"
       poster="/assets/fs/parallax-poster.webp"
     >
-      <source src="/assets/fs/numbers-ticker-web.webm" type="video/webm" />
+      <!-- Explicit av01 codec string is REQUIRED: bare type="video/webm" reads as
+           canPlayType "maybe" on iOS Safari 17.4+, so iOS picks the webm, fails to
+           decode AV1, and shows a black gap with no fallback. The codec string makes
+           iOS return "" and fall through to the H.264 mp4. av01.0.05M.08 = Main,
+           seq-level 5 (this clip), 8-bit. (see VideoInterlude for the full note.) -->
+      <source src="/assets/fs/numbers-ticker-web.webm" type='video/webm; codecs="av01.0.05M.08"' />
       <source src="/assets/fs/numbers-ticker-web.mp4" type="video/mp4" />
     </video>
   )}

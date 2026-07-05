@@ -10,7 +10,13 @@ interface Props {
 }
 const { src, height = '60vh', overlay = 'gradient', class: className = '', lite = false } = Astro.props
 // AV1/WebM primary (modern browsers), the .mp4 prop is the H.264 fallback.
+// The webm <source> MUST carry the explicit av01 codec string (below): without it
+// `type="video/webm"` returns canPlayType "maybe" on iOS Safari 17.4+ (it now knows
+// the WebM *container*), so iOS SELECTS the webm, then can't decode AV1 → a black
+// gap with NO fallback to the mp4. With the codec string iOS returns "" and falls
+// through to H.264. av01.0.08M.08 = Main profile, seq-level 8 (this clip), 8-bit.
 const webm = src.replace(/\.mp4$/, '.webm')
+const webmType = 'video/webm; codecs="av01.0.08M.08"'
 
 // Precompute each narrative line's treatment (avoids `<`/`<=` inside JSX,
 // which Astro's compiler misparses).
@@ -35,7 +41,7 @@ const lineItems = momentContent.lines.map((line, i) => {
     ) : (
       <video class="w-full h-full object-cover" muted loop playsinline autoplay preload="metadata"
         poster="/assets/fs/interlude-poster.webp" disablepictureinpicture>
-        <source src={webm} type="video/webm" />
+        <source src={webm} type={webmType} />
         <source src={src} type="video/mp4" />
       </video>
     )}

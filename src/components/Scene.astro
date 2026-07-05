@@ -135,4 +135,18 @@ const { class: satClass, ...satData } = satelliteAttrs({ boundary: sceneMood, di
     transition: background 900ms ease;
   }
   .scene-canvas { width: 100%; height: 100%; display: block; }
+
+  /* Phones (< md, breakpoints.js) — stack the two fallback orbs VERTICALLY
+     (top-center · bottom-center) to match the shader's portrait layout; the
+     diagonal top-right / bottom-left corners get clipped on a narrow screen. This
+     gradient is the scene on low / reduced-motion tiers where the canvas is omitted
+     (show=false), so it must read on a phone too. Tablets+ keep the diagonal. */
+  @media (max-width: 767.98px) {
+    .scene {
+      background:
+        radial-gradient(48% 30% at 50% 19%, color-mix(in srgb, #06b6d4 calc(var(--czap-mood-glow, 0.22) * 55%), transparent), transparent 62%),
+        radial-gradient(48% 30% at 50% 83%, color-mix(in srgb, #8b5cf6 calc(var(--czap-mood-glow, 0.22) * 55%), transparent), transparent 62%),
+        var(--bg-primary);
+    }
+  }
 </style>

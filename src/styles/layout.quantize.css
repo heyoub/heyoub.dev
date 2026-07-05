@@ -51,6 +51,15 @@
 .pyramid-labels { display: none; }           /* hidden */
 .pyramid-labels-mobile { display: flex; }    /* flex */
 .gallery-card { padding: 1.5rem; }           /* p-6 */
+/* Card deck (The Work): below the split (splitLayout.one — phones/portrait tablets)
+   each card is single-column and TALLER than the viewport, so the same-shape sticky
+   STACK can't pin — the next card slides up and covers the one behind, eating its
+   proof points (the "cards overlap / weird ordering / sections bleed" bug on phones).
+   So below split the cards just FLOW as a normal vertical stack; the sticky pin is a
+   ≥lg (two-column, short-card) affordance, turned on under splitLayout.two.
+   `.card-deck > .stack-card` (0,2,0) so `position` beats Tailwind's `.relative`. */
+.card-deck > .stack-card { margin-bottom: clamp(2rem, 6vw, 3rem); }
+.card-deck > .stack-card:last-child { margin-bottom: 0; }
 /* ContactDecompile editor gutter (folded off md:) → editorGutter.gutter (768). */
 .czap-editor-gutter { display: none; }       /* hidden */
 .code-block { padding: 1rem; }               /* py-4 px-4 (the pl-20 indent rides editorGutter) */
@@ -113,6 +122,17 @@
     .pyramid-labels { display: block; }          /* lg:block */
     .pyramid-labels-mobile { display: none; }    /* lg:hidden */
     .gallery-card { padding: 2.5rem; }           /* lg:p-10 */
+    /* Same-shape sticky STACK — each card pins near the top and the next slides over
+       it and holds (two-column here, so cards are short enough to actually pin). The
+       flow/spacing below the split lives in the base rule above. */
+    .card-deck > .stack-card {
+      position: sticky;
+      top: clamp(4.5rem, 9vh, 6.5rem);
+      /* Shortest height that still fits the tallest card's content (max of a
+         content-matched rem floor + a modest vh so it breathes on tall screens). */
+      min-height: max(31rem, 44vh);
+      margin-bottom: clamp(2.5rem, 7vh, 5.5rem);
+    }
   }
 }
 

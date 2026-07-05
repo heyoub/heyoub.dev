@@ -102,18 +102,8 @@ const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: p
   }
   @keyframes gh-fade { to { opacity: 0; transform: translateY(-20px); } }
 
-  /* Sticky card stack: each card pins near the top; the next slides over it and
-     holds. Same min-height → same shape; solid bg covers the card behind; the
-     margin gives each card its scroll distance before the next takes the top. */
-  .stack-card {
-    position: sticky;
-    top: clamp(4.5rem, 9vh, 6.5rem);
-    /* Same shape (so a shorter card can't let the one behind peek out) at the
-       SHORTEST height that still fits the tallest card's content — max() of a
-       content-matched rem floor and a modest vh so it breathes on tall screens.
-       Way shorter than the old 64vh dead-space, still a clean stack. */
-    min-height: max(31rem, 44vh);
-    margin-bottom: clamp(2.5rem, 7vh, 5.5rem);
-  }
-  .stack-card:last-child { margin-bottom: 0; }
+  /* The card deck's layout (flow below the split, sticky STACK at ≥lg) lives in
+     the @quantize layer — src/styles/layout.quantize.css, `.card-deck > .stack-card`
+     base + splitLayout.two — so the phone/desktop switch is single-sourced with
+     every other regime instead of a hand-written media query here. */
 </style>
