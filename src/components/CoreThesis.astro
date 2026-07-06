@@ -2,7 +2,11 @@
 import { coreThesisContent as t, stackPyramid } from '@/data/content'
 ---
 
-<section id="thesis" class="py-[clamp(2.5rem,10vw,10rem)] px-[8vw] bg-bg-secondary border-y border-white/5">
+<!-- overflow-x-clip: the pyramid's floating nowrap hint labels extend past the
+     container into the side gutters by design; in the 1024→~1280 window the
+     longest one pokes past the viewport and widens the document (22px hscroll).
+     Clip only the x-axis — decorative, pointer-events-none, nothing lost. -->
+<section id="thesis" class="py-[clamp(2.5rem,10vw,10rem)] px-[8vw] bg-bg-secondary border-y border-white/5 overflow-x-clip">
   <div class="max-w-5xl mx-auto" data-reveal>
     <!-- Opening hook -->
     <div class="thesis-hook text-center">

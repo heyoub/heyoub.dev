@@ -37,6 +37,13 @@
    via-accent to-transparent → --tw-gradient-stops); only width/height/direction move. */
 .hint-line { width: 1px; height: 2rem; background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); }
 .hint-text { display: none; }                                        /* hidden */
+/* Hero CTA row — base (phones): three EQUAL squares fill one row (no wrap, no
+   2+1 orphan); from heroChrome.expanded the fixed right-aligned squares return.
+   max-width caps the fill on wide-but-compact viewports (phone landscape) so a
+   square never outgrows its expanded desktop size. */
+.hero-ctas { gap: 0.75rem; }                  /* gap-3 */
+.hero-cta-cell { flex: 1 1 0%; }              /* flex-1 */
+.hero-cta { width: 100%; max-width: 9rem; }
 
 /* CoreThesis + OpenTo card-grid chrome, folded off `md:` → cardGrid.triple (768). */
 .thesis-hook { margin-bottom: 3rem; }        /* mb-12 */
@@ -60,6 +67,29 @@
    `.card-deck > .stack-card` (0,2,0) so `position` beats Tailwind's `.relative`. */
 .card-deck > .stack-card { margin-bottom: clamp(2rem, 6vw, 3rem); }
 .card-deck > .stack-card:last-child { margin-bottom: 0; }
+/* Below the split the deck can't PIN, but it still DEALS: each card rises onto
+   the stack as it enters (translate+scale, compositor-only), the same native
+   scroll-driven mechanism as the hero tuck / gallery-header fade — so phones
+   keep the deck read without a pinned card's tail ever becoming unreachable.
+   splitLayout.two cancels it (there the true sticky stack takes over, and a
+   transform would break sticky). Guards mirror the site's other timelines.
+   Deliberate stance: CSS scroll timelines here gate on prefers-reduced-motion
+   ONLY, not data-czap-motion tiers — they're compositor-only transforms (cheap
+   everywhere); the tier axis governs the heavy surfaces (videos via `lite`,
+   the GPU scene). Revisit if a timeline ever animates paint properties. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .card-deck > .stack-card {
+      animation: card-deal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+@keyframes card-deal {
+  from { transform: translateY(9vh) scale(0.97); }
+  to   { transform: translateY(0)   scale(1); }
+}
 /* ContactDecompile editor gutter (folded off md:) → editorGutter.gutter (768). */
 .czap-editor-gutter { display: none; }       /* hidden */
 .code-block { padding: 1rem; }               /* py-4 px-4 (the pl-20 indent rides editorGutter) */
@@ -93,6 +123,14 @@
 @quantize heroChrome {
   expanded {
     .czap-hero-grid { gap: 4rem; padding-block: 0; }         /* md:gap-16, md:py-0 */
+    /* CTA squares return to the right-aligned trio. Cells may SHRINK (equally)
+       instead of flex:none: in the split regime's narrow copy column
+       (1024→~1330) three fixed 15vw squares overflow the row's left edge —
+       flex-shrink + max-width:100% compresses the trio to fit, and at full
+       width the shrink never engages so the look is byte-identical. */
+    .hero-ctas { gap: 1.5rem; }                              /* md → gap-6 */
+    .hero-cta-cell { flex: 0 1 auto; min-width: 0; padding: 0.5rem; } /* md → p-2 */
+    .hero-cta { width: clamp(7rem, 15vw, 9rem); max-width: 100%; }
     .hero-copy h1 { margin-bottom: 1rem; }                   /* md:mb-4 */
     .hero-eyebrow { margin-bottom: 2rem; }                   /* md:mb-8 */
     .hero-copy > p { margin-bottom: 2rem; }                  /* md:mb-8 */
@@ -124,7 +162,9 @@
     .gallery-card { padding: 2.5rem; }           /* lg:p-10 */
     /* Same-shape sticky STACK — each card pins near the top and the next slides over
        it and holds (two-column here, so cards are short enough to actually pin). The
-       flow/spacing below the split lives in the base rule above. */
+       flow/spacing below the split lives in the base rule above. `animation: none`
+       cancels the base card-deal entrance: a scroll-driven transform on a pinned
+       element would break sticky, and the pin IS the deck effect here. */
     .card-deck > .stack-card {
       position: sticky;
       top: clamp(4.5rem, 9vh, 6.5rem);
@@ -132,6 +172,7 @@
          content-matched rem floor + a modest vh so it breathes on tall screens). */
       min-height: max(31rem, 44vh);
       margin-bottom: clamp(2.5rem, 7vh, 5.5rem);
+      animation: none;
     }
   }
 }

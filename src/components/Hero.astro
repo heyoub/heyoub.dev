@@ -1,5 +1,6 @@
 ---
-import { satelliteAttrs, resolveInitialStateFallback } from '@czap/astro'
+import { satelliteAttrs, resolveInitialState } from '@czap/astro'
+import type { CapTier } from '@czap/core'
 import { heroLayout } from '@/lib/boundaries'
 import { heroContent as h } from '@/data/content'
 
@@ -13,9 +14,21 @@ import { heroContent as h } from '@/data/content'
 // client directive natively off the data-czap-directive marker (evaluates
 // the boundary over a SharedArrayBuffer ring under crossOriginIsolated);
 // the manual entrypoint invocation this site shipped against 0.1.4 is gone.
+// resolveInitialState (NOT the first-state resolveInitialStateFallback): the
+// tuck animation below keys off data-czap-state, so the SSR'd state is now
+// VISUAL — the fallback's 'stacked' guess left desktop first paint with the
+// tuck unarmed until the worker booted (and forever with JS off). The request-
+// aware resolver reads UA/Client Hints + the middleware-detected tier, so a
+// desktop UA SSRs 'split' and the tuck is armed pre-JS. (liteship-auditor P1)
 const { class: satClass, ...satData } = satelliteAttrs({
   boundary: heroLayout,
-  initialState: resolveInitialStateFallback(heroLayout),
+  initialState: resolveInitialState(heroLayout, {
+    userAgent: Astro.request.headers.get('user-agent') ?? '',
+    clientHints: Object.fromEntries(Astro.request.headers),
+    // Cast: middleware.d.ts types tiers as Record<CapAxis, string>, but the
+    // tier axis only ever holds CapTier values — upstream typing gap (0.8.0).
+    detectedCapTier: Astro.locals.czap?.tiers.tier as CapTier | undefined,
+  }),
   directive: 'worker',
 })
 ---
@@ -49,18 +62,22 @@ const { class: satClass, ...satData } = satelliteAttrs({
         </p>
       </div>
 
-      <div class="flex flex-wrap justify-end gap-6">
+      <!-- CTA squares. The regime-switching props (row gap, cell flex/padding,
+           square width) live in the @quantize layer (layout.quantize.css): base
+           (stacked/compact) = three equal squares filling ONE row; from
+           heroChrome.expanded (768) = the fixed right-aligned squares. -->
+      <div class="hero-ctas flex justify-end">
         <!-- Book a Call square -->
-        <div class="flex items-center justify-center p-2">
-          <a href={h.cta.href} target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight">
+        <div class="hero-cta-cell flex items-center justify-center">
+          <a href={h.cta.href} target="_blank" rel="noopener noreferrer" class="hero-cta aspect-square bg-accent/10 border border-accent/30 hover:bg-accent hover:border-accent hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target cta-glow focus-ring press-effect tap-highlight">
             <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">{h.cta.label}</span>
             <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-accent group-hover:text-bg-primary transition-colors">{h.cta.action}</span>
           </a>
         </div>
 
         <!-- FBF square -->
-        <div class="flex items-center justify-center p-2">
-          <a href="https://freebatteryfactory.com" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
+        <div class="hero-cta-cell flex items-center justify-center">
+          <a href="https://freebatteryfactory.com" target="_blank" rel="noopener noreferrer" class="hero-cta aspect-square bg-purple/10 border border-purple/30 hover:bg-purple hover:border-purple hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
             <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">the</span>
             <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-purple group-hover:text-bg-primary transition-colors">FBF</span>
           </a>
@@ -68,8 +85,8 @@ const { class: satClass, ...satData } = satelliteAttrs({
 
         <!-- Résumé square — warm gold, the same #fbbf24 as the scene orbs' amber;
              same PDF the footer links, kept there too -->
-        <div class="flex items-center justify-center p-2">
-          <a href="/Eassa_Ayoub_Resume.pdf" target="_blank" rel="noopener noreferrer" class="aspect-square w-[clamp(7rem,15vw,9rem)] bg-warm/10 border border-warm/30 hover:bg-warm hover:border-warm hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
+        <div class="hero-cta-cell flex items-center justify-center">
+          <a href="/Eassa_Ayoub_Resume.pdf" target="_blank" rel="noopener noreferrer" class="hero-cta aspect-square bg-warm/10 border border-warm/30 hover:bg-warm hover:border-warm hover:text-bg-primary cta-btn flex flex-col items-center justify-center gap-2 group touch-target focus-ring press-effect tap-highlight">
             <span class="font-mono text-[clamp(0.65rem,1.5vw,0.75rem)] tracking-wider uppercase">my</span>
             <span class="font-serif text-[clamp(1.5rem,3vw,2rem)] text-warm group-hover:text-bg-primary transition-colors">Résumé</span>
           </a>
@@ -78,9 +95,13 @@ const { class: satClass, ...satData } = satelliteAttrs({
     </div>
   </div>
 
-  <!-- Photo -->
-  <div class="hero-content hero-figure flex justify-center items-center animate-fadeInUp" style="animation-delay:0.5s">
-    <div class="w-full max-w-[380px] aspect-[380/480] bg-gradient-to-br from-bg-tertiary to-bg-secondary border border-white/[0.08] relative overflow-hidden">
+  <!-- Photo. animate-fadeInUp lives on the INNER frame, not the .hero-content
+       figure: the tuck rule above sets `animation` on .hero-content with higher
+       specificity, so an entrance animation on the same element would be
+       replaced in split/cinematic (now armed at SSR) — decoupled elements keep
+       both the entrance fade and the scroll tuck. -->
+  <div class="hero-content hero-figure flex justify-center items-center">
+    <div class="w-full max-w-[380px] aspect-[380/480] bg-gradient-to-br from-bg-tertiary to-bg-secondary border border-white/[0.08] relative overflow-hidden animate-fadeInUp" style="animation-delay:0.5s">
       <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-500 to-purple-500"></div>
       <picture class="contents">
         <source srcset="/assets/headshot.avif" type="image/avif" />
@@ -107,8 +128,14 @@ const { class: satClass, ...satData } = satelliteAttrs({
          contentY 0→250, opacity 1→0, scale 1→0.95 over one viewport). Driven off
          scroll(root block) — the real scroller, proven live with Lenis below — so
          it responds immediately, instead of the old view()/exit range that only
-         fired once the hero was already leaving (read as static while reading). */
-      .hero-content {
+         fired once the hero was already leaving (read as static while reading).
+         Keyed to the heroLayout boundary state (the satellite's data-czap-state,
+         live-updated by the worker directive): only split/cinematic tuck. In the
+         stacked regime the copy + CTA squares START below the fold, so a fade
+         tied to scroll 0→100vh dims them while the user is still scrolling TO
+         them — the "hero fades before you can tap the buttons" phone bug. */
+      #hero-satellite[data-czap-state='split'] .hero-content,
+      #hero-satellite[data-czap-state='cinematic'] .hero-content {
         animation: hero-tuck linear both;
         animation-timeline: scroll(root block);
         animation-range: 0 100vh;

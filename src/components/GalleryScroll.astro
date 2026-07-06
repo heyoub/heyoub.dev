@@ -102,8 +102,11 @@ const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: p
   }
   @keyframes gh-fade { to { opacity: 0; transform: translateY(-20px); } }
 
-  /* The card deck's layout (flow below the split, sticky STACK at ≥lg) lives in
-     the @quantize layer — src/styles/layout.quantize.css, `.card-deck > .stack-card`
-     base + splitLayout.two — so the phone/desktop switch is single-sourced with
-     every other regime instead of a hand-written media query here. */
+  /* The card deck's layout lives in the @quantize layer — src/styles/
+     layout.quantize.css, `.card-deck > .stack-card` base + splitLayout.two — so
+     the phone/desktop switch is single-sourced with every other regime instead
+     of a hand-written media query here. Below the split the cards FLOW and get
+     the scroll-driven card-deal entrance (they're taller than a phone viewport,
+     so a pinned card's tail would be unreachable); at splitLayout.two the true
+     sticky STACK takes over and the entrance is cancelled. */
 </style>
