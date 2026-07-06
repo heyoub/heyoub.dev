@@ -18,12 +18,14 @@ const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: p
        you scroll: each rises, covers the one before, holds; the whole deck scrolls
        up once complete. NO data-reveal here — its transform would break sticky. -->
   <div class="card-deck">
-    <!-- Card 1 — the pattern -->
+    <!-- Card 1 — the pattern. Below the split the article + grid dissolve
+         (display: contents in the @quantize layer) and each .deck-unit half
+         becomes its own pinnable deck card — see layout.quantize.css. -->
     <article class="stack-card gallery-card relative bg-bg-tertiary border border-white/5" style="z-index:1">
-      <div class="absolute top-0 left-0 w-16 h-px bg-gradient-to-r from-accent to-transparent"></div>
-      <div class="absolute top-0 left-0 h-16 w-px bg-gradient-to-b from-accent to-transparent"></div>
+      <div class="card-accent absolute top-0 left-0 w-16 h-px bg-gradient-to-r from-accent to-transparent"></div>
+      <div class="card-accent absolute top-0 left-0 h-16 w-px bg-gradient-to-b from-accent to-transparent"></div>
       <div class="grid czap-split-2 h-full">
-        <div class="flex flex-col justify-center">
+        <div class="deck-unit flex flex-col justify-center" style="--ua: var(--accent)">
           <div class="section-label">The Pattern</div>
           <h3 class="font-serif text-[clamp(1.5rem,4vw,2.5rem)] mb-6 leading-tight">
             {pathContent.heading[0]}<br /><span class="text-text-secondary">{pathContent.heading[1]}</span>
@@ -31,11 +33,14 @@ const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: p
           <p class="text-text-secondary font-light text-[clamp(0.95rem,2vw,1.1rem)] leading-relaxed">{pathContent.body}</p>
         </div>
 
-        <div class="flex flex-col justify-center space-y-6">
+        <!-- deck-subgrid, not deck-unit: this half is ~680px at 375w — taller than
+             a short phone's pin budget — so below the split it dissolves too and
+             EACH proof point pins as its own mini deck card (per-principle accent). -->
+        <div class="deck-subgrid flex flex-col justify-center space-y-6">
           {proofPoints.map((point) => {
             const principle = principleMap[point.principle]
             return (
-              <div class="group">
+              <div class="deck-unit group" style={`--ua: var(--${principle.accent})`}>
                 <div class="flex items-center gap-3 mb-2">
                   <div class="w-1.5 h-1.5 rounded-full" style={`background-color: var(--${principle.accent})`}></div>
                   <span class="font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-wider uppercase text-accent">{principle.label}</span>
@@ -59,10 +64,10 @@ const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: p
     <!-- Cards 2+ — the products, same shape + same title/write-up/3-points format -->
     {productCards.map((p, i) => (
       <article class="stack-card gallery-card relative bg-bg-tertiary border border-white/5" style={`z-index:${i + 2}`}>
-        <div class="absolute top-0 left-0 w-16 h-px" style={`background: linear-gradient(to right, var(--${p.accent}), transparent)`}></div>
-        <div class="absolute top-0 left-0 h-16 w-px" style={`background: linear-gradient(to bottom, var(--${p.accent}), transparent)`}></div>
+        <div class="card-accent absolute top-0 left-0 w-16 h-px" style={`background: linear-gradient(to right, var(--${p.accent}), transparent)`}></div>
+        <div class="card-accent absolute top-0 left-0 h-16 w-px" style={`background: linear-gradient(to bottom, var(--${p.accent}), transparent)`}></div>
         <div class="grid czap-split-2 h-full">
-          <div class="flex flex-col justify-center">
+          <div class="deck-unit flex flex-col justify-center" style={`--ua: var(--${p.accent})`}>
             <div class="font-mono text-[clamp(0.6rem,1.25vw,0.7rem)] tracking-wider uppercase mb-3" style={`color: var(--${p.accent})`}>Product</div>
             <h3 class="font-serif text-[clamp(1.5rem,4vw,2.5rem)] mb-3 leading-tight">{p.name}</h3>
             <p class="font-serif italic text-[clamp(1rem,2.2vw,1.25rem)] text-text-secondary leading-snug mb-5">{p.tagline}</p>
@@ -70,7 +75,7 @@ const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: p
             <a href={p.link.url} target="_blank" rel="noopener noreferrer" class="font-mono text-[clamp(0.7rem,1.25vw,0.8rem)] tracking-wider self-start hover:opacity-70 transition-opacity" style={`color: var(--${p.accent})`}>{p.link.label} →</a>
           </div>
 
-          <div class="flex flex-col justify-center space-y-6">
+          <div class="deck-unit flex flex-col justify-center space-y-6" style={`--ua: var(--${p.accent})`}>
             {p.points.map((pt) => (
               <div class="group">
                 <div class="flex items-center gap-3 mb-2">
@@ -103,10 +108,11 @@ const principleMap = { attention: pillars[0]!, rent: pillars[1]!, constraints: p
   @keyframes gh-fade { to { opacity: 0; transform: translateY(-20px); } }
 
   /* The card deck's layout lives in the @quantize layer — src/styles/
-     layout.quantize.css, `.card-deck > .stack-card` base + splitLayout.two — so
-     the phone/desktop switch is single-sourced with every other regime instead
-     of a hand-written media query here. Below the split the cards FLOW and get
-     the scroll-driven card-deal entrance (they're taller than a phone viewport,
-     so a pinned card's tail would be unreachable); at splitLayout.two the true
-     sticky STACK takes over and the entrance is cancelled. */
+     layout.quantize.css, `.card-deck` base + splitLayout.two — so the
+     phone/desktop switch is single-sourced with every other regime instead of
+     a hand-written media query here. Below the split the article + grid
+     dissolve (display: contents) and each .deck-unit HALF pins as its own deck
+     card (a whole single-column card is taller than a phone viewport — a pin
+     would strand its tail); at splitLayout.two the articles reassemble and the
+     sticky STACK pins whole cards. */
 </style>

@@ -58,38 +58,45 @@
 .pyramid-labels { display: none; }           /* hidden */
 .pyramid-labels-mobile { display: flex; }    /* flex */
 .gallery-card { padding: 1.5rem; }           /* p-6 */
-/* Card deck (The Work): below the split (splitLayout.one — phones/portrait tablets)
-   each card is single-column and TALLER than the viewport, so the same-shape sticky
-   STACK can't pin — the next card slides up and covers the one behind, eating its
-   proof points (the "cards overlap / weird ordering / sections bleed" bug on phones).
-   So below split the cards just FLOW as a normal vertical stack; the sticky pin is a
-   ≥lg (two-column, short-card) affordance, turned on under splitLayout.two.
-   `.card-deck > .stack-card` (0,2,0) so `position` beats Tailwind's `.relative`. */
-.card-deck > .stack-card { margin-bottom: clamp(2rem, 6vw, 3rem); }
-.card-deck > .stack-card:last-child { margin-bottom: 0; }
-/* Below the split the deck can't PIN, but it still DEALS: each card rises onto
-   the stack as it enters (translate+scale, compositor-only), the same native
-   scroll-driven mechanism as the hero tuck / gallery-header fade — so phones
-   keep the deck read without a pinned card's tail ever becoming unreachable.
-   splitLayout.two cancels it (there the true sticky stack takes over, and a
-   transform would break sticky). Guards mirror the site's other timelines.
-   Deliberate stance: CSS scroll timelines here gate on prefers-reduced-motion
-   ONLY, not data-czap-motion tiers — they're compositor-only transforms (cheap
-   everywhere); the tier axis governs the heavy surfaces (videos via `lite`,
-   the GPU scene). Revisit if a timeline ever animates paint properties. */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .card-deck > .stack-card {
-      animation: card-deal linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 60%;
-    }
-  }
+/* Card deck (The Work) below the split — TRUE stagger via phone-sized pinning
+   units. A full card can't pin on a phone: single-column it's TALLER than the
+   viewport (pattern card ≈ 1050px at 390w), so a pin strands its tail
+   off-screen — the buried-proof-points bug. But each card's two HALVES (text
+   block / points block, ~300–650px) DO fit. So below the split the deck
+   re-granularizes: article + split grid dissolve (display: contents) and each
+   .deck-unit half is a standalone deck card with the SAME sticky
+   pin-and-cover mechanics as the desktop stack. No content hidden, no
+   measuring JS (element size is not in the LiteShip signal vocabulary — CSS
+   granularity-per-state is the framework-shaped answer). splitLayout.two
+   reassembles the two-column articles and pins those instead. Sticky needs no
+   @supports/PRM guard, so this stays fully inside the @quantize plane (state
+   bodies take declarations + selector rules; needing at-rule guards is what
+   forces the attr path, as with the hero tuck). */
+.card-deck > .stack-card { display: contents; }
+.card-deck .czap-split-2 { display: contents; }
+/* The article-frame corner accents have no box to anchor to while the article
+   is dissolved (absolute would resolve against #work); each unit re-expresses
+   the accent as a top gradient hairline via its --ua custom prop instead. */
+.card-deck .card-accent { display: none; }
+/* The pattern card's proof-points half is itself taller than a short phone's
+   pin budget (~680px at 375w vs ~630 usable), so it dissolves one level
+   further: each proof point is its own mini deck card. Its space-y-6 margins
+   are suppressed while dissolved (the units carry deck spacing); (0,4,0)
+   matches Tailwind's space-y selector shape to win the tie. */
+.card-deck .deck-subgrid { display: contents; }
+.card-deck .deck-subgrid > :not([hidden]) ~ :not([hidden]) { margin-top: 0; }
+.card-deck .deck-unit {
+  position: sticky;
+  top: clamp(2rem, 5svh, 4rem);
+  background-color: var(--bg-tertiary);
+  background-image: linear-gradient(to right, var(--ua), transparent);
+  background-size: 4rem 1px;
+  background-repeat: no-repeat;
+  border: 1px solid rgb(255 255 255 / 0.05);
+  padding: 1.25rem;
+  margin-bottom: clamp(2rem, 6vw, 3rem);
 }
-@keyframes card-deal {
-  from { transform: translateY(9vh) scale(0.97); }
-  to   { transform: translateY(0)   scale(1); }
-}
+.card-deck > .stack-card:last-child .deck-unit:last-child { margin-bottom: 0; }
 /* ContactDecompile editor gutter (folded off md:) → editorGutter.gutter (768). */
 .czap-editor-gutter { display: none; }       /* hidden */
 .code-block { padding: 1rem; }               /* py-4 px-4 (the pl-20 indent rides editorGutter) */
@@ -162,17 +169,28 @@
     .gallery-card { padding: 2.5rem; }           /* lg:p-10 */
     /* Same-shape sticky STACK — each card pins near the top and the next slides over
        it and holds (two-column here, so cards are short enough to actually pin). The
-       flow/spacing below the split lives in the base rule above. `animation: none`
-       cancels the base card-deal entrance: a scroll-driven transform on a pinned
-       element would break sticky, and the pin IS the deck effect here. */
+       phone regime pins the half-card .deck-units instead (base rules above);
+       here the articles REASSEMBLE (display restored, unit chrome neutralized)
+       and the pin moves back to the whole card. */
     .card-deck > .stack-card {
+      display: block;
       position: sticky;
       top: clamp(4.5rem, 9vh, 6.5rem);
       /* Shortest height that still fits the tallest card's content (max of a
          content-matched rem floor + a modest vh so it breathes on tall screens). */
       min-height: max(31rem, 44vh);
       margin-bottom: clamp(2.5rem, 7vh, 5.5rem);
-      animation: none;
+    }
+    .card-deck .czap-split-2 { display: grid; }
+    .card-deck .card-accent { display: block; }
+    .card-deck .deck-subgrid { display: flex; }  /* flex-col/justify/space-y utilities re-engage */
+    .card-deck .deck-subgrid > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; } /* space-y-6 */
+    .card-deck .deck-unit {
+      position: static;
+      background: none;
+      border: 0;
+      padding: 0;
+      margin-bottom: 0;
     }
   }
 }

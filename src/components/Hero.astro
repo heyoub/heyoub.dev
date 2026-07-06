@@ -140,6 +140,18 @@ const { class: satClass, ...satData } = satelliteAttrs({
         animation-timeline: scroll(root block);
         animation-range: 0 100vh;
       }
+      /* stacked: the hero still says goodbye, but only AFTER the reach — same
+         scroll(root) timeline, range shifted past the first viewport (the copy
+         + CTAs start below the fold on phones, so a 0-start fade dims them on
+         the way TO them). Pure opacity: the tuck's downward translate was the
+         other half of the reach problem. NOT view()-based: #hero-satellite is
+         overflow-hidden, i.e. a scroll container, so a view() timeline in here
+         would track the section's own never-scrolling scrollport and freeze. */
+      #hero-satellite[data-czap-state='stacked'] .hero-content {
+        animation: hero-fade-late linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 100vh 200vh;
+      }
       /* The scroll cue drifts up + fades in concert (over the first ~70vh). On the
          inner wrapper so it doesn't clobber the hint's translate-x centering. */
       .hint-inner {
@@ -158,6 +170,7 @@ const { class: satClass, ...satData } = satelliteAttrs({
     100% { transform: translateY(250px) scale(0.95);  opacity: 0; }
   }
   @keyframes hint-drift { to { transform: translateY(-70px); opacity: 0; } }
+  @keyframes hero-fade-late { to { opacity: 0; } }
 
   /* The cue breathes as ONE pulse — line + text on the same 2.4s curve — and
      nudges DOWN in sync (the universal "scroll here" signal) so someone hunting
