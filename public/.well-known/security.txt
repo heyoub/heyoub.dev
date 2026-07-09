@@ -1,5 +1,6 @@
 # Vulnerability disclosure for heyoub.dev (RFC 9116)
 Contact: mailto:hello@heyoub.dev
+Policy: https://heyoub.dev/.well-known/security.txt
 Expires: 2027-06-29T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://heyoub.dev/.well-known/security.txt

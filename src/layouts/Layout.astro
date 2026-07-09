@@ -20,7 +20,10 @@ import { CAP_AXES, capAxisAttr } from '@czap/detect'
 import { Font } from 'astro:assets'
 
 const siteUrl = 'https://heyoub.dev'
-const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`
+// Designed 1200×630 social card (public/og-card.png) — the transparent headshot
+// stays the on-page hero image; a summary_large_image card reads far better when
+// the link is unfurled in a feed.
+const ogImage = `${siteUrl}/og-card.png`
 
 // Server-resolved tier triple → <html> at first paint (the edge Client-Hints
 // detection in Astro.locals.czap; cf. EdgeTier.tierDataAttributes). The
@@ -30,11 +33,18 @@ const image = `${siteUrl}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png
 // attrs on settle. cap + motion + design: 0.2.3 split the reduced-motion
 // PREFERENCE onto data-czap-reduced-motion (our finding F1), so data-czap-motion
 // is now purely the motion tier and no longer collides with the head script.
+// 0.9.0 (bone 2): prefer the edge-forwarded spreadable attribute map —
+// `locals.czap.edge.htmlAttributesMap` is the ready-made `data-czap-<axis>` set,
+// sourced from the SAME edge resolution that produced the KV-cached boundary CSS,
+// so shell and CSS can't drift and a future 4th cap axis auto-appears with no
+// hand-maintained list. Fall back to rebuilding it from the CAP_AXES registry
+// (the 0.6.0/0.8.0 path) for the prerendered-no-middleware path, where there is
+// no request-time edge resolution (locals.czap.edge is absent); Astro drops any
+// undefined attribute value so an omitted axis simply isn't stamped.
 const czapTier = Astro.locals.czap?.tiers
-// Spread the tier triple from the CAP_AXES registry (0.6.0) instead of hand-
-// enumerating each axis on <html> — a future 4th cap axis auto-appears instead of
-// silently missing. Emits the identical data-czap-tier/motion/design today.
-const tierAttrs = Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), czapTier?.[axis]]))
+const tierAttrs =
+  Astro.locals.czap?.edge?.htmlAttributesMap ??
+  Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), czapTier?.[axis]]))
 ---
 
 <!DOCTYPE html>
@@ -77,9 +87,9 @@ const tierAttrs = Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), 
     <meta property="og:url" content={siteUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-    <meta property="og:image:width" content="380" />
-    <meta property="og:image:height" content="480" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Eassa Ayoub - Cognitive-First Systems Architect" />
     <meta property="og:site_name" content="Eassa Ayoub Portfolio" />
     <meta property="og:locale" content="en_US" />
@@ -87,13 +97,13 @@ const tierAttrs = Object.fromEntries(CAP_AXES.map((axis) => [capAxisAttr(axis), 
     <meta property="profile:last_name" content="Ayoub" />
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@heyoub" />
     <meta name="twitter:creator" content="@heyoub" />
     <meta name="twitter:url" content={siteUrl} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content="Eassa Ayoub - Cognitive-First Systems" />
 
     <!-- AI Discovery & Schema -->
