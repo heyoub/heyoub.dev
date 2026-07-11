@@ -26,9 +26,9 @@ export interface ContactConfig {
 }
 
 export const contactConfig: ContactConfig = {
-  heading: "Let's Connect",
+  heading: 'Bring me the hard part.',
   description:
-    'Interested in semantic computing, cognitive ergonomics, or the future of human-AI collaboration? Building in public. Always open to substantive conversations.',
+    "Bring me a system that's fighting its users, drifting from its own rules, or getting dangerous as it grows. Architecture diagram, repo, or napkin sketch. All three work.",
   links: [
     {
       key: 'email',

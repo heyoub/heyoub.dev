@@ -74,17 +74,18 @@ export interface MomentContent {
 
 export const momentContent: MomentContent = {
   lines: [
-    'It starts with a tap.',
-    'Your finger hesitates over "submit" for the thousandth time.',
-    'Another spreadsheet. Another app. Another fix.',
-    'But the chaos remains.',
+    'It usually starts smaller than people admit.',
+    'One more dropdown.',
+    'One more field.',
+    'One more place to remember what the system forgot.',
     '',
-    'What if the problem isn\'t you at all?',
-    'What if the software you use daily was built to fight your brain?',
+    'Then someone says, "I\'m just bad at this."',
+    'They\'re usually not.',
+    'The system is handing its bookkeeping to a human.',
   ],
   closer: {
-    before: "That's why I build",
-    emphasis: 'differently.',
+    before: 'I build the',
+    emphasis: 'other way.',
   },
 }
 
@@ -119,7 +120,7 @@ export interface CoreThesisContent {
       term: string
       meaning: string
     }
-    stats: Stat[]
+    bridge: string
   }
   universalTruth: {
     before: string
@@ -146,23 +147,7 @@ export const coreThesisContent: CoreThesisContent = {
       term: 'Cognitive Overload',
       meaning: 'Mental exhaustion caused by badly designed systems.',
     },
-    stats: [
-      {
-        value: '40% longer',
-        description: 'Users take to complete tasks in poorly structured interfaces',
-        accent: 'accent',
-      },
-      {
-        value: '2x error rates',
-        description: 'When systems overload your brain with tiny decisions',
-        accent: 'purple',
-      },
-      {
-        value: '3x abandonment',
-        description: 'Not because users don\'t need it—because it\'s mentally exhausting',
-        accent: 'green',
-      },
-    ],
+    bridge: "Most overload doesn't arrive as one dramatic failure. It arrives as dozens of tiny decisions the system could have made itself.",
   },
   universalTruth: {
     before: "This isn't about special modes or accessibility theater.",

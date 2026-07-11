@@ -20,13 +20,15 @@ const webmType = 'video/webm; codecs="av01.0.08M.08"'
 
 // Precompute each narrative line's treatment (avoids `<`/`<=` inside JSX,
 // which Astro's compiler misparses).
-const lineItems = momentContent.lines.map((line, i) => {
+const lineItems = momentContent.lines.map((line) => {
   if (line === '') return { gap: true, cls: '', text: '' }
-  let cls = 'font-serif text-[clamp(1.3rem,3vw,1.6rem)] text-white leading-snug'
-  if (i === 0) cls = 'font-mono text-[clamp(0.7rem,1.5vw,0.85rem)] tracking-[0.2em] uppercase text-accent/80'
-  else if (i === 1 || i === 2) cls = 'font-light text-[clamp(0.95rem,2vw,1.1rem)] text-white/70 leading-relaxed'
-  else if (i === 3) cls = 'font-serif text-[clamp(1.1rem,2.2vw,1.3rem)] text-white/90 italic'
-  else if (i === 5) cls = 'font-serif text-[clamp(1.15rem,2.5vw,1.4rem)] text-white/90 leading-snug'
+  // Content-driven so copy edits don't desync from index-based styling: the
+  // staccato "one more…" beats and the short turn read as light small type;
+  // everything else lands as serif.
+  const light = /^one more/i.test(line) || /usually not/i.test(line)
+  const cls = light
+    ? 'font-light text-[clamp(0.95rem,2vw,1.1rem)] text-white/70 leading-relaxed'
+    : 'font-serif text-[clamp(1.15rem,2.6vw,1.45rem)] text-white/90 leading-snug'
   return { gap: false, cls, text: line }
 })
 ---
