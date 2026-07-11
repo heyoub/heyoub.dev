@@ -176,11 +176,11 @@
     }
   ],
   "metadata": {
-    "last_updated": "2026-03",
+    "last_updated": "2026-07",
     "schema_version": "2.0.0",
     "discoverable": true,
     "indexable": true,
-    "ai_training_allowed": false,
+    "ai_training_allowed": true,
     "commercial_use": "contact required"
   }
 }
