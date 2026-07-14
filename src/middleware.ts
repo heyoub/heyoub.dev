@@ -28,6 +28,9 @@ const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
+  // Deny powerful features the site never uses (verified absent from live headers,
+  // 2026-07-14). Matches the-fbf's policy so the two sites don't drift.
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
 }
 
