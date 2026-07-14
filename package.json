@@ -60,5 +60,9 @@
       "msgpackr-extract",
       "workerd"
     ]
+  },
+  "engines": {
+    "node": ">=22.18",
+    "pnpm": ">=10"
   }
 }
