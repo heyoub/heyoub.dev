@@ -1,5 +1,6 @@
 import { cloudflareMiddleware } from '@czap/cloudflare'
 import { boundaries } from 'virtual:czap/boundaries'
+import { apexRedirectTarget } from './lib/url-canonical'
 // The same llms.txt served statically at /llms.txt, inlined at build time so
 // markdown content-negotiation needs no runtime ASSETS binding (one source).
 import llmsMarkdown from '../public/llms.txt?raw'
@@ -72,13 +73,18 @@ const czapHandler = cloudflareMiddleware({
 export const onRequest = async (context: any, next: () => Promise<Response>): Promise<Response> => {
   const url = new URL(context.request.url)
 
-  // Always Use HTTPS: 301 any http:// hit to its https:// equivalent (skip local
-  // dev so astro/wrangler dev on http://localhost don't redirect-loop). The edge
-  // "Always Use HTTPS" zone toggle does this before the Worker too — this is the
-  // in-app guarantee so it holds regardless of zone config.
-  if (url.protocol === 'http:' && !/^(localhost|127\.|0\.0\.0\.0|\[)/.test(url.hostname)) {
-    url.protocol = 'https:'
-    return new Response(null, { status: 301, headers: { Location: url.href, ...SECURITY_HEADERS } })
+  // Host + scheme canonicalization in ONE hop (no redirect chains): force https
+  // AND strip a leading `www.` so a `www` + http hit resolves straight to
+  // apex + https in a single 301 (never www→apex→https). Both hosts are attached
+  // as Worker custom domains, so `www` would otherwise be its own crawl/cache/
+  // analytics cohort with a self-canonical `www` URL. Local dev is exempt so it
+  // can't redirect-loop. The edge "Always Use HTTPS" toggle does the scheme half
+  // before the Worker too — this is the in-app guarantee, regardless of zone config.
+  // Logic lives in the pure, unit-tested `apexRedirectTarget` (lib/url-canonical).
+  const isLoopback = /^(localhost|127\.|0\.0\.0\.0|\[)/.test(url.hostname)
+  const redirectTo = apexRedirectTarget(url, { loopback: isLoopback })
+  if (redirectTo) {
+    return new Response(null, { status: 301, headers: { Location: redirectTo.href, ...SECURITY_HEADERS } })
   }
 
   // Agent content negotiation short-circuits the HTML render entirely.
