@@ -26,7 +26,6 @@
     "@czap/compiler": "0.10.0",
     "@czap/core": "0.10.0",
     "@czap/detect": "0.10.0",
-    "@czap/edge": "0.10.0",
     "@czap/quantizer": "0.10.0",
     "@czap/scene": "0.10.0",
     "@czap/stage": "0.10.0",
