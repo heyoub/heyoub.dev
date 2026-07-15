@@ -6,9 +6,13 @@ interface Props {
   height?: string
   overlay?: 'gradient' | 'dark' | 'none'
   class?: string
-  lite?: boolean
+  /** Save-Data / static tier: spend no bytes on the clip — brand gradient only. */
+  noData?: boolean
+  /** prefers-reduced-motion: the clip's own frame, held still. Not a gradient —
+   *  the glass card above needs real footage to frost against. */
+  noMotion?: boolean
 }
-const { src, height = '60vh', overlay = 'gradient', class: className = '', lite = false } = Astro.props
+const { src, height = '60vh', overlay = 'gradient', class: className = '', noData = false, noMotion = false } = Astro.props
 // AV1/WebM primary (modern browsers), the .mp4 prop is the H.264 fallback.
 // The webm <source> MUST carry the explicit av01 codec string (below): without it
 // `type="video/webm"` returns canPlayType "maybe" on iOS Safari 17.4+ (it now knows
@@ -38,8 +42,15 @@ const lineItems = momentContent.lines.map((line) => {
        any pre-load / re-buffer flash is the real footage, not a stray image.
        Save-Data / low tier gets a brand gradient instead of the video. -->
   <div class="vi-video absolute inset-0 w-full h-[130%] -top-[15%]">
-    {lite ? (
+    {noData ? (
       <div class="w-full h-full" style="background: radial-gradient(70% 70% at 50% 45%, color-mix(in srgb, var(--accent) 16%, transparent), var(--bg-primary))"></div>
+    ) : noMotion ? (
+      /* NOT interlude-poster.webp — that's a 2.3KB placeholder of the clip's FIRST
+         frame, which is the fade-in (near-black). It exists to make a re-buffer
+         flash look like the footage, not to be looked at. This is a chosen frame
+         (t=6.7s, the globe mid-burst) encoded to be seen. */
+      <img src="/assets/fs/interlude-still.webp" alt="" aria-hidden="true" decoding="async"
+        class="w-full h-full object-cover" />
     ) : (
       <video class="w-full h-full object-cover" muted loop playsinline autoplay preload="metadata"
         poster="/assets/fs/interlude-poster.webp" disablepictureinpicture>
