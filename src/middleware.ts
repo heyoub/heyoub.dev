@@ -24,6 +24,49 @@ import llmsMarkdown from '../public/llms.txt?raw'
 // salt of the old layout-css.ts. `quantize.container: '.czap-vp'` (astro.config)
 // keeps containment off :root, so it never makes <html> the containing block for
 // the fixed orb bg/nav (finding #7) — framework-native now, not hand-authored.
+// Content-Security-Policy, REPORT-ONLY. It reports violations and blocks nothing —
+// a wrong policy here cannot break the page, which is the only reason it ships
+// before it has been proven against real traffic.
+//
+// Built from what the live page ACTUALLY loads (measured 2026-07-15, not guessed):
+//   - all 6 external scripts are same-origin (/_astro/*); nothing third-party loads
+//   - github/cal.com/linkedin/freebatteryfactory appear only as <a href>, never as
+//     resource loads, so they need no allowance (CSP does not govern navigation)
+//   - the noise overlay pulls a data: SVG from CSS -> img-src data:
+//   - Cloudflare RUM POSTs to same-origin /cdn-cgi/rum -> connect-src 'self'
+//   - the GPU cast fetches /shaders/scene.frag -> connect-src 'self'
+//   - 84 style="" attributes -> style-src-attr 'unsafe-inline' is unavoidable
+//   - @czap/astro boots a wasm runtime -> script-src needs 'wasm-unsafe-eval'
+//
+// HONEST LIMITATION: script-src carries 'unsafe-inline', so this policy is NOT yet
+// XSS protection. The page has 14 inline <script> blocks, and their content varies
+// per request (czap serializes device-tier-dependent boundary payloads), so static
+// hashes would break on the first tier change. What this DOES buy today is the
+// non-script half — object-src, base-uri, frame-ancestors, form-action, and a
+// closed default-src — plus a report stream that proves whether anything
+// unexpected loads.
+//
+// The path to real script-src: Astro 7 ships native CSP (`security.csp`) which
+// hashes bundled scripts automatically. Blocked on two things — it emits an
+// ENFORCING <meta> (no report-only mode, so a mistake breaks production), and it
+// does not hash `is:inline` scripts, which Scene.astro's WGSL probe relies on.
+// Resolve those, then drop 'unsafe-inline' and flip this to Content-Security-Policy.
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "media-src 'self'",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "form-action 'self'",
+].join('; ')
+
 const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
@@ -32,6 +75,7 @@ const SECURITY_HEADERS: Record<string, string> = {
   // 2026-07-14). Matches the-fbf's policy so the two sites don't drift.
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'Content-Security-Policy-Report-Only': CSP_REPORT_ONLY,
 }
 
 // RFC 8288 Link headers for agent discovery — point crawlers/agents at the
