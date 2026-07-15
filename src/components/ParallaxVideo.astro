@@ -1,14 +1,26 @@
 ---
 // Fixed-background video parallax (webflow-style) — "The pattern persists".
-// On Save-Data / low tier the video is replaced by a static gradient.
-interface Props { lite?: boolean }
-const { lite = false } = Astro.props
+// Save-Data / low tier gets a static gradient (spend no bytes). Reduced motion
+// gets the clip's own frame held still — the ticker texture IS the artwork here,
+// so a gradient threw it away for a visitor who could afford to see it.
+interface Props {
+  /** Save-Data / static tier: brand gradient, no download. */
+  noData?: boolean
+  /** prefers-reduced-motion: the ticker frame, held still. */
+  noMotion?: boolean
+}
+const { noData = false, noMotion = false } = Astro.props
 ---
 
 <div class="relative h-[60vh] lg:h-[80vh]" style="clip-path: inset(0)">
-  {lite ? (
+  {noData ? (
     <div class="fixed inset-0 w-full h-full pointer-events-none" aria-hidden="true"
       style="background: radial-gradient(60% 60% at 50% 50%, color-mix(in srgb, var(--purple) 22%, transparent), var(--bg-primary))"></div>
+  ) : noMotion ? (
+    /* Same fixed/object-cover geometry as the <video> below, so the duck-stack
+       still slides over it identically — only the motion is gone. */
+    <img src="/assets/fs/parallax-still.webp" alt="" aria-hidden="true" decoding="async"
+      class="fixed inset-0 w-full h-full object-cover pointer-events-none" />
   ) : (
     <video
       class="fixed inset-0 w-full h-full object-cover pointer-events-none"

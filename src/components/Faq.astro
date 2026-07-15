@@ -1,0 +1,100 @@
+---
+// Objection-handling FAQ — visible copy and FAQPage JSON-LD both derive from
+// FAQ in @/lib/identity, so they cannot drift.
+//
+// No JavaScript by design. Native <details name="faq"> is an exclusive
+// accordion (opening one closes the rest) as a browser behaviour, so there is
+// no hydration, no listeners, and no client state to carry. Content stays in
+// the DOM either way, so it is readable by crawlers and by find-in-page.
+import { FAQ } from '@/lib/identity'
+---
+
+<section id="faq" class="py-[clamp(2.5rem,10vw,10rem)] px-[8vw] bg-bg-secondary border-y border-white/5">
+  <div class="max-w-3xl mx-auto" data-reveal>
+    <div class="text-center mb-[clamp(2rem,5vw,3.5rem)]">
+      <p class="font-mono text-[clamp(0.7rem,1.5vw,0.85rem)] tracking-[0.2em] uppercase text-text-muted mb-4">
+        Common questions
+      </p>
+      <h2 class="font-serif text-[clamp(1.8rem,4vw,2.8rem)] font-normal leading-snug">
+        What people ask <em class="text-accent">before they reach out.</em>
+      </h2>
+    </div>
+
+    <dl class="faq-list border-t border-white/5">
+      {FAQ.map((item, i) => (
+        <div class="faq-row border-b border-white/5">
+          <dt>
+            <details name="faq" class="faq-details group">
+              <summary class="faq-summary">
+                <span class="faq-index font-mono text-[0.7rem] tracking-[0.15em] text-accent/50 shrink-0 pt-1" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="faq-question font-serif text-[clamp(1rem,2.2vw,1.25rem)] font-normal leading-snug flex-1">
+                  {item.question}
+                </span>
+                <span class="faq-marker font-mono text-[0.625rem] text-accent/40 shrink-0 pt-1" aria-hidden="true">▼</span>
+              </summary>
+            </details>
+          </dt>
+          <dd class="faq-answer-wrap">
+            <p class="faq-answer text-text-secondary font-light text-[clamp(0.95rem,1.9vw,1.1rem)] leading-relaxed">
+              {item.answer}
+            </p>
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  /* The <details> owns only the question row; the answer lives in the sibling
+     <dd> so the markup stays a valid <dl>. The row's open state is projected
+     onto the answer with :has(), which keeps one source of truth (the details'
+     own open attribute) instead of duplicating state. */
+  .faq-summary {
+    @apply flex items-start gap-4 py-5 cursor-pointer list-none transition-colors duration-300;
+  }
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-summary:hover .faq-question,
+  .faq-details[open] .faq-question {
+    @apply text-accent;
+  }
+  .faq-summary:focus-visible {
+    @apply outline-none ring-1 ring-accent/40;
+  }
+
+  .faq-marker {
+    @apply transition-transform duration-300;
+  }
+  .faq-details[open] .faq-marker {
+    transform: rotate(180deg);
+  }
+
+  /* Collapsed by default; the open row grows the site's accent left-rule — the
+     same annotation treatment CoreThesis uses for definitions and pull-quotes. */
+  .faq-answer-wrap {
+    @apply grid overflow-hidden;
+    grid-template-rows: 0fr;
+    transition:
+      grid-template-rows 320ms ease,
+      opacity 320ms ease;
+    opacity: 0;
+  }
+  .faq-row:has(.faq-details[open]) .faq-answer-wrap {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .faq-answer {
+    @apply min-h-0 border-l-2 border-accent/30 pl-6 ml-[2.1rem] mb-6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-answer-wrap,
+    .faq-marker {
+      transition: none;
+    }
+  }
+</style>

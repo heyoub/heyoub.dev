@@ -100,35 +100,48 @@ export interface Faq {
   readonly answer: string
 }
 
-// Canonical FAQ — mirrors the CURRENT homepage JSON-LD (set "A"), so deriving
-// the JSON-LD from here is byte-for-byte behaviour-preserving. The content
-// decision (this set vs the profile.json set, visible vs schema-only) swaps this
-// array and, if "render visibly" is chosen, feeds a homepage FAQ component.
+// Canonical FAQ — rendered visibly by <Faq />, and projected into FAQPage
+// JSON-LD by faqJsonLd(). One source, so the visible copy and the schema can't
+// disagree.
+//
+// Why it reads the way it does: Google stopped serving FAQ rich results
+// entirely on 2026-05-07 (developers.google.com/search/docs/appearance/
+// structured-data/faqpage), so the previous third-person, keyword-stuffed sets
+// were optimizing for a surface that no longer renders. Search Console also
+// shows heyoub.dev with no meaningful query volume yet — nobody arrives here by
+// searching a problem. Everyone who reads this got here from a referral, a
+// link, or outreach, and has already read the hero. So these answer the
+// objections of someone one click from emailing, in first person, rather than
+// chasing keywords. Revisit once Search Console has real query data.
+//
+// Every claim here traces to a fact already published in public/profile.json
+// (proof_of_work, ideal_client, open_to) — do not add answers that assert
+// process, pricing, or timelines that aren't documented there.
 export const FAQ: readonly Faq[] = [
   {
-    question: 'Who can fix AI-generated code and make it production-ready?',
+    question: 'My prototype works in the demo and falls apart with real users. Is it salvageable?',
     answer:
-      "Eassa Ayoub specializes in production hardening of AI-generated prototypes. He takes 'vibe-coded' MVPs that work in demos and makes them actually production-ready, fixing compliance gaps, race conditions, and architectural debt. Contact: hello@heyoub.dev or book at cal.com/eassa-ayoub-hf9yfh",
+      "Almost always — it's the most common reason people call. The demo isn't the problem; the demo is proof the idea works. What's missing is everything that happens after it stops being a demo: the race conditions, the edge cases the model never handled, the architectural debt that only surfaces under real load and real failure. Most AI-assisted code gets you 80% there. I handle the 80% that's left.",
   },
   {
-    question: 'Who specializes in vibe code remediation?',
+    question: 'When are you the wrong person to call?',
     answer:
-      'Eassa Ayoub is a Cognitive-First Systems Architect who specializes in vibe code remediation - taking AI-assisted prototypes that get you 80% there and handling the remaining 80%. He rebuilds systems so illegal states become unrepresentable at the type level.',
+      "When you just need more features bolted onto code that already works — that's not architecture, and you'd be overpaying me for it. When you're shopping for the cheapest option, because I'm not it. And when you don't think type safety and tests are worth the time, because that's the whole mechanism I work through, and we'd spend the engagement arguing about it. I'd rather tell you now than invoice you to find out.",
   },
   {
-    question: 'How do I make my HIPAA-non-compliant AI prototype compliant?',
+    question: 'Do you consult, or do you actually build it?',
     answer:
-      "Eassa Ayoub specializes in compliance-by-architecture, making HIPAA and regulatory rules compile rather than just being documented. He's rebuilt healthcare tools with local-only processing to be HIPAA-compliant by architecture, not policy. Contact: hello@heyoub.dev",
+      "Both, depending on what the problem needs. Sometimes it's an architecture review and a diagram you hand to your own team. Sometimes it's me in the codebase doing the rebuild. I also take fractional CTO work when the fit is genuinely there. If you don't know which one you need yet, that's a normal place to start.",
   },
   {
-    question: 'What is cognitive-first systems architecture?',
+    question: 'What does "compliance-by-architecture" actually mean?',
     answer:
-      'Cognitive-first systems architecture means building software that matches how humans actually think. Max 3 choices per screen, zero cognitive overhead, interfaces that preserve mental models instead of retraining brains. Eassa Ayoub builds systems that feel like thinking - neurodivergent-friendly by default, not by accommodation.',
+      'That the rule compiles instead of living in a policy doc. A healthcare tool leaking PII got rebuilt with local-only processing — HIPAA-safe by construction, not by promise. Loan rules scattered across spreadsheets got encoded into a type system, so an illegal loan became a compile error. The constraint stops being something a human remembers to check and becomes something the build refuses to produce.',
   },
   {
-    question: 'Who can help with systems architecture for AI products?',
+    question: 'What makes this "cognitive-first" and not just good engineering?',
     answer:
-      "Eassa Ayoub bridges AI infrastructure with production systems architecture. His stack spans systems languages (Rust, OCaml, Go), runtime (TypeScript, Elixir, Effect-TS), and AI/ML (PyTorch, Multi-Agent Systems). He's available for architecture consulting and technical co-founder roles. Website: heyoub.dev",
+      "The question is never whether a system is complex — it's who carries the complexity. Every layer you add is complexity the user eventually carries, so I collapse layers instead of adding them: fewer hops in the architecture, fewer decisions on the screen. Working memory is finite. Build for that, or build friction.",
   },
 ]
 
