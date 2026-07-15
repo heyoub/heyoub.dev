@@ -13,7 +13,8 @@
     "test": "playwright test",
     "audit:czap": "czap audit --consumer --pretty",
     "indexnow": "node scripts/indexnow-ping.mjs",
-    "predeploy": "czap doctor --target cloudflare && czap audit --consumer",
+    "dns:check": "node --experimental-strip-types scripts/dns-check.mjs",
+    "predeploy": "czap doctor --target cloudflare && czap audit --consumer && node --experimental-strip-types scripts/dns-check.mjs --warn",
     "deploy": "pnpm build && wrangler deploy --config dist/server/wrangler.json && node scripts/indexnow-ping.mjs",
     "test:unit": "node --experimental-strip-types --test tests/*.unit.ts"
   },
