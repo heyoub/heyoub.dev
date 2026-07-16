@@ -38,7 +38,14 @@ const webmcp = {
   const data = (window as unknown as { __WEBMCP_DATA__?: Record<string, unknown> }).__WEBMCP_DATA__
   const liveGraph = (): any => (window as unknown as { __CZAP_GRAPH__?: unknown }).__CZAP_GRAPH__
 
-  if (mc && typeof mc.provideContext === 'function' && data) {
+  // Non-visual: this registers navigator.modelContext tools for AI agents —
+  // nothing paints, and only an agent (which queries the API long after load)
+  // ever reads it. Registering it eagerly cost ~56ms (throttled) in the load
+  // storm for zero first-paint benefit, so defer to idle after load. Two tools
+  // read __CZAP_GRAPH__ (from GraphRuntime, also idle-deferred) and already
+  // degrade gracefully if it isn't up yet, so ordering is safe. See LiteShip #155.
+  const register = (): void => {
+    if (!(mc && typeof mc.provideContext === 'function' && data)) return
     const text = (value: unknown) => ({ content: [{ type: 'text', text: JSON.stringify(value, null, 2) }] })
     const noArgs = { type: 'object', properties: {}, additionalProperties: false }
     try {
@@ -95,4 +102,11 @@ const webmcp = {
       /* WebMCP is experimental — never let it break the page */
     }
   }
+
+  const schedule = (cb: () => void): void => {
+    if ('requestIdleCallback' in window) requestIdleCallback(cb, { timeout: 4000 })
+    else setTimeout(cb, 1)
+  }
+  if (document.readyState === 'complete') schedule(register)
+  else window.addEventListener('load', () => schedule(register), { once: true })
 </script>

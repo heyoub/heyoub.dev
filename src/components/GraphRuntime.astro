@@ -39,7 +39,18 @@ const serialized = JSON.stringify(siteGraph)
         /* live-graph boot is additive — never let it disturb the orbs/layout */
       }
     }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true })
-    else boot()
+    // Non-visual: this boots the DocumentGraph for the AI-apply seam (exposes
+    // __CZAP_GRAPH__ for WebMCP's propose_page_patch tool). The orbs are the gpu
+    // directive + initSceneMood, NOT this — so nothing on screen waits for it.
+    // It used to boot on DOMContentLoaded, piling ~174ms (throttled) onto the
+    // load-phase long frames that also carry the czap runtime boot. Deferring to
+    // idle after load moves it out of the critical paint/interaction window; the
+    // graph is still up long before any agent calls a tool. See LiteShip #155.
+    const schedule = (cb: () => void): void => {
+      if ('requestIdleCallback' in window) requestIdleCallback(cb, { timeout: 3000 })
+      else setTimeout(cb, 1)
+    }
+    if (document.readyState === 'complete') schedule(boot)
+    else window.addEventListener('load', () => schedule(boot), { once: true })
   }
 </script>
