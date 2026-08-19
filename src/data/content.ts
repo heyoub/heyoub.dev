@@ -38,15 +38,15 @@ export const heroContent: HeroContent = {
     first: 'Eassa',
     last: 'Ayoub',
   },
-  label: 'Cognitive-First Systems · Former Operator',
+  label: 'Founder, The Free Battery Factory · Operator-Engineer',
   tagline: {
-    before: 'Most software makes users carry its complexity. I build',
-    emphasis: 'software that feels like thinking',
-    after: '— systems that match how humans actually work.',
+    before: 'Businesses are full of people doing a job the software should be doing. I build',
+    emphasis: 'the machinery underneath',
+    after: '— for work somebody has to answer for.',
   },
   quote: {
-    regular: 'The question is never "is this complex?" It\'s "WHO carries the complexity?"',
-    emphasis: 'I vote computer.',
+    regular: `The question is never "is this complex?" It's "who's carrying it?"`,
+    emphasis: 'The machine carries the machinery. The operator keeps the judgment.',
   },
   cta: {
     label: 'Book a',
@@ -56,7 +56,7 @@ export const heroContent: HeroContent = {
   scrollHint: 'Scroll to explore',
   photo: {
     src: '/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png',
-    alt: 'Eassa Ayoub - Cognitive-first systems architect',
+    alt: 'Eassa Ayoub - founder of The Free Battery Factory',
   },
 }
 
@@ -286,7 +286,7 @@ export interface OpenToContent {
 export const openToContent: OpenToContent = {
   heading: "Let's Build",
   description:
-    'I want teams building real systems — or rescuing promising ones from prototype purgatory.',
+    'I want small teams doing work that matters — where getting it wrong costs somebody something real.',
   services: [
     {
       title: 'AI that earns its keep',
@@ -309,7 +309,7 @@ export const openToContent: OpenToContent = {
   // won't discuss client financials in public — so no names, numbers, or war-story
   // specifics, ever. Keep it at the "who carries the complexity" lens. Every word true.
   hook: {
-    label: 'Before I built systems, I ran them',
+    label: 'Before I built the systems, I ran them',
     lines: [
       "Mortgage. Accounting. Sales. The work where a clumsy interface isn't a bad review — it's someone's close, someone's money, someone's mistake to sign off on.",
       "So I don't treat complexity as abstract. It's a cost, and someone always pays it — usually the person with the least room to.",
@@ -358,7 +358,7 @@ export const productCards: ProductCard[] = [
     points: [
       { label: 'Hash-chained', title: 'Tamper-evident', detail: 'Blake3 ancestry links every event; you can prove nothing was altered.' },
       { label: 'Deterministic', title: 'Replay from zero', detail: 'Rebuild the whole state from the log; verifiable receipts for every write.' },
-      { label: 'Proven', title: '103 invariants', detail: 'Traced to 150 artifacts — loom concurrency proofs, chaos-tested with fault injection.' },
+      { label: 'Released', title: 'v0.10.0, and finished', detail: 'The line shipped, then stopped. Still installable, still resolvable, stated at exactly that.' },
     ],
     link: { url: 'https://freebatteryfactory.com/batpak/overview', label: 'batpak/overview' },
     accent: 'purple',

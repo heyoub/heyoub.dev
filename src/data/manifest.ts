@@ -36,17 +36,17 @@ export const projectManifest: ProjectLink[] = [
   },
   {
     name: 'BatPAK',
-    gitUrl: 'https://github.com/freebatteryfactory/batpak',
+    gitUrl: 'https://github.com/freebatteryfactory/batpak_DEPRECATED',
     siteUrl: 'https://crates.io/crates/batpak',
     pitch: {
       filename: 'batpak.rs',
-      tagline: 'Seven Rust crates. Every one earns its keep.',
+      tagline: 'Seven Rust crates. Shipped, then finished.',
       blurb:
-        "Seven crates shipped in dependency order, each dragged through the full gauntlet before it goes near crates.io — CI, mutation testing, semver and public-API checks, consumer smoke, dry-run publish. No 'works on my machine.'",
+        "Seven crates shipped in dependency order, each dragged through the full gauntlet before it went near crates.io — CI, mutation testing, semver and public-API checks, consumer smoke, dry-run publish. Released at 0.10.0 and no longer developed; the crate is still there and still installable, and the repo carries the rename that says so.",
       stack: ['Rust', 'Cargo', 'CI/CD'],
       links: [
         { label: 'crate', url: 'https://crates.io/crates/batpak', display: 'crates.io/crates/batpak' },
-        { label: 'repo', url: 'https://github.com/freebatteryfactory/batpak', display: 'github.com/freebatteryfactory/batpak' },
+        { label: 'repo', url: 'https://github.com/freebatteryfactory/batpak_DEPRECATED', display: 'github.com/freebatteryfactory/batpak_DEPRECATED' },
       ],
     },
   },

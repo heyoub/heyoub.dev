@@ -5,12 +5,19 @@
 // derived from it (below), and a drift test (tests/identity-drift.unit.ts)
 // asserts `profile.json` still agrees on every field here.
 //
-// Scope note: this owns identity FACTS, not the FAQ COPY. The homepage JSON-LD
-// FAQ and profile.json FAQ are two different curations pending a content
-// decision (which set is canonical + render-visibly vs remove-schema). Until
-// that's decided, `FAQ` below mirrors the current JSON-LD set exactly, so this
-// refactor changes no emitted output.
+// Scope note: this owns identity FACTS *and* the canonical FAQ. That pending
+// content decision is now made — the FAQ below is the one curation, rendered
+// visibly by <Faq /> and projected into FAQPage JSON-LD. profile.json carries a
+// machine-shaped restatement of the same claims, and the drift test asserts the
+// two do not contradict each other.
 
+// Title note: this record used to say "Cognitive-First Systems Architect" with
+// an O*NET occupational code attached. Both went. The phrase named a design
+// sensibility rather than a person, the code asserted a federal classification
+// nothing here can back, and neither said who the work answers to. What's here
+// now is checkable: he founded the company, and he ran operations before he
+// built them.
+//
 // Explicit .ts extension: lets `node --test` (type-stripping) resolve this leaf
 // import too, while vite/astro resolve it fine at build.
 import { APEX_ORIGIN } from './url-canonical.ts'
@@ -36,7 +43,6 @@ export interface Identity {
   readonly github: string
   readonly organization: { readonly name: string; readonly url: string; readonly wikidata: string; readonly role: string }
   readonly knowsAbout: readonly string[]
-  readonly occupationalCategory: string
   readonly occupationSkills: readonly string[]
   /** Portfolio/site names (surface-specific, kept here so they can't drift silently). */
   readonly profilePageName: string
@@ -52,9 +58,9 @@ export const IDENTITY: Identity = {
   email: 'hello@heyoub.dev',
   calendar: 'https://cal.com/eassa-ayoub-hf9yfh',
   image: `${APEX_ORIGIN}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`,
-  jobTitle: 'Cognitive-First Systems Architect',
+  jobTitle: 'Founder & Operator-Engineer',
   description:
-    'Building software that feels like thinking. Systems where mental models become structure, constraints compile, and complexity transfers to the machine.',
+    'I build the machinery underneath work somebody has to answer for. Founder of The Free Battery Factory; before that I ran the operations I now build for.',
   location: { locality: 'Philadelphia', region: 'PA', country: 'US' },
   wikidata: 'https://www.wikidata.org/wiki/Q140440561',
   linkedin: 'https://linkedin.com/in/eassageorge',
@@ -68,7 +74,8 @@ export const IDENTITY: Identity = {
   knowsAbout: [
     'Systems Architecture',
     'AI Infrastructure',
-    'Cross-Domain Integration',
+    'Operator Experience',
+    'Operational AI',
     'Type Systems',
     'Event Sourcing',
     'Rust',
@@ -78,13 +85,11 @@ export const IDENTITY: Identity = {
     'React',
     'Effect-TS',
     'Multi-Agent Orchestration',
-    'Cognitive-First Design',
   ],
-  occupationalCategory: '15-1252.00',
-  occupationSkills: ['Systems Architecture', 'AI Infrastructure', 'Type Systems', 'Event Sourcing', 'Full-Stack Development'],
-  profilePageName: 'Eassa Ayoub — Cognitive-First Systems',
-  websiteName: 'Eassa Ayoub Portfolio',
-  websiteDescription: 'Portfolio and professional profile of Eassa Ayoub, Cognitive-First Systems Architect',
+  occupationSkills: ['Operator Experience', 'Systems Architecture', 'Event Sourcing', 'Type Systems', 'Operational AI'],
+  profilePageName: 'Eassa Ayoub — Operator-Engineer',
+  websiteName: 'Eassa Ayoub',
+  websiteDescription: 'Eassa Ayoub — founder of The Free Battery Factory, building the machinery underneath consequential work',
 }
 
 /** The `sameAs` set, derived once so JSON-LD and any other surface agree. */
@@ -114,34 +119,41 @@ export interface Faq {
 // objections of someone one click from emailing, in first person, rather than
 // chasing keywords. Revisit once Search Console has real query data.
 //
-// Every claim here traces to a fact already published in public/profile.json
+// Every claim here traces to a fact published in public/profile.json
 // (proof_of_work, ideal_client, open_to) — do not add answers that assert
-// process, pricing, or timelines that aren't documented there.
+// process, pricing, or timelines that aren't documented there. Two answers
+// deliberately decline work ("wrong person to call", "nothing should be built");
+// they are load-bearing, not modesty, and the drift test keeps them.
 export const FAQ: readonly Faq[] = [
   {
-    question: 'My prototype works in the demo and falls apart with real users. Is it salvageable?',
+    question: 'What do you actually do?',
     answer:
-      "Almost always — it's the most common reason people call. The demo isn't the problem; the demo is proof the idea works. What's missing is everything that happens after it stops being a demo: the race conditions, the edge cases the model never handled, the architectural debt that only surfaces under real load and real failure. Most AI-assisted code gets you 80% there. I handle the 80% that's left.",
+      "I build the machinery underneath work that somebody has to answer for. In practice that means learning how the work really happens, finding the place where a person is doing a job the software should have been doing, and automating one bounded piece of it — with the judgment and the authority left where they were. I run The Free Battery Factory, which is where that work lives. This site is me, the technical work, and how I think about it.",
   },
   {
-    question: 'When are you the wrong person to call?',
+    question: 'Why does an engineer keep talking about operations?',
     answer:
-      "When you just need more features bolted onto code that already works — that's not architecture, and you'd be overpaying me for it. When you're shopping for the cheapest option, because I'm not it. And when you don't think type safety and tests are worth the time, because that's the whole mechanism I work through, and we'd spend the engagement arguing about it. I'd rather tell you now than invoice you to find out.",
+      "Because I ran them first. Mortgage, accounting, sales — work where a clumsy interface isn't a bad review, it's someone's close, someone's money, someone's signature on a mistake. That's not a credential, it's a bias: I don't treat complexity as an abstraction, because I was the one absorbing it. It's the difference between designing a screen and knowing who gets the phone call when the screen is wrong.",
+  },
+  {
+    question: 'When am I the wrong person to call?',
+    answer:
+      "When you need more features bolted onto something that already works — that's not the job, and you'd be overpaying me for it. When you're shopping for the cheapest option, because I'm not it. And when nothing about the work has a consequence, because most of what I'm careful about stops being worth paying for. I'd rather say that now than invoice you to find out.",
   },
   {
     question: 'Do you consult, or do you actually build it?',
     answer:
-      "Both, depending on what the problem needs. Sometimes it's an architecture review and a diagram you hand to your own team. Sometimes it's me in the codebase doing the rebuild. I also take fractional CTO work when the fit is genuinely there. If you don't know which one you need yet, that's a normal place to start.",
+      "Build it, mostly. Sometimes the useful thing is an architecture review and a written account you hand to your own team, and sometimes it's me in the codebase. I take fractional CTO work when the fit is genuinely there. And sometimes the honest answer is that nothing should be built — if the current thing works and replacing it buys nothing, saying so is the result.",
   },
   {
-    question: 'What does "compliance-by-architecture" actually mean?',
+    question: 'What does "compliance-by-architecture" mean?',
     answer:
-      'That the rule compiles instead of living in a policy doc. A healthcare tool leaking PII got rebuilt with local-only processing — HIPAA-safe by construction, not by promise. Loan rules scattered across spreadsheets got encoded into a type system, so an illegal loan became a compile error. The constraint stops being something a human remembers to check and becomes something the build refuses to produce.',
+      "That the rule compiles instead of living in a policy doc. A healthcare tool leaking PII got rebuilt with local-only processing — HIPAA-safe by construction rather than by promise. Loan rules scattered across spreadsheets got encoded into a type system, so an illegal loan became a compile error. The constraint stops being something a person remembers to check and becomes something the build refuses to produce.",
   },
   {
-    question: 'What makes this "cognitive-first" and not just good engineering?',
+    question: 'Why is there so much source code on a personal site?',
     answer:
-      "The question is never whether a system is complex — it's who carries the complexity. Every layer you add is complexity the user eventually carries, so I collapse layers instead of adding them: fewer hops in the architecture, fewer decisions on the screen. Working memory is finite. Build for that, or build friction.",
+      "Because \"trust me, I understand systems\" is a weak technical standard. The packages, the specs and the tests are public where they can be, stated at whatever claim state they're actually at — including the lines that stopped. You never have to read any of it. It's there so the claims can be checked.",
   },
 ]
 
@@ -163,7 +175,6 @@ export const personJsonLd = () => ({
   hasOccupation: {
     '@type': 'Occupation',
     name: IDENTITY.jobTitle,
-    occupationalCategory: IDENTITY.occupationalCategory,
     skills: [...IDENTITY.occupationSkills],
   },
   address: {
