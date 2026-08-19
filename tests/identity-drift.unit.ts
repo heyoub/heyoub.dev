@@ -175,6 +175,12 @@ test('released artifacts are described at their actual claim state', () => {
   // both — "released" alone oversells, "ended" alone undersells.
   assert.match(content, /The line shipped, then stopped/)
   assert.match(content, /still installable/i)
+  // LiteShip's numbers must name the version they describe. The repo head is a
+  // paused successor rebuild, so an unversioned claim silently drifts to
+  // describing a tree that was never released.
+  assert.match(manifest, /published at 0\.10\.0/)
+  // ...and it cites a gate CI enforces, not a coverage snapshot from one run
+  assert.match(manifest, /below 90% coverage overall or 85% on any single package/)
   // and the repo link points at the real name, not the pre-rename redirect
   assert.match(manifest, /batpak_DEPRECATED/)
   assert.ok(
