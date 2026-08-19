@@ -18,6 +18,12 @@ export interface ProjectLink {
 }
 
 export const projectManifest: ProjectLink[] = [
+  // Numbers below describe the RELEASED 0.10.0 line, not the repository head
+  // (the head is a paused successor rebuild). Provenance: the package count is
+  // 23 @czap/* plus liteship and create-liteship, each confirmed at 0.10.0 on
+  // the npm registry; the coverage figures are the thresholds enforced by
+  // scripts/merge-coverage.ts at tag v0.10.0 (commit 12861f76). A gate CI
+  // applies can be checked by anyone; a coverage snapshot is one run on one day.
   {
     name: 'LiteShip',
     gitUrl: 'https://github.com/freebatteryfactory/LiteShip',
@@ -26,7 +32,7 @@ export const projectManifest: ProjectLink[] = [
       filename: 'liteship.ts',
       tagline: 'Name the states once. Everything else falls in line.',
       blurb:
-        "Most 'responsive' UIs are a junk drawer of media queries held together with hope. LiteShip makes you name the few states that actually matter, then casts them to every surface listening — CSS, shaders, the screen reader, an AI manifest — from one source. 3,534 tests, 97% coverage, 18 packages. This site is running on it right now.",
+        "Most 'responsive' UIs are a junk drawer of media queries held together with hope. LiteShip makes you name the few states that actually matter, then casts them to every surface listening — CSS, shaders, the screen reader, an AI manifest — from one source. 25 packages published at 0.10.0, and CI won't take a merge below 90% coverage overall or 85% on any single package. This site is running on it right now.",
       stack: ['TypeScript', 'Astro', 'Effect', 'Vitest'],
       links: [
         { label: 'npm', url: 'https://www.npmjs.com/package/@czap/core', display: 'npmjs.com/@czap/core' },
