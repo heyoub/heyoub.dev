@@ -218,16 +218,24 @@ test('the brand palette is stated once and flows', () => {
   )
 })
 
-test('LiteShip diagnostics reach both a build logger and the browser', () => {
-  // Two sinks, because they cover different halves. installDiagnosticsBridge
-  // takes an Astro logger, so it only sees build/SSR diagnostics. The
-  // frozen-signal warnings that matter most fire in the browser and need
-  // Diagnostics.setSink client-side. Installing one and calling it done was
-  // the trap here.
+test('LiteShip build/SSR diagnostics route through the Astro logger', () => {
+  // installDiagnosticsBridge covers build/SSR (it takes an Astro logger,
+  // which only exists server-side) — a genuine gain: those diagnostics now
+  // respect --json output and land in the stream CI already parses, instead
+  // of raw console.
+  //
+  // There is deliberately no browser-side half. @czap/core's defaultSink
+  // already writes labelled `[source] code: message` diagnostics straight to
+  // console in every environment, browser included (diagnostics.js reads
+  // globalThis.console) — so a directive wired to a bad signal input was
+  // never silent. A prior version of this repo installed a second sink here
+  // on the false premise that it was; measured against the real default, it
+  // only stuttered the label (`[czap:czap/astro.satellite]` doubling the
+  // already-namespaced source) and silently dropped `event.detail` /
+  // `event.cause`, which the default sink forwards as extra console args.
+  // Net regression, removed. If a browser sink is ever proposed again, it
+  // needs to beat the default sink on a real diff, not assume one exists.
   const config = read('astro.config.mjs')
   assert.match(config, /installDiagnosticsBridge/)
   assert.match(config, /astro:config:setup/)
-
-  const layoutSrc = read('src/layouts/Layout.astro')
-  assert.match(layoutSrc, /installBrowserDiagnostics/)
 })
