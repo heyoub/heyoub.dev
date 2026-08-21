@@ -89,8 +89,13 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
   //
   // Driven from the same two conditions the CSS uses, so the announced state and
   // the painted state cannot disagree. Deliberately NOT a boundary: this is
-  // pointer/focus state, and LiteShip's signal inputs are viewport width and
-  // scroll progress — a boundary here would model a signal that does not exist.
+  // pointer/focus state. LiteShip types a `pointer` signal source, but it has
+  // no live runtime producer in 0.10.0 — readSignalValue returns undefined for
+  // it, so a boundary wired to pointer.* would be frozen and never
+  // re-evaluate. Hover and focus therefore stay ordinary DOM events. (An
+  // earlier version of this comment claimed the vocabulary was only viewport
+  // width and scroll progress; it is seven source types, of which viewport,
+  // scroll and audio are the live ones.)
   document.querySelectorAll<HTMLElement>('.nav-drop').forEach((drop) => {
     const button = drop.querySelector<HTMLElement>('[aria-haspopup]')
     if (!button) return
