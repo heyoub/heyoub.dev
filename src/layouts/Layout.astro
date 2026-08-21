@@ -141,15 +141,17 @@ const tierAttrs =
     <DisplayFidelity />
 
     <!-- LiteShip's browser-side diagnostics (src/lib/diagnostics.ts): the build/SSR
-         half is bridged in astro.config.mjs, but the frozen-signal / unknown-input
-         warnings that matter most fire client-side and had no listener at all.
-         Dev-only guard lives INSIDE the script, not around the tag — Astro hoists
-         and bundles <script> regardless of a surrounding {condition && ...}, so
-         that would ship dead code to production; import.meta.env.DEV here is a
-         real build-time constant the bundler can tree-shake. -->
+         half is bridged in astro.config.mjs via installDiagnosticsBridge, which only
+         sees the server side (it takes an Astro logger). @czap/core already logs to
+         console by default, so this isn't the difference between silence and a
+         warning — it's a `[czap:<source>] <code>` label on top of the default's bare
+         line, so you can tell WHICH boundary is complaining, plus one place to
+         redirect diagnostics from later. No DEV gate: the default sink logs in every
+         environment anyway, so gating this one off would only revert the format,
+         not silence anything. -->
     <script>
       import { installBrowserDiagnostics } from '../lib/diagnostics'
-      if (import.meta.env.DEV) installBrowserDiagnostics()
+      installBrowserDiagnostics()
     </script>
   </head>
   <body>
