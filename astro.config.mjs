@@ -73,9 +73,13 @@ export default defineConfig({
       },
     }),
     sitemap(),
-    // Route @czap's build/SSR diagnostics into Astro's logger. The browser
-    // half lives in Layout.astro (src/lib/diagnostics.ts) — this bridge takes
-    // an Astro logger, so it can only see what happens server-side.
+    // Route @czap's build/SSR diagnostics into Astro's logger, so they land
+    // in the same stream --json configures instead of raw console. No
+    // browser half: @czap/core's defaultSink already writes labelled
+    // diagnostics (`[source] code: message`, plus detail/cause) to console
+    // in every environment. A second console sink was built, measured, and
+    // removed — it stuttered its prefix to `[czap:czap/astro.satellite]`
+    // and dropped detail/cause. Don't re-add one without re-measuring.
     {
       name: 'czap-diagnostics',
       hooks: {
