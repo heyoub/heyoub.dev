@@ -140,6 +140,17 @@ const tierAttrs =
     <!-- Wide-gamut (P3/rec2020) + HDR palette, gated by display capability -->
     <DisplayFidelity />
 
+    <!-- LiteShip's browser-side diagnostics (src/lib/diagnostics.ts): the build/SSR
+         half is bridged in astro.config.mjs, but the frozen-signal / unknown-input
+         warnings that matter most fire client-side and had no listener at all.
+         Dev-only guard lives INSIDE the script, not around the tag — Astro hoists
+         and bundles <script> regardless of a surrounding {condition && ...}, so
+         that would ship dead code to production; import.meta.env.DEV here is a
+         real build-time constant the bundler can tree-shake. -->
+    <script>
+      import { installBrowserDiagnostics } from '../lib/diagnostics'
+      if (import.meta.env.DEV) installBrowserDiagnostics()
+    </script>
   </head>
   <body>
     <slot />
