@@ -14,7 +14,7 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
   <!-- Desktop -->
   <div class="hidden md:flex gap-10">
     <div class="nav-drop relative">
-      <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true">Git</button>
+      <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true" aria-expanded="false">Git</button>
       <div class="nav-menu absolute top-full right-0 mt-2 min-w-[200px] bg-bg-tertiary border border-white/10 py-2 backdrop-blur-xl">
         {gitProjects.map((p) => (
           <a href={p.gitUrl} target="_blank" rel="noopener noreferrer" class="block px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">{p.name}</a>
@@ -23,7 +23,7 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
     </div>
 
     <div class="nav-drop relative">
-      <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true">Projects</button>
+      <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true" aria-expanded="false">Projects</button>
       <div class="nav-menu absolute top-full right-0 mt-2 min-w-[200px] bg-bg-tertiary border border-white/10 py-2 backdrop-blur-xl">
         {projectManifest.map((p) => (
           <button data-scroll="#work" class="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">{p.name}</button>
@@ -32,7 +32,7 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
     </div>
 
     <div class="nav-drop relative">
-      <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true">Contact</button>
+      <button class="font-mono text-xs tracking-[0.15em] uppercase text-text-muted hover:text-accent transition-colors" aria-haspopup="true" aria-expanded="false">Contact</button>
       <div class="nav-menu absolute top-full right-0 mt-2 min-w-[200px] bg-bg-tertiary border border-white/10 py-2 backdrop-blur-xl">
         <button data-scroll="#footer" class="block w-full text-left px-4 py-2 font-mono text-xs text-text-secondary hover:bg-accent/10 hover:text-accent transition-colors">View Contact Info</button>
         <div class="border-t border-white/5 mt-1 pt-1"></div>
@@ -81,6 +81,35 @@ const gitProjects = projectManifest.filter((p) => p.gitUrl)
     const top = el.getBoundingClientRect().top + window.scrollY + offset
     window.scrollTo({ top, behavior: 'smooth' })
   }
+  // The desktop dropdowns open on hover OR keyboard focus (the CSS above uses
+  // both :hover and :focus-within). The buttons advertise aria-haspopup, so a
+  // screen reader announces "has popup" — but without aria-expanded it is never
+  // told whether the popup is currently showing, which is the half that says
+  // whether Tab will walk into the menu items or straight past them.
+  //
+  // Driven from the same two conditions the CSS uses, so the announced state and
+  // the painted state cannot disagree. Deliberately NOT a boundary: this is
+  // pointer/focus state, and LiteShip's signal inputs are viewport width and
+  // scroll progress — a boundary here would model a signal that does not exist.
+  document.querySelectorAll<HTMLElement>('.nav-drop').forEach((drop) => {
+    const button = drop.querySelector<HTMLElement>('[aria-haspopup]')
+    if (!button) return
+    let hovered = false
+    let focused = false
+    const sync = (): void =>
+      button.setAttribute('aria-expanded', hovered || focused ? 'true' : 'false')
+    drop.addEventListener('mouseenter', () => { hovered = true; sync() })
+    drop.addEventListener('mouseleave', () => { hovered = false; sync() })
+    drop.addEventListener('focusin', () => { focused = true; sync() })
+    drop.addEventListener('focusout', (e) => {
+      // focusout fires BEFORE the next element takes focus; relatedTarget is
+      // where focus is going, so moving between two items inside the same menu
+      // keeps it open rather than flickering closed.
+      focused = drop.contains((e as FocusEvent).relatedTarget as Node | null)
+      sync()
+    })
+  })
+
   const menu = document.querySelector<HTMLElement>('[data-menu]')
   const closeMenu = () => { menu?.classList.add('hidden'); menu?.classList.remove('flex') }
   // Nav links scroll to their section (top gets 0 offset, sections a small one) and

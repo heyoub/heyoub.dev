@@ -28,3 +28,6 @@ pnpm-debug.log*
 # playwright
 test-results/
 playwright-report/
+
+# Local, machine-specific Claude Code permissions — not shared state
+.claude/settings.local.json
