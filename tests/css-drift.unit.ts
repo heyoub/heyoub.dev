@@ -217,3 +217,17 @@ test('the brand palette is stated once and flows', () => {
     'tokens.ts hardcodes a hex instead of reading palette.ts',
   )
 })
+
+test('LiteShip diagnostics reach both a build logger and the browser', () => {
+  // Two sinks, because they cover different halves. installDiagnosticsBridge
+  // takes an Astro logger, so it only sees build/SSR diagnostics. The
+  // frozen-signal warnings that matter most fire in the browser and need
+  // Diagnostics.setSink client-side. Installing one and calling it done was
+  // the trap here.
+  const config = read('astro.config.mjs')
+  assert.match(config, /installDiagnosticsBridge/)
+  assert.match(config, /astro:config:setup/)
+
+  const layoutSrc = read('src/layouts/Layout.astro')
+  assert.match(layoutSrc, /installBrowserDiagnostics/)
+})

@@ -2,7 +2,7 @@ import { defineConfig, fontProviders } from 'astro/config'
 import { fileURLToPath } from 'node:url'
 import sitemap from '@astrojs/sitemap'
 import cloudflare from '@astrojs/cloudflare'
-import { integration as czap } from '@czap/astro'
+import { integration as czap, installDiagnosticsBridge } from '@czap/astro'
 import { cloudflareCacheProvider } from '@czap/cloudflare/cache-provider'
 
 // Your real site, on Astro + LiteShip. No React. SSR on Cloudflare Workers so
@@ -73,6 +73,17 @@ export default defineConfig({
       },
     }),
     sitemap(),
+    // Route @czap's build/SSR diagnostics into Astro's logger. The browser
+    // half lives in Layout.astro (src/lib/diagnostics.ts) — this bridge takes
+    // an Astro logger, so it can only see what happens server-side.
+    {
+      name: 'czap-diagnostics',
+      hooks: {
+        'astro:config:setup': ({ logger }) => {
+          installDiagnosticsBridge(logger)
+        },
+      },
+    },
   ],
   vite: {
     resolve: {
