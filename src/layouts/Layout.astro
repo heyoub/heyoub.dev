@@ -147,6 +147,15 @@ const tierAttrs =
     <WebMCP />
     <GraphRuntime />
     <MoodSvg />
+    <script>
+      // czap directives are marked into the HTML by satelliteAttrs() but do not
+      // start themselves on plain elements — see src/lib/directives.ts. Without
+      // this call every satellite on the page stays at its SSR initialState
+      // forever: no resize, no crossing, no re-read.
+      import { bootstrapDirectives } from '@czap/astro/runtime'
+      import { SITE_DIRECTIVES } from '../lib/directives'
+      bootstrapDirectives([...SITE_DIRECTIVES])
+    </script>
   </body>
 </html>
 
