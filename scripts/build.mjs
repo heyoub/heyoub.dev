@@ -11,16 +11,35 @@
 //
 // The build must not depend on whose shell it runs in, so the value is set
 // here rather than left to the environment.
+//
+// The workerd sweep runs FIRST and that ordering is the whole point: the lock
+// it clears is taken on dist/client, which `astro build` empties on startup.
+// Sweeping afterwards would be sweeping after the failure. See
+// scripts/clear-workerd.mjs for what leaves the lock behind.
 import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
+import { clearWorkerd } from './clear-workerd.mjs'
 
 export const productionEnv = (env = process.env) => ({ ...env, NODE_ENV: 'production' })
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const result = spawnSync('astro', ['build', ...process.argv.slice(2)], {
+/**
+ * @returns {number} the exit code astro build produced.
+ */
+export const runBuild = ({
+  args = [],
+  run = spawnSync,
+  clear = clearWorkerd,
+  env = productionEnv,
+} = {}) => {
+  clear()
+  const result = run('astro', ['build', ...args], {
     stdio: 'inherit',
     shell: true,
-    env: productionEnv(),
+    env: env(),
   })
-  process.exit(result.status ?? 1)
+  return result?.status ?? 1
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  process.exit(runBuild({ args: process.argv.slice(2) }))
 }
