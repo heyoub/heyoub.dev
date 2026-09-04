@@ -73,9 +73,11 @@ deterministic software is the right answer.
 **The Free Battery Factory** — operational AI for consequential small teams.
 The released software is public where it can be, as evidence of how the work is
 built rather than as the thing being sold: batpak (a Rust event store, released,
-development ended) and LiteShip (constraint-based adaptive rendering, released;
-this site runs on it). Claim state is stated exactly, including for the lines
-that stopped.
+development ended), LiteShip (constraint-based adaptive rendering, released; this
+site runs on it), and Macroonz (proof-carrying Rust code generation with a test
+harness, released and in active development). Claim state is stated exactly,
+including for the lines that stopped, and no version number is restated here —
+the registry is the authority for what is currently published.
 
 https://freebatteryfactory.com · https://freebatteryfactory.com/llms.txt
 

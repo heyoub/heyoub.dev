@@ -337,7 +337,10 @@ export interface ProductCard {
   body: string
   points: ProductPoint[]
   link: { url: string; label: string }
-  accent: 'accent' | 'purple'
+  /** Rendered as `var(--<accent>)`, so every member must exist as a token in
+   *  globals.css. `warm` is the hero's gold, closest of the three to Macroonz's
+   *  own orange without importing a colour the site does not otherwise use. */
+  accent: 'accent' | 'purple' | 'warm'
 }
 
 export const productCards: ProductCard[] = [
@@ -364,6 +367,21 @@ export const productCards: ProductCard[] = [
     ],
     link: { url: 'https://freebatteryfactory.com/batpak/overview', label: 'batpak/overview' },
     accent: 'purple',
+  },
+  {
+    name: 'Macroonz',
+    tagline: 'A macro that emits tokens and hopes is a process nobody can reconstruct.',
+    body: "Code generation for Rust that can say what it made. It names every unit it produced, proves the set matches its plan, and explains each decision before rustc sees a byte — then a harness tries to break the result on purpose: generated inputs, injected faults, a controlled clock, mutants of your own code, and a capsule that replays whatever it found. Same argument as everything else here, pointed at a compiler.",
+    points: [
+      { label: 'Accounted', title: 'Every unit named', detail: 'The expansion proves the set it produced matches the plan it was asked for.' },
+      { label: 'Adversarial', title: 'Tested by a stranger', detail: 'Property, fuzz, fault, schedule and mutation testing with typed evidence and replay.' },
+      // No version here on purpose: this line is still shipping, and a number
+      // in this file would be stale the next time it is bumped. crates.io is
+      // the authority, and the link goes there.
+      { label: 'Released', title: 'Four crates, on crates.io', detail: 'Published and in active development — the registry says which version is current.' },
+    ],
+    link: { url: 'https://freebatteryfactory.com/macroonz/overview', label: 'macroonz/overview' },
+    accent: 'warm',
   },
 ]
 
