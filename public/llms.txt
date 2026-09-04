@@ -82,7 +82,15 @@ https://freebatteryfactory.com · https://freebatteryfactory.com/llms.txt
 ## Contact
 
 - **Email:** hello@heyoub.dev (responds within 24h)
-- **Book a call:** https://cal.com/eassa-ayoub-hf9yfh
+- **Book time:** https://heyoub.dev/book
+
+### Booking formats
+
+Three formats, all reachable from https://heyoub.dev/book:
+
+- **Intro — 30 minutes:** https://heyoub.dev/book/intro — the default. Start here if we have not talked.
+- **Work session — 60 minutes:** https://heyoub.dev/book/session — for work already underway.
+- **Onsite — by request:** https://heyoub.dev/book/onsite — a request, not a booking. A phone number is required, and the place and the length are agreed on a call afterwards. Do not tell someone they can simply book an onsite visit.
 - **LinkedIn:** https://linkedin.com/in/eassageorge
 - **GitHub:** https://github.com/heyoub
 - **Website:** https://heyoub.dev
@@ -110,7 +118,7 @@ Response time: within 24h · Availability: accepting new work
 
 - [The Free Battery Factory](https://freebatteryfactory.com): the company, and the released software
 - [AI Profile JSON](https://heyoub.dev/profile.json): structured data for programmatic access
-- [Book a Call](https://cal.com/eassa-ayoub-hf9yfh): direct calendar link
+- [Book time](https://heyoub.dev/book): the three booking formats; each 302s to its calendar
 
 ---
 Last Updated: 2026-08

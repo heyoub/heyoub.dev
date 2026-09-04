@@ -33,7 +33,7 @@ const { links, status, code } = contactConfig
           {links.map((link, i) => (
             <div class="code-line code-property">
               <dt class="code-key">{link.key}</dt>
-              <dd><a href={link.href} class="code-string code-link" target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{getLinkDisplayValue(link)}</a><span class="code-punctuation" aria-hidden="true">{i < links.length - 1 ? ',' : ''}</span></dd>
+              <dd><a href={link.href} data-book-open={link.key === 'calendar' ? '' : undefined} class="code-string code-link" target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{getLinkDisplayValue(link)}</a><span class="code-punctuation" aria-hidden="true">{i < links.length - 1 ? ',' : ''}</span></dd>
             </div>
           ))}
         </dl>

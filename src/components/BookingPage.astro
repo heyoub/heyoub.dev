@@ -1,0 +1,50 @@
+---
+// The chooser as a standalone page — the shell shared by /book and by the 404
+// that /book/<unknown> renders. Both are the same page with one line of
+// difference, so they are one component rather than two copies of the window,
+// a back link and identical CSS.
+import Layout from '../layouts/Layout.astro'
+import BookingWindow from './BookingWindow.astro'
+import { BOOKING } from '../lib/booking'
+
+interface Props {
+  /** The segment that did not resolve. Present only on the 404 path. */
+  missing?: string
+}
+
+const { missing } = Astro.props
+const summary = BOOKING.slots.map((s) => `${s.name} (${s.timing})`).join(', ')
+---
+
+<Layout
+  title="Book time — Eassa Ayoub"
+  description={`Three ways to book time with Eassa Ayoub: ${summary}. Onsite is by request and needs a phone number.`}
+>
+  <main class="book-page" id="main">
+    <BookingWindow missing={missing} />
+    <a href="/" class="book-back font-mono">&larr; back to heyoub.dev</a>
+  </main>
+</Layout>
+
+<style>
+  .book-page {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 2rem 1rem;
+  }
+  .book-page > :global(.booking-window) {
+    width: min(34rem, 100%);
+  }
+  .book-back {
+    color: #8b949e;
+    font-size: 0.8125rem;
+    text-decoration: none;
+  }
+  .book-back:hover {
+    color: #58a6ff;
+  }
+</style>

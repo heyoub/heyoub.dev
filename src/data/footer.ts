@@ -39,8 +39,8 @@ export const contactConfig: ContactConfig = {
     {
       key: 'calendar',
       label: 'Book a Call',
-      href: 'https://cal.com/eassa-ayoub-hf9yfh',
-      external: true,
+      href: '/book',
+      external: false,
     },
     {
       key: 'linkedin',
@@ -87,8 +87,10 @@ export function getLinkDisplayValue(link: ContactLink): string {
     return link.href.replace('mailto:', '')
   }
   if (link.key === 'calendar') {
-    // Display as cal.com/eassa-ayoub (without hash)
-    return 'cal.com/eassa-ayoub'
+    // The code view prints these values verbatim, which is the whole reason
+    // booking is behind a first-party URL: an appointment-schedule hash would
+    // read as garbage in a block whose conceit is that these are real values.
+    return 'heyoub.dev/book'
   }
   if (link.key === 'resume') {
     return 'resume.pdf'

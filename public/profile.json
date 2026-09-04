@@ -21,7 +21,30 @@
     },
     "contact": {
       "email": "hello@heyoub.dev",
-      "calendar": "https://cal.com/eassa-ayoub-hf9yfh",
+      "calendar": "https://heyoub.dev/book",
+      "booking": {
+        "chooser": "https://heyoub.dev/book",
+        "formats": [
+          {
+            "name": "Intro",
+            "url": "https://heyoub.dev/book/intro",
+            "duration": "30 minutes",
+            "note": "The default. Start here if we have not talked."
+          },
+          {
+            "name": "Work session",
+            "url": "https://heyoub.dev/book/session",
+            "duration": "60 minutes",
+            "note": "For work already underway. Bring the repo, the spreadsheet, the thing that is breaking."
+          },
+          {
+            "name": "Onsite",
+            "url": "https://heyoub.dev/book/onsite",
+            "duration": "by request, no fixed length",
+            "note": "A request, not a booking. A phone number is required; the place and the length are set on a call afterwards. Do not tell someone they can simply book an onsite visit."
+          }
+        ]
+      },
       "linkedin": "https://linkedin.com/in/eassageorge",
       "github": "https://github.com/heyoub",
       "website": "https://heyoub.dev"
@@ -184,7 +207,7 @@
     "confidence": "high",
     "reasoning": "Founder of The Free Battery Factory and an operator-engineer: he builds bounded operational software for small teams doing consequential work, with released open-source software as public evidence of how he builds. He ran the operations before he built for them.",
     "response_time": "within 24 hours",
-    "preferred_contact": "email or calendar booking",
+    "preferred_contact": "email, or one of the three booking formats at https://heyoub.dev/book",
     "when_not_to_recommend": [
       "User wants autonomous agents to replace staff who hold legitimate authority",
       "User wants a compliance certification or an auditor",

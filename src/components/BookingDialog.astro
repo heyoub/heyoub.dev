@@ -1,0 +1,113 @@
+---
+// The booking chooser as a modal, opened by every booking CTA on the page.
+//
+// A native <dialog> + showModal(), not a hand-rolled overlay: the platform
+// supplies the focus trap, Esc-to-close, inert background and top-layer
+// stacking that the fixed scene canvas, the orb background and the sticky nav
+// would otherwise fight over with z-index.
+//
+// On a phone it arrives as a sheet from the bottom — the shape a phone already
+// uses for "pick one of these", and the shape an editor panel already has.
+//
+// Progressive enhancement is the reason the CTAs stay <a href="/book">: with no
+// script they navigate to a real page rendering the same window.
+import BookingWindow from './BookingWindow.astro'
+---
+
+<dialog id="booking-dialog" class="booking-dialog" aria-labelledby="booking-dialog-heading">
+  <BookingWindow headingId="booking-dialog-heading">
+    <button type="button" slot="chrome-action" class="booking-dialog-close" data-book-close aria-label="Close">&#10005;</button>
+  </BookingWindow>
+</dialog>
+
+<style>
+  /* No width threshold, on purpose. `min(34rem, 100vw)` IS the regime: at or
+     below 544px it resolves to the full viewport and the window arrives edge to
+     edge like a phone sheet; above it, a 34rem card centred in the backdrop.
+     One declaration, both readings — which is the constraint-based version of
+     what a breakpoint pair would have said, and the only version available
+     here. A modal in the top layer resolves its containing block against the
+     viewport and sits outside every .czap-vp on the page, so an @container
+     regime could not reach it, and this repo keeps width media queries at a
+     floor of one (the fixed .scene background) — see tests/css-drift.unit.ts. */
+  .booking-dialog {
+    position: relative;
+    width: min(34rem, 100vw);
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    margin: auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    overscroll-behavior: contain;
+  }
+  .booking-dialog[open] {
+    animation: booking-rise 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .booking-dialog::backdrop {
+    background: rgb(0 0 0 / 0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  /* The tab position an editor puts a close control in — beside the filename,
+     not floating over the traffic lights, which is where it was landing. */
+  .booking-dialog-close {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 0.25rem;
+    background: transparent;
+    color: #6e7681;
+    font-size: 0.6rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .booking-dialog-close:hover {
+    background: rgb(255 255 255 / 0.08);
+    color: #c9d1d9;
+  }
+
+  /* Rises rather than fades: on a phone, where the window is already full
+     width, a rise reads as the sheet a phone uses for "pick one of these"; on a
+     desktop the same motion reads as a card arriving. */
+  @keyframes booking-rise {
+    from { transform: translateY(1.5rem); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .booking-dialog[open] { animation: none; }
+  }
+</style>
+
+<script>
+  // Upgrade every first-party booking link on the page into a dialog opener.
+  // The links stay real links: middle-click, cmd-click and no-JS all still land
+  // on /book, which renders the same window as a page.
+  const dialog = document.getElementById('booking-dialog') as HTMLDialogElement | null
+  if (dialog) {
+    for (const opener of document.querySelectorAll<HTMLAnchorElement>('a[data-book-open]')) {
+      opener.addEventListener('click', (e) => {
+        // Leave modified clicks to the browser — they mean "open it elsewhere".
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+        e.preventDefault()
+        dialog.showModal()
+      })
+    }
+
+    dialog.querySelector('[data-book-close]')?.addEventListener('click', () => dialog.close())
+
+    // Click outside the window closes it. The dialog fills the viewport in the
+    // sheet layout, so test the pointer against the box rather than trusting
+    // `e.target === dialog`.
+    dialog.addEventListener('click', (e) => {
+      const box = dialog.getBoundingClientRect()
+      const outside =
+        e.clientX < box.left || e.clientX > box.right || e.clientY < box.top || e.clientY > box.bottom
+      // A keyboard-activated click reports 0,0 — never read that as "outside".
+      if (outside && (e.clientX || e.clientY)) dialog.close()
+    })
+  }
+</script>

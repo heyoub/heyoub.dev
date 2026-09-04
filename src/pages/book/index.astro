@@ -1,0 +1,13 @@
+---
+// /book — the chooser as a real page.
+//
+// Deliberately NOT the one-pager with a dialog forced open: people trim URLs
+// and share them, so a bare /book has to stand on its own, need no canonical
+// juggling against `/`, and read as a straight answer to "how do I book time
+// with him". It is also the no-JS path behind every booking CTA.
+import BookingPage from '@components/BookingPage.astro'
+
+export const prerender = false
+---
+
+<BookingPage />

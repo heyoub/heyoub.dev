@@ -56,7 +56,10 @@ export const IDENTITY: Identity = {
   familyName: 'Ayoub',
   url: APEX_ORIGIN,
   email: 'hello@heyoub.dev',
-  calendar: 'https://cal.com/eassa-ayoub-hf9yfh',
+  // First-party, never the vendor URL: booking runs on Google appointment
+  // schedules whose links are opaque hashes that change when a schedule is
+  // regenerated. /book is the chooser; /book/<slot> 302s. See src/lib/booking.ts.
+  calendar: 'https://heyoub.dev/book',
   image: `${APEX_ORIGIN}/assets/Eassa_Headshot_-_Low_Res-1-removebg-preview.png`,
   jobTitle: 'Founder & Operator-Engineer',
   description:

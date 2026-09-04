@@ -51,7 +51,9 @@ export const heroContent: HeroContent = {
   cta: {
     label: 'Book a',
     action: 'Call',
-    href: 'https://cal.com/eassa-ayoub-hf9yfh',
+    // Opens the booking chooser (src/components/BookingDialog.astro). Stays a
+    // real href so cmd-click and the no-JS path land on the /book page.
+    href: '/book',
   },
   scrollHint: 'Scroll to explore',
   photo: {

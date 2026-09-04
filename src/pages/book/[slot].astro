@@ -1,0 +1,25 @@
+---
+// /book/<slot> — 302 to that appointment schedule.
+//
+// Fails closed: the allowlist is DERIVED from the slot array the window renders
+// (src/lib/booking.ts), so a slot can never exist in the UI and 404 here, and an
+// unknown segment can never redirect anywhere. 302 rather than 301 — the
+// destinations are vendor URLs that change when a schedule is regenerated, and
+// a cached permanent redirect would outlive them in browsers we cannot reach.
+//
+// An unknown slot renders the window at HTTP 404, not 200: somebody who
+// mistyped still gets the three real options, and crawlers get an honest status
+// instead of a soft 404.
+import BookingPage from '@components/BookingPage.astro'
+import { bookingSlot } from '../../lib/booking'
+
+export const prerender = false
+
+const requested = Astro.params.slot
+const slot = bookingSlot(requested)
+if (slot) return Astro.redirect(slot.destination, 302)
+
+Astro.response.status = 404
+---
+
+<BookingPage missing={requested} />
