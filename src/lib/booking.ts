@@ -46,7 +46,7 @@ export interface BookingCopy {
 export const BOOKING: BookingCopy = {
   path: '/book',
   heading: 'Book time.',
-  body: 'Three formats. Intro is the default — the other two are for work already underway.',
+  body: 'Three formats. Intro is the default. The other two are for work already underway.',
   slots: [
     {
       key: 'intro',
