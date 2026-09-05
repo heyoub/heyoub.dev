@@ -11,7 +11,6 @@ import Faq from '@components/Faq.astro'
 import OpenTo from '@components/OpenTo.astro'
 import ParallaxVideo from '@components/ParallaxVideo.astro'
 import ContactDecompile from '@components/ContactDecompile.astro'
-import BookingDialog from '@components/BookingDialog.astro'
 
 // LiteShip device tier (resolved server-side by czapMiddleware). Two DIFFERENT
 // asks, deliberately not one flag:
@@ -77,9 +76,6 @@ const noMotion = tiers.motion === 'none' || tiers.tier === 'static'
     </div>
 
     <ContactDecompile />
-    <!-- Opened by every [data-book-open] link on the page (hero square + the
-         footer's calendar value). Top-layer chrome, not page content. -->
-    <BookingDialog />
   </main>
 </Layout>
 

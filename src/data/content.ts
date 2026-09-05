@@ -51,8 +51,9 @@ export const heroContent: HeroContent = {
   cta: {
     label: 'Book a',
     action: 'Call',
-    // Opens the booking chooser (src/components/BookingDialog.astro). Stays a
-    // real href so cmd-click and the no-JS path land on the /book page.
+    // Plain link to the chooser page. It briefly opened a <dialog>; showModal()
+    // does not lock page scroll, so on a phone the sheet left the viewport on
+    // the first drag.
     href: '/book',
   },
   scrollHint: 'Scroll to explore',
