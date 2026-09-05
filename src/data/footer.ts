@@ -21,7 +21,6 @@ export interface ContactConfig {
   code: {
     filename: string
     openComment: string
-    closeComment: string
   }
 }
 
@@ -77,7 +76,6 @@ export const contactConfig: ContactConfig = {
   code: {
     filename: 'contact.tsx',
     openComment: 'where abstractions terminate',
-    closeComment: 'all state terminates here',
   },
 }
 
