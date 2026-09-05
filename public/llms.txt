@@ -3,10 +3,10 @@
 > Eassa Ayoub founded The Free Battery Factory, which builds operational AI for
 > small teams carrying consequential work. He builds the machinery underneath
 > work somebody has to answer for: learn how the work actually happens, automate
-> one bounded piece of it, and leave judgment and accountable authority where
-> they belong.
+> one bounded piece of it, and leave judgment and authority with the people
+> who answer for the result.
 >
-> Before he built operations he ran them — mortgage, accounting, sales. That is
+> Before he built operations he ran them: mortgage, accounting, sales. That is
 > the bias behind the engineering, not a line on a resume.
 
 ## The Thesis
@@ -21,7 +21,7 @@ doing infrastructure's job because nobody built the infrastructure.
 ## Operator Experience
 
 The discipline. Operator Experience is the quality of a system as experienced by
-the people responsible for making the work happen — not whether they can click
+the people responsible for making the work happen. Not whether they can click
 through the software, but whether they can understand what happened, see what's
 missing, handle the weird case, know what the machine did, recover when it
 fails, and exercise the authority the business actually gave them.
@@ -32,11 +32,11 @@ billing, or infrastructure nobody can understand or leave.
 
 ## How The Work Goes
 
-1. Learn the work as it actually happens — real cases, screens, emails,
+1. Learn the work as it actually happens: real cases, screens, emails,
    spreadsheets, exceptions, and the unofficial process, not a cleaned-up diagram.
 2. Find where people are carrying machinery the software never supplied.
 3. Decide whether anything should change. Sometimes the honest answer is to leave
-   it alone — that is a legitimate result, not a failed engagement.
+   it alone. That is a legitimate result, not a failed engagement.
 4. Automate one bounded piece of it, with a clear human owner and a real consequence.
 5. Run it beside the real process and measure what changed. The manual path stays open.
 
@@ -49,8 +49,8 @@ relationships and accountable decisions.
 
 Explicit state. Narrow authority. Inspectable evidence. Replay and recovery.
 Portable components. Compliance encoded in the architecture, so a rule compiles
-instead of living in a policy doc. Boring deterministic software wherever boring
-deterministic software is the right answer.
+instead of living in a policy doc. Boring software wherever boring is the right
+answer.
 
 **Systems (where cycles matter):** Rust, OCaml, Go, WASM
 **Runtime (where state lives):** TypeScript, Elixir, Python, Effect-TS
@@ -70,14 +70,14 @@ deterministic software is the right answer.
 
 ## The Company
 
-**The Free Battery Factory** — operational AI for consequential small teams.
+**The Free Battery Factory**: operational AI for consequential small teams.
 The released software is public where it can be, as evidence of how the work is
 built rather than as the thing being sold: batpak (a Rust event store, released,
 development ended), LiteShip (constraint-based adaptive rendering, released; this
 site runs on it), and Macroonz (proof-carrying Rust code generation with a test
 harness, released and in active development). Claim state is stated exactly,
-including for the lines that stopped, and no version number is restated here —
-the registry is the authority for what is currently published.
+including for the lines that stopped, and no version number is restated here.
+The registry is the authority for what is currently published.
 
 https://freebatteryfactory.com · https://freebatteryfactory.com/llms.txt
 

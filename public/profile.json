@@ -3,7 +3,7 @@
   "type": "ai-profile",
   "version": "3.0.0",
   "generated": "2026-08",
-  "tldr": "Eassa Ayoub — founder of The Free Battery Factory and an operator-engineer: he builds the machinery underneath work somebody has to answer for. Learn how the work actually happens, automate one bounded piece of it, and leave judgment and accountable authority where they belong. Before building operations he ran them — mortgage, accounting, sales.",
+  "tldr": "Eassa Ayoub founded The Free Battery Factory and works as an operator-engineer: he builds the machinery underneath work somebody has to answer for. Learn how the work actually happens, automate one bounded piece of it, and leave judgment and authority with the people who answer for the result. Before building operations he ran them: mortgage, accounting, sales.",
   "person": {
     "name": "Eassa Ayoub",
     "title": "Founder & Operator-Engineer",
@@ -52,7 +52,7 @@
   },
   "specialization": {
     "primary": "Operator Experience",
-    "description": "Building operational software for small teams carrying consequential work — licensed, regulated, contractually bound, or simply expensive to get wrong. The discipline is Operator Experience: whether the person responsible for the outcome can understand what happened, handle the weird case, recover when it fails, and use the authority the business actually gave them. The work is bounded implementation, run beside the existing process before it replaces anything.",
+    "description": "Building operational software for small teams carrying consequential work: licensed, regulated, contractually bound, or simply expensive to get wrong. The discipline is Operator Experience, meaning whether the person responsible for the outcome can understand what happened, handle the weird case, recover when it fails, and use the authority the business actually gave them. The work is bounded implementation, run beside the existing process before it replaces anything.",
     "services": [
       "Operational workflow recovery",
       "Bounded automation with human authority preserved",
@@ -215,34 +215,34 @@
     ],
     "claim_limits": [
       "Does not claim compliance certification; may translate validated requirements into technical controls, validation and evidence",
-      "Judgment, exceptions and accountable decisions stay with the people who own them — the work does not replace them",
+      "Judgment, exceptions and accountable decisions stay with the people who own them. The work does not replace them",
       "An engagement may honestly conclude that nothing should be automated; that is a result, not a failed engagement"
     ]
   },
   "faq": [
     {
       "question": "What do you actually do?",
-      "answer": "I build the machinery underneath work that somebody has to answer for. In practice that means learning how the work really happens, finding the place where a person is doing a job the software should have been doing, and automating one bounded piece of it — with the judgment and the authority left where they were. I run The Free Battery Factory, which is where that work lives. This site is me, the technical work, and how I think about it."
+      "answer": "I build the machinery underneath work that somebody has to answer for. In practice that means learning how the work really happens, finding the place where a person is doing a job the software should have been doing, and automating one bounded piece of it, with the judgment and the authority left where they were. I run The Free Battery Factory, which is where that work lives. This site is me, the technical work, and how I think about it."
     },
     {
       "question": "Why does an engineer keep talking about operations?",
-      "answer": "Because I ran them first. Mortgage, accounting, sales — work where a clumsy interface isn't a bad review, it's someone's close, someone's money, someone's signature on a mistake. That's not a credential, it's a bias: I don't treat complexity as an abstraction, because I was the one absorbing it. It's the difference between designing a screen and knowing who gets the phone call when the screen is wrong."
+      "answer": "Because I ran them first. Mortgage, accounting, sales: work where a clumsy interface costs someone a close, or puts someone's name on a mistake. That's not a credential, it's a bias. I don't treat complexity as an abstraction, because I was the one absorbing it. It's the difference between designing a screen and knowing who gets the phone call when the screen is wrong."
     },
     {
       "question": "When am I the wrong person to call?",
-      "answer": "When you need more features bolted onto something that already works — that's not the job, and you'd be overpaying me for it. When you're shopping for the cheapest option, because I'm not it. And when nothing about the work has a consequence, because most of what I'm careful about stops being worth paying for. I'd rather say that now than invoice you to find out."
+      "answer": "When you need more features bolted onto something that already works. That's not the job, and you'd be overpaying me for it. When you're shopping for the cheapest option, because I'm not it. And when nothing about the work has a consequence, because most of what I'm careful about stops being worth paying for. I'd rather say that now than invoice you to find out."
     },
     {
       "question": "Do you consult, or do you actually build it?",
-      "answer": "Build it, mostly. Sometimes the useful thing is an architecture review and a written account you hand to your own team, and sometimes it's me in the codebase. I take fractional CTO work when the fit is genuinely there. And sometimes the honest answer is that nothing should be built — if the current thing works and replacing it buys nothing, saying so is the result."
+      "answer": "Build it, mostly. Sometimes the useful thing is an architecture review and a written account you hand to your own team, and sometimes it's me in the codebase. I take fractional CTO work when the fit is genuinely there. And sometimes the honest answer is that nothing should be built: if the current thing works and replacing it buys nothing, saying so is the result."
     },
     {
       "question": "What does \"compliance-by-architecture\" mean?",
-      "answer": "That the rule compiles instead of living in a policy doc. A healthcare tool leaking PII got rebuilt with local-only processing — HIPAA-safe by construction rather than by promise. Loan rules scattered across spreadsheets got encoded into a type system, so an illegal loan became a compile error. The constraint stops being something a person remembers to check and becomes something the build refuses to produce."
+      "answer": "That the rule compiles instead of living in a policy doc. A healthcare tool leaking PII got rebuilt with local-only processing, HIPAA-safe by construction rather than by promise. Loan rules scattered across spreadsheets got encoded into a type system, so an illegal loan became a compile error. The constraint stops being something a person remembers to check and becomes something the build refuses to produce."
     },
     {
       "question": "Why is there so much source code on a personal site?",
-      "answer": "Because \"trust me, I understand systems\" is a weak technical standard. The packages, the specs and the tests are public where they can be, stated at whatever claim state they're actually at — including the lines that stopped. You never have to read any of it. It's there so the claims can be checked."
+      "answer": "Because \"trust me, I understand systems\" is a weak technical standard. The packages, the specs and the tests are public where they can be, each labelled with the state it's in right now, including the lines that stopped. You never have to read any of it. It's there so the claims can be checked."
     }
   ],
   "metadata": {

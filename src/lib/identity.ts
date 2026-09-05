@@ -131,32 +131,32 @@ export const FAQ: readonly Faq[] = [
   {
     question: 'What do you actually do?',
     answer:
-      "I build the machinery underneath work that somebody has to answer for. In practice that means learning how the work really happens, finding the place where a person is doing a job the software should have been doing, and automating one bounded piece of it — with the judgment and the authority left where they were. I run The Free Battery Factory, which is where that work lives. This site is me, the technical work, and how I think about it.",
+      "I build the machinery underneath work that somebody has to answer for. In practice that means learning how the work really happens, finding the place where a person is doing a job the software should have been doing, and automating one bounded piece of it, with the judgment and the authority left where they were. I run The Free Battery Factory, which is where that work lives. This site is me, the technical work, and how I think about it.",
   },
   {
     question: 'Why does an engineer keep talking about operations?',
     answer:
-      "Because I ran them first. Mortgage, accounting, sales — work where a clumsy interface isn't a bad review, it's someone's close, someone's money, someone's signature on a mistake. That's not a credential, it's a bias: I don't treat complexity as an abstraction, because I was the one absorbing it. It's the difference between designing a screen and knowing who gets the phone call when the screen is wrong.",
+      "Because I ran them first. Mortgage, accounting, sales: work where a clumsy interface costs someone a close, or puts someone's name on a mistake. That's not a credential, it's a bias. I don't treat complexity as an abstraction, because I was the one absorbing it. It's the difference between designing a screen and knowing who gets the phone call when the screen is wrong.",
   },
   {
     question: 'When am I the wrong person to call?',
     answer:
-      "When you need more features bolted onto something that already works — that's not the job, and you'd be overpaying me for it. When you're shopping for the cheapest option, because I'm not it. And when nothing about the work has a consequence, because most of what I'm careful about stops being worth paying for. I'd rather say that now than invoice you to find out.",
+      "When you need more features bolted onto something that already works. That's not the job, and you'd be overpaying me for it. When you're shopping for the cheapest option, because I'm not it. And when nothing about the work has a consequence, because most of what I'm careful about stops being worth paying for. I'd rather say that now than invoice you to find out.",
   },
   {
     question: 'Do you consult, or do you actually build it?',
     answer:
-      "Build it, mostly. Sometimes the useful thing is an architecture review and a written account you hand to your own team, and sometimes it's me in the codebase. I take fractional CTO work when the fit is genuinely there. And sometimes the honest answer is that nothing should be built — if the current thing works and replacing it buys nothing, saying so is the result.",
+      "Build it, mostly. Sometimes the useful thing is an architecture review and a written account you hand to your own team, and sometimes it's me in the codebase. I take fractional CTO work when the fit is genuinely there. And sometimes the honest answer is that nothing should be built: if the current thing works and replacing it buys nothing, saying so is the result.",
   },
   {
     question: 'What does "compliance-by-architecture" mean?',
     answer:
-      "That the rule compiles instead of living in a policy doc. A healthcare tool leaking PII got rebuilt with local-only processing — HIPAA-safe by construction rather than by promise. Loan rules scattered across spreadsheets got encoded into a type system, so an illegal loan became a compile error. The constraint stops being something a person remembers to check and becomes something the build refuses to produce.",
+      "That the rule compiles instead of living in a policy doc. A healthcare tool leaking PII got rebuilt with local-only processing, HIPAA-safe by construction rather than by promise. Loan rules scattered across spreadsheets got encoded into a type system, so an illegal loan became a compile error. The constraint stops being something a person remembers to check and becomes something the build refuses to produce.",
   },
   {
     question: 'Why is there so much source code on a personal site?',
     answer:
-      "Because \"trust me, I understand systems\" is a weak technical standard. The packages, the specs and the tests are public where they can be, stated at whatever claim state they're actually at — including the lines that stopped. You never have to read any of it. It's there so the claims can be checked.",
+      "Because \"trust me, I understand systems\" is a weak technical standard. The packages, the specs and the tests are public where they can be, each labelled with the state it's in right now, including the lines that stopped. You never have to read any of it. It's there so the claims can be checked.",
   },
 ]
 
