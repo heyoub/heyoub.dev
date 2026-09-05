@@ -1,6 +1,5 @@
 ---
 import { contactConfig, getLinkDisplayValue } from '@/data/footer'
-import { BOOKING, bookingPath } from '@/lib/booking'
 const { links, status, code } = contactConfig
 ---
 
@@ -34,24 +33,7 @@ const { links, status, code } = contactConfig
           {links.map((link, i) => (
             <div class="code-line code-property">
               <dt class="code-key">{link.key}</dt>
-              <dd><a href={link.href} class="code-string code-link" target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{getLinkDisplayValue(link)}</a><span class="code-punctuation" aria-hidden="true">{i < links.length - 1 ? ',' : ''}</span></dd>
-            </div>
-          ))}
-        </dl>
-        <p class="code-line"><span class="code-punctuation">{'};'}</span></p>
-        <p class="code-line">&nbsp;</p>
-        {/* The three booking formats, inline. They used to live behind a
-            <dialog> opened from the calendar link; showModal() does not lock
-            the page scroll, so on a phone the sheet slid out of the viewport on
-            the first drag. Rendered in place there is no layer to fight, and
-            this is the surface that already prints `const links = {...}` with
-            clickable values — booking slots are the same shape of data. */}
-        <p class="code-line"><span class="code-keyword">const</span> <span class="code-variable">booking</span> <span class="code-punctuation">=</span> <span class="code-punctuation">{'{'}</span></p>
-        <dl class="code-object-body">
-          {BOOKING.slots.map((slot, i) => (
-            <div class="code-line code-property">
-              <dt class="code-key">{slot.key}</dt>
-              <dd><a href={bookingPath(slot.key)} class="code-string code-link">{slot.timing}</a><span class="code-punctuation" aria-hidden="true">{i < BOOKING.slots.length - 1 ? ',' : ''}</span><span class="code-comment code-comment--with-slashes booking-note">{slot.note}</span></dd>
+              <dd><a href={link.href} data-book-open={link.key === 'calendar' ? '' : undefined} class="code-string code-link" target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>{getLinkDisplayValue(link)}</a><span class="code-punctuation" aria-hidden="true">{i < links.length - 1 ? ',' : ''}</span></dd>
             </div>
           ))}
         </dl>
@@ -80,14 +62,6 @@ const { links, status, code } = contactConfig
     <small class="font-mono text-[0.65rem] tracking-wider text-editor-gray">© {status.year} Eassa Ayoub · {status.location}</small>
   </div>
 </footer>
-
-<style>
-  /* Separates the trailing note from the value it annotates; the links list
-     above has no comments, so `.code-property` never needed this. */
-  .booking-note {
-    margin-left: 0.75rem;
-  }
-</style>
 
 <script>
   // Fill the line-number gutter for the single contact panel (no tabs to switch).
