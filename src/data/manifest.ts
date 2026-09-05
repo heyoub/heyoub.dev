@@ -32,7 +32,7 @@ export const projectManifest: ProjectLink[] = [
       filename: 'liteship.ts',
       tagline: 'Name the states once. Everything else falls in line.',
       blurb:
-        "Most 'responsive' UIs are a junk drawer of media queries held together with hope. LiteShip makes you name the few states that actually matter, then casts them to every surface listening — CSS, shaders, the screen reader, an AI manifest — from one source. 25 packages published at 0.10.0, and CI won't take a merge below 90% coverage overall or 85% on any single package. This site is running on it right now.",
+        "Most 'responsive' UIs are a junk drawer of media queries held together with hope. LiteShip makes you name the few states that actually matter, then casts them from one source to every surface listening: CSS, shaders, the screen reader, an AI manifest. 25 packages published at 0.10.0, and CI won't take a merge below 90% coverage overall or 85% on any single package. This site is running on it right now.",
       stack: ['TypeScript', 'Astro', 'Effect', 'Vitest'],
       links: [
         { label: 'npm', url: 'https://www.npmjs.com/package/@czap/core', display: 'npmjs.com/@czap/core' },
@@ -48,7 +48,7 @@ export const projectManifest: ProjectLink[] = [
       filename: 'batpak.rs',
       tagline: 'Seven Rust crates. Shipped, then finished.',
       blurb:
-        "Seven crates shipped in dependency order, each dragged through the full gauntlet before it went near crates.io — CI, mutation testing, semver and public-API checks, consumer smoke, dry-run publish. Released at 0.10.0 and no longer developed; the crate is still there and still installable, and the repo carries the rename that says so.",
+        "Seven crates shipped in dependency order, each dragged through the full gauntlet before it went near crates.io: CI, mutation testing, semver and public-API checks, consumer smoke, dry-run publish. Released at 0.10.0 and no longer developed. The crate is still there and still installable, and the repo is renamed to say so.",
       stack: ['Rust', 'Cargo', 'CI/CD'],
       links: [
         { label: 'crate', url: 'https://crates.io/crates/batpak', display: 'crates.io/crates/batpak' },

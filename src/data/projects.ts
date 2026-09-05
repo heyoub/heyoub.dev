@@ -20,12 +20,12 @@ export const proofPoints: ProofPoint[] = [
   {
     id: 'attention-crm',
     principle: 'attention',
-    proof: 'Rebuilt the CRM people actually live in — three choices per screen, the next action already decided. It stopped being the app they dreaded opening.',
+    proof: 'Rebuilt the CRM people actually live in: three choices per screen, the next action already decided. It stopped being the app they dreaded opening.',
   },
   {
     id: 'rent-liteship',
     principle: 'rent',
-    proof: 'LiteShip: one definition, cast to every surface — CSS, shaders, ARIA, the machine manifest — with nothing to keep in sync by hand.',
+    proof: 'LiteShip: one definition, cast to CSS, shaders, ARIA and the machine manifest, with nothing to keep in sync by hand.',
     link: { label: 'liteship/overview', url: 'https://freebatteryfactory.com/liteship/overview', type: 'live' },
   },
   {
